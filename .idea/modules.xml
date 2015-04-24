@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Spektogram.iml" filepath="$PROJECT_DIR$/Spektogram.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/telegram/telegram.iml" filepath="$PROJECT_DIR$/telegram/telegram.iml" />
     </modules>
   </component>
 </project>
