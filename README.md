@@ -3,14 +3,23 @@
 Extra libs:
 
 https://github.com/TechFreak/WizardPager
+
 https://github.com/DevinShine/easyloadingbtn
+
 https://github.com/chrisbanes/ActionBar-PullToRefresh
+
 https://github.com/curioustechizen/android-ago
+
 https://github.com/balesz/android-tutorial-CardFlipAnimation
+
 https://github.com/scottyab/secure-preferences
+
 https://github.com/guerwan/TransitionsBackport 
+
 https://github.com/moagrius/TileView/tree/master /
+
 https://github.com/dmytrodanylyk/circular-progress-button
+
 https://github.com/matthewrkula/SecretTextView 
 
 https://github.com/skyfishjy/android-ripple-background
