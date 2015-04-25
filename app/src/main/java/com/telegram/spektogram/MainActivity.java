@@ -1,9 +1,15 @@
 package com.telegram.spektogram;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import telegram.Client;
+import telegram.TG;
+import telegram.TdApi;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -12,6 +18,22 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        TG.setDir(Environment.getExternalStorageDirectory() + "/" + "Test3");
+        TG.setUpdatesHandler(new Client.ResultHandler() {
+            @Override
+            public void onResult(TdApi.TLObject object) {
+
+            }
+        });
+        final Client clientInstance = TG.getClientInstance();
+
+        clientInstance.send(new TdApi.AuthSetCode("1231"),new Client.ResultHandler() {
+            @Override
+            public void onResult(TdApi.TLObject object) {
+                Log.v(null,"auth result");
+            }
+        });
+
     }
 
 

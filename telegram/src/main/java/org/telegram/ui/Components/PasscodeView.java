@@ -41,12 +41,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.telegram.spektogram.R;
+
 import org.telegram.android.AndroidUtilities;
 import org.telegram.android.LocaleController;
 import org.telegram.android.NotificationCenter;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
-import com.telegram.spektogram.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.AnimationCompat.AnimatorListenerAdapterProxy;
@@ -1011,7 +1012,8 @@ public class PasscodeView extends FrameLayout {
 
         if (UserConfig.passcodeType == 1 && (AndroidUtilities.isTablet() || getContext().getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE)) {
             int t = 0;
-            if (passwordFrameLayout.getTag() != 0) {
+            final Object tag = passwordFrameLayout.getTag();
+            if ((Integer)tag != 0) {
                 t = (Integer) passwordFrameLayout.getTag();
             }
             LayoutParams layoutParams = (LayoutParams) passwordFrameLayout.getLayoutParams();
