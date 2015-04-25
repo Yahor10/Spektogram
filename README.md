@@ -26,3 +26,6 @@ https://github.com/zhaozhentao/KugouLayout
 https://github.com/inloop/easygcm
 
 https://github.com/ex3ndr/telegram-api // telegram api?
+
+
+http://www.android-app-patterns.com/category/lists // chat designs
