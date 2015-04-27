@@ -31,4 +31,8 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.google.android.gms:play-services:6.5.87'
+
+    compile files('libs/telegram-api-1.1.127-shadow.jar')
+    compile files('libs/tl-core-1.0.19.jar')
+    compile files('libs/telegram-api-1.1.127.jar')
 }
