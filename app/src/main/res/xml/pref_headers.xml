@@ -9,7 +9,7 @@
         android:fragment="com.telegram.spektogram.SettingsActivity$ChatSettingsPreferenceFragment"
         android:title="@string/pref_header_chat_settings" />
 
-    <header android:fragment="com.telegram.spektogram.SettingsActivity$DataSyncPreferenceFragment"
+    <header android:fragment="com.telegram.spektogram.SettingsActivity$UserPreferenceFragment"
         android:title="@string/pref_header_data_sync" />
 
 </preference-headers>
