@@ -1,6 +1,8 @@
 package com.telegram.spektogram;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,9 +19,12 @@ import android.view.ViewGroup;
 import com.telegram.spektogram.views.PopupMenu;
 
 
-public class ChatActivity extends ActionBarActivity
+public class ChatRoomActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
+    public static Intent buildStartIntent(Context context){
+        return new Intent(context,ChatRoomActivity.class);
+    }
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -40,7 +45,7 @@ public class ChatActivity extends ActionBarActivity
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu menu = new PopupMenu(ChatActivity.this);
+                PopupMenu menu = new PopupMenu(ChatRoomActivity.this);
                 Resources resources = getResources();
 
                 menu.setHeaderTitle(resources.getString(R.string.messege));
@@ -156,7 +161,7 @@ public class ChatActivity extends ActionBarActivity
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
-            ((ChatActivity) activity).onSectionAttached(
+            ((ChatRoomActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
