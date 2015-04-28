@@ -34,6 +34,11 @@ public class ApplicationSpektogram extends android.app.Application implements Ab
     @Override
     public void onCreate() {
         super.onCreate();
+
+        connections.put(1, new ConnectionInfo[]{
+                new ConnectionInfo(1, 0, true ? Constants.Test_Configuration_Server : Constants.Production_Configuration_Server, 443)
+        });
+
         try {
             startTelegramApi();
         } catch (IOException e) {
