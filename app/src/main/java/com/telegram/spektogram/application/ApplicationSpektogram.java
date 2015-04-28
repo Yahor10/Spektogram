@@ -149,7 +149,7 @@ public class ApplicationSpektogram extends android.app.Application implements Ab
         AppInfo appInfo = new AppInfo(Constants.API_ID, "android", "1", "1", "en");
         api = new TelegramApi(this, appInfo,this);
 //        TLRequestAuthSendCode method = new TLRequestAuthSendCode("+375293886590", 0, 34993, "9866dc29b504cedb40a86bb03bbe8c93", "en");
-//        TLSentCode doRpcCallNonAuth = api.doRpcCallNonAuth(method);  example
+//        TLSentCode doRpcCallNonAuth = api.doRpcCallNonAuth(method);
 //
     }
 

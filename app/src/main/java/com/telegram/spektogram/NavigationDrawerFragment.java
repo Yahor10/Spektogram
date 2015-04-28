@@ -109,7 +109,7 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
 
         dataList.add(new DrawerItem("Message", R.drawable.ic_drawer));
         dataList.add(new DrawerItem("Likes", R.drawable.ic_drawer));
-        dataList.add(new DrawerItem("Games", R.drawable.ic_drawer));
+        dataList.add(new DrawerItem("Settings", R.drawable.ic_drawer));
 
         adapter = new CustomDrawerAdapter(getActivity(), R.layout.custom_drawer_item,
                 dataList);
@@ -287,6 +287,12 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.v(null, "pos" + position);
+
+        switch (position){
+            case 2:
+
+                break;
+        }
     }
 
     /**
