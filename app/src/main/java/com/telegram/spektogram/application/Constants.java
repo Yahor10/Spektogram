@@ -13,10 +13,4 @@ public final class Constants {
 
     public final static String Production_Configuration_Server = "149.154.167.50";
 
-    // Test_configuration_server 149.154.167.40:443";
-
-    // Production configuration 149.154.167.50:443
-
-
-
 }

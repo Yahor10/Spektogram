@@ -1,31 +1,44 @@
 package com.telegram.spektogram.application;
 
 
+import android.content.Context;
+import android.util.Log;
+
+import org.telegram.api.TLAbsUpdates;
 import org.telegram.api.TLConfig;
 import org.telegram.api.TLDcOption;
+import org.telegram.api.engine.ApiCallback;
+import org.telegram.api.engine.AppInfo;
+import org.telegram.api.engine.TelegramApi;
 import org.telegram.api.engine.storage.AbsApiState;
 import org.telegram.mtproto.state.AbsMTProtoState;
 import org.telegram.mtproto.state.ConnectionInfo;
 import org.telegram.mtproto.state.KnownSalt;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * Created by ychabatarou on 27.04.2015.
  */
-public class Application extends android.app.Application implements AbsApiState {
+public class ApplicationSpektogram extends android.app.Application implements AbsApiState,ApiCallback {
 
     private int primerId = 1;
     private static HashMap<Integer, org.telegram.mtproto.state.ConnectionInfo[]> connections = new HashMap<Integer, ConnectionInfo[]>();
 
     private HashMap<Integer, Boolean> isAuth = new HashMap<Integer, Boolean>();
     private HashMap<Integer, byte[]> keys = new HashMap<Integer, byte[]>();
+    private TelegramApi api;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
+        try {
+            startTelegramApi();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -101,12 +114,12 @@ public class Application extends android.app.Application implements AbsApiState 
 
             @Override
             public byte[] getAuthKey() {
-                return Application.this.getAuthKey(dcId);
+                return ApplicationSpektogram.this.getAuthKey(dcId);
             }
 
             @Override
             public ConnectionInfo[] getAvailableConnections() {
-                return Application.this.getAvailableConnections(dcId);
+                return ApplicationSpektogram.this.getAvailableConnections(dcId);
             }
 
             @Override
@@ -130,5 +143,42 @@ public class Application extends android.app.Application implements AbsApiState 
     public void reset() {
         isAuth.clear();
         keys.clear();
+    }
+
+    private void startTelegramApi() throws IOException {
+        AppInfo appInfo = new AppInfo(Constants.API_ID, "android", "1", "1", "en");
+        api = new TelegramApi(this, appInfo,this);
+//        TLRequestAuthSendCode method = new TLRequestAuthSendCode("+375293886590", 0, 34993, "9866dc29b504cedb40a86bb03bbe8c93", "en");
+//        TLSentCode doRpcCallNonAuth = api.doRpcCallNonAuth(method);  example
+//
+    }
+
+    public  TelegramApi getTelegramApi(){
+        AppInfo appInfo = new AppInfo(Constants.API_ID, "android", "1", "1", "en");
+        if(api == null){
+            api = new TelegramApi(this, appInfo,this);
+        }
+        return api;
+    }
+
+    public void onUpdatesInvalidated(TelegramApi api) {
+        // TODO Auto-generated method stub
+        Log.v(null,"on onUpdatesInvalidated");
+    }
+
+    @Override
+    public void onUpdate(TLAbsUpdates updates) {
+        // TODO Auto-generated method stub
+        Log.v(null, "onUpdate");
+
+    }
+
+    @Override
+    public void onAuthCancelled(TelegramApi api) {
+        // TODO Auto-generated method stub
+        Log.v(null,"onAuthCancelled");
+    }
+    public static ApplicationSpektogram getApplication(Context context) {
+        return (ApplicationSpektogram) context.getApplicationContext();
     }
 }

@@ -35,8 +35,6 @@ public class ChatActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-
-
         // Set Listener
 
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
