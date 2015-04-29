@@ -1,16 +1,14 @@
 package com.telegram.spektogram;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.drinkless.td.libcore.telegram.Client;
-import org.drinkless.td.libcore.telegram.TG;
-import org.drinkless.td.libcore.telegram.TdApi;
+import com.telegram.spektogram.application.ApplicationSpektogram;
 
-import java.io.File;
+import org.drinkless.td.libcore.telegram.Client;
+import org.drinkless.td.libcore.telegram.TdApi;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -21,18 +19,17 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 //        startActivity(SettingsActivity.buildStartIntent(this));
 
-        Client.ResultHandler handler = new Client.ResultHandler() {
-            public void onResult(TdApi.TLObject object) {}
-        };
 
-        TG.setUpdatesHandler(handler);
-        File f = new File (Environment.getDataDirectory().getAbsolutePath() + "/tdb/");
-        f.mkdir();
-        TG.setDir(Environment.getDataDirectory().getAbsolutePath() + "/tdb/");
+        TdApi.TLFunction func = new TdApi.AuthGetState();
+        final ApplicationSpektogram application = ApplicationSpektogram.getApplication(this);
 
-        Client client = TG.getClientInstance();
-//        TdApi.TLFunction func = new TdApi.AuthGetState();
+        final Client client = application.getClient();
+        client.send(func, new Client.ResultHandler() {
+            @Override
+            public void onResult(TdApi.TLObject object) {
 
+            }
+        });
     }
 
 
