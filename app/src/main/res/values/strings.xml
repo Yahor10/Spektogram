@@ -20,8 +20,19 @@
     <string name="delete">copy</string>
     <string name="messege">Messege</string>
 
+    <string name="title_activity_sign_in">Sign In</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up_on_login">Don\'t have an account? So sign Up!</string>
+    <string name="title_activity_sign_up">Sign Up</string>
+
+    <string name="send_code">Send code</string>
+    <string name="phone_number">Phone number</string>
+
 
     <string name="new_group">New Group</string>
     <string name="new_secret_chat">New Secret Chat</string>
+    <string name="title_activity_next_page_callback">NextPageCallback</string>
 
 </resources>

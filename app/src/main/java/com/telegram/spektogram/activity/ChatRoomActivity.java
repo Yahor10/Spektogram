@@ -1,4 +1,4 @@
-package com.telegram.spektogram;
+package com.telegram.spektogram.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.telegram.spektogram.fragment.NavigationDrawerFragment;
+import com.telegram.spektogram.R;
 import com.telegram.spektogram.views.PopupMenu;
 
 
@@ -39,6 +41,8 @@ public class ChatRoomActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        startActivity(new Intent(this, SignInActivity.class));
 
         // Set Listener
 

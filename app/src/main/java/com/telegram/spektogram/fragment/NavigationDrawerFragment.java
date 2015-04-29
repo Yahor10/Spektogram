@@ -1,4 +1,4 @@
-package com.telegram.spektogram;
+package com.telegram.spektogram.fragment;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.telegram.spektogram.R;
 import com.telegram.spektogram.views.CustomDrawerAdapter;
 import com.telegram.spektogram.views.DrawerItem;
 

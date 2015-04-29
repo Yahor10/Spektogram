@@ -1,4 +1,4 @@
-package com.telegram.spektogram;
+package com.telegram.spektogram.activity;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -18,6 +18,7 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 
+import com.telegram.spektogram.R;
 import com.telegram.spektogram.preferences.PreferenceKeys;
 import com.telegram.spektogram.preferences.PreferenceUtils;
 
