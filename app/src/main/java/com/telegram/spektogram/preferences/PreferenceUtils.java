@@ -25,4 +25,21 @@ public class PreferenceUtils {
                 PreferenceKeys.USER_NAME, "user");
     }
 
+    public static void setPhoneCodeHash(Context context,
+                                   String code) {
+        SharedPreferences.Editor pEditor = PreferenceManager.getDefaultSharedPreferences(context)
+                .edit();
+        pEditor.putString(PreferenceKeys.PHONE_CODE_HASH,
+                code);
+        pEditor.commit();
+    }
+
+    public static String getPhoneCodeHash(Context context) {
+        SharedPreferences defaultSharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        return defaultSharedPreferences.getString(
+                PreferenceKeys.PHONE_CODE_HASH, "user");
+    }
+
+
 }

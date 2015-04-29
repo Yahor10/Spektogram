@@ -1,1 +1,1 @@
-include ':app', ':telegram'
+include ':app', ':telegram', ':libtd'

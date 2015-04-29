@@ -2,7 +2,12 @@ package com.telegram.spektogram.application;
 
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
+
+import com.telegram.spektogram.telegram.Client;
+import com.telegram.spektogram.telegram.TG;
+import com.telegram.spektogram.telegram.TdApi;
 
 import org.telegram.api.TLAbsUpdates;
 import org.telegram.api.TLConfig;
@@ -26,6 +31,7 @@ public class ApplicationSpektogram extends android.app.Application implements Ab
 
     private int primerId = 1;
     private static HashMap<Integer, org.telegram.mtproto.state.ConnectionInfo[]> connections = new HashMap<Integer, ConnectionInfo[]>();
+    public static Context applicationContext;
 
     private HashMap<Integer, Boolean> isAuth = new HashMap<Integer, Boolean>();
     private HashMap<Integer, byte[]> keys = new HashMap<Integer, byte[]>();
@@ -150,12 +156,43 @@ public class ApplicationSpektogram extends android.app.Application implements Ab
         keys.clear();
     }
 
+
     private void startTelegramApi() throws IOException {
-        AppInfo appInfo = new AppInfo(Constants.API_ID, "android", "1", "1", "en");
-        api = new TelegramApi(this, appInfo,this);
-//        TLRequestAuthSendCode method = new TLRequestAuthSendCode("+375293886590", 0, 34993, "9866dc29b504cedb40a86bb03bbe8c93", "en");
-//        TLSentCode doRpcCallNonAuth = api.doRpcCallNonAuth(method);
+//        AppInfo appInfo = new AppInfo(Constants.API_ID, "android", "1", "1", "en");
+//        if(api == null) {
+//            api = new TelegramApi(this, appInfo, this);
+//        }
 //
+//        applicationContext = getApplicationContext();
+//        String name = PhoneFormat.getInstance().format("+375293886590");
+//
+//        Log.v(null,"name" + name);
+//
+//        TLRequestAuthSendCode method = new TLRequestAuthSendCode(name, 0, 34993, "9866dc29b504cedb40a86bb03bbe8c93", "en");
+////
+//        TLSentCode doRpcCallNonAuth = api.doRpcCallNonAuth(method);
+//        final String phoneCodeHash = doRpcCallNonAuth.getPhoneCodeHash();
+//        Log.v(null,"reg" + doRpcCallNonAuth.getPhoneRegistered());
+//        Log.v(null,"phoneCodeHash:" + phoneCodeHash);
+//        PreferenceUtils.setPhoneCodeHash(this, phoneCodeHash);
+
+//        TLRequestAuthSignUp signUp = new TLRequestAuthSignUp(name, PreferenceUtils.getPhoneCodeHash(this),"78730","Egor","Chebotarev");
+//        Log.v(null,"hash" + PreferenceUtils.getPhoneCodeHash(this));
+//        final TLAuthorization tlAuthorization = api.doRpcCallNonAuth(signUp);
+//
+//        final TLAbsUser user = tlAuthorization.getUser();//
+//        Log.v(null,"user id " + user.getId());
+
+        Client.ResultHandler handler = new Client.ResultHandler() {
+            public void onResult(TdApi.TLObject object) {}
+        };
+
+        TG.setUpdatesHandler(handler);
+        TG.setDir(Environment.getDataDirectory().getAbsolutePath()+"/tdb");
+
+        Client client = TG.getClientInstance();
+        TdApi.TLFunction func = new TdApi.AuthGetState();
+
     }
 
     public  TelegramApi getTelegramApi(){
