@@ -10,6 +10,8 @@ import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TG;
 import org.drinkless.td.libcore.telegram.TdApi;
 
+import java.io.File;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -24,7 +26,9 @@ public class MainActivity extends ActionBarActivity {
         };
 
         TG.setUpdatesHandler(handler);
-        TG.setDir(Environment.getDataDirectory().getAbsolutePath()+"/tdb");
+        File f = new File (Environment.getDataDirectory().getAbsolutePath() + "/tdb/");
+        f.mkdir();
+        TG.setDir(Environment.getDataDirectory().getAbsolutePath() + "/tdb/");
 
         Client client = TG.getClientInstance();
 //        TdApi.TLFunction func = new TdApi.AuthGetState();
