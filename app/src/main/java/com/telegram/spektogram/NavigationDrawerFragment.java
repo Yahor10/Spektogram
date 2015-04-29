@@ -98,17 +98,17 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDrawerListView = (ListView) inflater.inflate(
+        View inflate = inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
+        mDrawerListView = (ListView) inflate.findViewById(R.id.list);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectItem(position);
             }
         });
-
-        dataList.add(new DrawerItem("Message", R.drawable.ic_drawer));
-        dataList.add(new DrawerItem("Likes", R.drawable.ic_drawer));
+        dataList.add(new DrawerItem(getString(R.string.new_group), R.drawable.ic_drawer));
+        dataList.add(new DrawerItem(getString(R.string.new_secret_chat), R.drawable.ic_drawer));
         dataList.add(new DrawerItem("Settings", R.drawable.ic_drawer));
 
         adapter = new CustomDrawerAdapter(getActivity(), R.layout.custom_drawer_item,
@@ -119,9 +119,7 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         mDrawerListView.setOnItemClickListener(this);
 
-        final LayoutInflater layoutInflater = getLayoutInflater(savedInstanceState);
-        mDrawerListView.addHeaderView(layoutInflater.inflate(R.layout.custom_drawer_header, null));
-        return mDrawerListView;
+        return inflate;
     }
 
     public boolean isDrawerOpen() {

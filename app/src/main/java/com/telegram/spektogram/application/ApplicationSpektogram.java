@@ -42,13 +42,15 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
             if(!f.exists()) {
                 f.mkdir();
                 path = f.getAbsolutePath();
+                TG.setDir(path);
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
 
-        TG.setDir(path);
-        client = TG.getClientInstance();
+        if(client == null) {
+            client = TG.getClientInstance();
+        }
     }
 
 

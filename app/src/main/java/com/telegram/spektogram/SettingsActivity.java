@@ -18,6 +18,8 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 
+import com.telegram.spektogram.preferences.PreferenceKeys;
+import com.telegram.spektogram.preferences.PreferenceUtils;
 
 import java.util.List;
 
@@ -77,7 +79,7 @@ public class SettingsActivity extends PreferenceActivity {
 
         // Add 'data and sync' preferences, and a corresponding header.
         fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle(R.string.pref_header_data_sync);
+        fakeHeader.setTitle(R.string.pref_header_user_settings);
         getPreferenceScreen().addPreference(fakeHeader);
         addPreferencesFromResource(R.xml.pref_user_settings);
 
@@ -259,6 +261,18 @@ public class SettingsActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_user_settings);
 
+            final Preference pref = getPreferenceManager().findPreference(
+                    PreferenceKeys.USER_NAME);
+            pref.setSummary(PreferenceUtils.getUserName(getActivity()));
+
+            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    pref.setSummary(newValue.toString());
+                    return true;
+                }
+            });
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design

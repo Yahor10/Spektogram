@@ -5,11 +5,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.telegram.spektogram.application.ApplicationSpektogram;
-
-import org.drinkless.td.libcore.telegram.Client;
-import org.drinkless.td.libcore.telegram.TdApi;
-
 
 public class MainActivity extends ActionBarActivity {
 
@@ -18,18 +13,6 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        startActivity(SettingsActivity.buildStartIntent(this));
-
-
-        TdApi.TLFunction func = new TdApi.AuthGetState();
-        final ApplicationSpektogram application = ApplicationSpektogram.getApplication(this);
-
-        final Client client = application.getClient();
-        client.send(func, new Client.ResultHandler() {
-            @Override
-            public void onResult(TdApi.TLObject object) {
-
-            }
-        });
     }
 
 

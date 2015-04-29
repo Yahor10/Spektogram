@@ -20,4 +20,8 @@
     <string name="delete">copy</string>
     <string name="messege">Messege</string>
 
+
+    <string name="new_group">New Group</string>
+    <string name="new_secret_chat">New Secret Chat</string>
+
 </resources>
