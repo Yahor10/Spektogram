@@ -5,10 +5,9 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
-import com.telegram.spektogram.telegram.Client;
-import com.telegram.spektogram.telegram.TG;
-import com.telegram.spektogram.telegram.TdApi;
-
+import org.drinkless.td.libcore.telegram.Client;
+import org.drinkless.td.libcore.telegram.TG;
+import org.drinkless.td.libcore.telegram.TdApi;
 import org.telegram.api.TLAbsUpdates;
 import org.telegram.api.TLConfig;
 import org.telegram.api.TLDcOption;
@@ -183,15 +182,7 @@ public class ApplicationSpektogram extends android.app.Application implements Ab
 //        final TLAbsUser user = tlAuthorization.getUser();//
 //        Log.v(null,"user id " + user.getId());
 
-        Client.ResultHandler handler = new Client.ResultHandler() {
-            public void onResult(TdApi.TLObject object) {}
-        };
 
-        TG.setUpdatesHandler(handler);
-        TG.setDir(Environment.getDataDirectory().getAbsolutePath()+"/tdb");
-
-        Client client = TG.getClientInstance();
-        TdApi.TLFunction func = new TdApi.AuthGetState();
 
     }
 
