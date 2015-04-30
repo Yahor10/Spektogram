@@ -18,5 +18,7 @@ public class PreferenceKeys {
 
     public final static String CHANGE_NUMBER = "change_number";
 
+    public final static String TG_INIT = "tg_init";
+
 
 }

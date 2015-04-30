@@ -32,7 +32,6 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
     private void startTelegramApi() {
         Log.v(null, "init spektogram app...");
 
-
         File f = null;
         String path = "";
         try {

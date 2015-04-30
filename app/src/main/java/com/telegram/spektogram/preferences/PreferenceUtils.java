@@ -98,4 +98,20 @@ public class PreferenceUtils {
                 PreferenceKeys.OFFLINE_MODE, false);
     }
 
+    public static void setTGinit(Context context,
+                                   boolean init) {
+        SharedPreferences.Editor pEditor = PreferenceManager.getDefaultSharedPreferences(context)
+                .edit();
+        pEditor.putBoolean(PreferenceKeys.TG_INIT,
+                init);
+        pEditor.commit();
+    }
+
+    public static boolean isTGinit(Context context) {
+        SharedPreferences defaultSharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        return defaultSharedPreferences.getBoolean(
+                PreferenceKeys.TG_INIT, false);
+    }
+
 }
