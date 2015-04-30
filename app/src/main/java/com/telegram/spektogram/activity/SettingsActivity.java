@@ -264,7 +264,7 @@ public class SettingsActivity extends PreferenceActivity {
             addPreferencesFromResource(R.xml.pref_user_settings);
 
             final Preference pref = getPreferenceManager().findPreference(
-                    PreferenceKeys.USER_NAME);
+                    PreferenceKeys.USER_FIRST_NAME);
 
             final Preference change = getPreferenceManager().findPreference(
                     PreferenceKeys.CHANGE_NUMBER);
@@ -272,7 +272,7 @@ public class SettingsActivity extends PreferenceActivity {
             final Activity activity = getActivity();
             change.setTitle(getString(R.string.phone_number) +" " + PreferenceUtils.getPhoneNumber(activity));
 
-            pref.setSummary(PreferenceUtils.getUserName(activity));
+            pref.setSummary(PreferenceUtils.getUserFistName(activity));
             pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
                 @Override

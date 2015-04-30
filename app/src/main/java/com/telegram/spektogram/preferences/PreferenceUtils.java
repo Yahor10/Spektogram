@@ -9,20 +9,36 @@ import android.preference.PreferenceManager;
  */
 public class PreferenceUtils {
 
-    public static void setUserName(Context context,
+    public static void setUserFirstName(Context context,
                                  String userName) {
         SharedPreferences.Editor pEditor = PreferenceManager.getDefaultSharedPreferences(context)
                 .edit();
-        pEditor.putString(PreferenceKeys.USER_NAME,
+        pEditor.putString(PreferenceKeys.USER_FIRST_NAME,
                 userName);
         pEditor.commit();
     }
 
-    public static String getUserName(Context context) {
+    public static String getUserFistName(Context context) {
         SharedPreferences defaultSharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
         return defaultSharedPreferences.getString(
-                PreferenceKeys.USER_NAME, "user");
+                PreferenceKeys.USER_FIRST_NAME, "user");
+    }
+
+    public static void setUserLastName(Context context,
+                                        String userName) {
+        SharedPreferences.Editor pEditor = PreferenceManager.getDefaultSharedPreferences(context)
+                .edit();
+        pEditor.putString(PreferenceKeys.USER_FIRST_NAME,
+                userName);
+        pEditor.commit();
+    }
+
+    public static String getUserLastName(Context context) {
+        SharedPreferences defaultSharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        return defaultSharedPreferences.getString(
+                PreferenceKeys.USER_FIRST_NAME, "user");
     }
 
     public static void setPhoneCodeHash(Context context,

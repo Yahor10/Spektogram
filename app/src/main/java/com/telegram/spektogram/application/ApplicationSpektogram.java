@@ -3,6 +3,7 @@ package com.telegram.spektogram.application;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import com.telegram.spektogram.preferences.PreferenceUtils;
 
@@ -24,15 +25,13 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
     public void onCreate() {
         super.onCreate();
 
-     
-
             startTelegramApi();
 
     }
 
     private void startTelegramApi() {
+        Log.v(null, "init spektogram app...");
 
-        TG.setUpdatesHandler(this);
 
         File f = null;
         String path = "";
@@ -50,6 +49,8 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
             e.printStackTrace();
         }
 
+
+        TG.setUpdatesHandler(this);
         TG.setDir(path);
 
         if(client == null) {

@@ -4,7 +4,7 @@ package com.telegram.spektogram.preferences;
  * Created by ychabatarou on 28.04.2015.
  */
 public class PreferenceKeys {
-    public final static String USER_NAME = "user_name";
+    public final static String USER_FIRST_NAME = "user_first_name";
 
     public final static String PHONE_CODE_HASH = "phone_code_hash";
 

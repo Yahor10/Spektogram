@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.telegram.spektogram.R;
-import com.telegram.spektogram.activity.ChatRoomActivity;
+import com.telegram.spektogram.application.ApplicationSpektogram;
 import com.telegram.spektogram.callback.NextPageCallback;
 
 import org.drinkless.td.libcore.telegram.Client;
@@ -31,16 +31,19 @@ public class PhoneNumberFragment extends Fragment implements Client.ResultHandle
     public void sendCode () {
         String phoneNumber = phoneNumberField.getText().toString();
         ((NextPageCallback) getActivity()).nextPage();
-//        final ApplicationSpektogram application = ApplicationSpektogram.getApplication(getActivity());
-//        final TdApi.AuthSetPhoneNumber function = new TdApi.AuthSetPhoneNumber("+");// TODO set your phone here
+        final ApplicationSpektogram application = ApplicationSpektogram.getApplication(getActivity());
+//        final TdApi.AuthSetPhoneNumber function = new TdApi.AuthSetPhoneNumber("+375293886590");
+//        final TdApi.AuthGetState function = new TdApi.AuthGetState();
+//        final TdApi.AuthSetCode function = new TdApi.AuthSetCode("73833");
+//        final TdApi.AuthSetName function = new TdApi.AuthSetName("Egor","Chebotarev");
 //        application.sendFunction(function,this);
 
-        startActivity(ChatRoomActivity.buildStartIntent(getActivity()));
+//        startActivity(ChatRoomActivity.buildStartIntent(getActivity()));
     }
 
     @Override
     public void onResult(TdApi.TLObject object) {
-        Log.v(null,"On result" + object.toString());
+        Log.v(null,"On result:" + object.toString());
     }
 
     @Override
