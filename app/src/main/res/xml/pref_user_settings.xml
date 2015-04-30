@@ -11,4 +11,12 @@
         android:singleLine="true"
         android:maxLines="1" />
 
+
+    <Preference
+        android:selectable="false"
+        android:enabled="true"
+        android:key="change_number"
+        android:title="@string/phone_number"
+        android:summary="@string/change_phonenumber" />
+
 </PreferenceScreen>

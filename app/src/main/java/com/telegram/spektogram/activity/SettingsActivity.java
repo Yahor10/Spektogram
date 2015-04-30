@@ -1,6 +1,7 @@
 package com.telegram.spektogram.activity;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -264,8 +265,14 @@ public class SettingsActivity extends PreferenceActivity {
 
             final Preference pref = getPreferenceManager().findPreference(
                     PreferenceKeys.USER_NAME);
-            pref.setSummary(PreferenceUtils.getUserName(getActivity()));
 
+            final Preference change = getPreferenceManager().findPreference(
+                    PreferenceKeys.CHANGE_NUMBER);
+
+            final Activity activity = getActivity();
+            change.setTitle(getString(R.string.phone_number) +" " + PreferenceUtils.getPhoneNumber(activity));
+
+            pref.setSummary(PreferenceUtils.getUserName(activity));
             pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
                 @Override

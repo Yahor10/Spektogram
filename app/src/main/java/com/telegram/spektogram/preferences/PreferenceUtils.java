@@ -58,4 +58,28 @@ public class PreferenceUtils {
                 PreferenceKeys.AUTH, false);
     }
 
+
+    public static void setPhoneNumber(Context context,
+                                   String phone) {
+        SharedPreferences.Editor pEditor = PreferenceManager.getDefaultSharedPreferences(context)
+                .edit();
+        pEditor.putString(PreferenceKeys.PHONE_NUMBER,
+                phone);
+        pEditor.commit();
+    }
+
+    public static String getPhoneNumber(Context context) {
+        SharedPreferences defaultSharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        return defaultSharedPreferences.getString(
+                PreferenceKeys.PHONE_NUMBER, "1");
+    }
+
+    public static boolean isOfflineMode(Context context) {
+        SharedPreferences defaultSharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        return defaultSharedPreferences.getBoolean(
+                PreferenceKeys.OFFLINE_MODE, false);
+    }
+
 }

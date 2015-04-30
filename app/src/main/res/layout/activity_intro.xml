@@ -7,12 +7,6 @@
     tools:context="com.telegram.spektogram.IntroActivity"
     android:background="@drawable/intro_background">
 
-    <TextView android:text="@string/app_name" android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/imageView2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="120dp" />
 
     <ImageView
         android:layout_width="120dp"
@@ -21,5 +15,16 @@
         android:layout_centerVertical="true"
         android:src="@mipmap/ic_launcher"
         android:layout_centerHorizontal="true" />
+
+
+
+    <TextView android:text="@string/telegram_messenger" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true" />
+
+
 
 </RelativeLayout>

@@ -10,9 +10,13 @@ public class PreferenceKeys {
 
     public final static String PHONE_SMS_AUTH_CODE = "phone_sms_auth_code";
 
+    public final static String PHONE_NUMBER = "phone_number";
+
     public final static String OFFLINE_MODE = "offline_mode";
 
     public final static String AUTH = "auth_user";
+
+    public final static String CHANGE_NUMBER = "change_number";
 
 
 }

@@ -4,6 +4,8 @@ package com.telegram.spektogram.application;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
+import com.telegram.spektogram.preferences.PreferenceUtils;
+
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TG;
 import org.drinkless.td.libcore.telegram.TdApi;
@@ -70,5 +72,16 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
             client = TG.getClientInstance();
         }
         return client;
+    }
+
+    public void sendFunction(TdApi.TLFunction func, Client.ResultHandler handler){
+        if(!PreferenceUtils.isOfflineMode(this)) {
+            if (client == null) {
+                client = getClient();
+            }
+            client.send(func, handler);
+        }else{
+            // TODO send message about offline;
+        }
     }
 }

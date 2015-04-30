@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.telegram.spektogram.R;
-import com.telegram.spektogram.application.ApplicationSpektogram;
+import com.telegram.spektogram.activity.ChatRoomActivity;
 import com.telegram.spektogram.callback.NextPageCallback;
 
 import org.drinkless.td.libcore.telegram.Client;
@@ -31,9 +31,11 @@ public class PhoneNumberFragment extends Fragment implements Client.ResultHandle
     public void sendCode () {
         String phoneNumber = phoneNumberField.getText().toString();
         ((NextPageCallback) getActivity()).nextPage();
-        final ApplicationSpektogram application = ApplicationSpektogram.getApplication(getActivity());
-        final TdApi.AuthSetPhoneNumber function = new TdApi.AuthSetPhoneNumber("");// TODO set your phone here
-        application.getClient().send(function,this);
+//        final ApplicationSpektogram application = ApplicationSpektogram.getApplication(getActivity());
+//        final TdApi.AuthSetPhoneNumber function = new TdApi.AuthSetPhoneNumber("+");// TODO set your phone here
+//        application.sendFunction(function,this);
+
+        startActivity(ChatRoomActivity.buildStartIntent(getActivity()));
     }
 
     @Override
