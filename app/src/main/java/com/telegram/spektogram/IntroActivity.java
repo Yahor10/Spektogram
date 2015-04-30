@@ -1,38 +1,63 @@
 package com.telegram.spektogram;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.os.Handler;
+
+import com.telegram.spektogram.activity.ChatRoomActivity;
+import com.telegram.spektogram.activity.SignInActivity;
+import com.telegram.spektogram.preferences.PreferenceUtils;
 
 
-public class IntroActivity extends ActionBarActivity {
+public class IntroActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_intro, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (handler == null) {
+            handler = new Handler();
         }
-
-        return super.onOptionsItemSelected(item);
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handler.postDelayed(runnable, SPLASH_TIME_OUT);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        handler.removeCallbacks(runnable);
+    }
+
+    Handler handler;
+    final Runnable runnable = new Runnable() {
+
+            /*
+             * Showing splash screen with a timer. This will be useful when you
+             * want to show case your app logo / company
+             */
+
+        @Override
+        public void run() {
+            // This method will be executed once the timer is over
+            // Start your app main activity
+            final Context baseContext = getBaseContext();
+            Intent i = null;
+            if(!PreferenceUtils.isUserAuth(baseContext)) {
+                i = SignInActivity.buildStartIntent(baseContext);
+            }else{
+                i = ChatRoomActivity.buildStartIntent(baseContext);
+            }
+            startActivity(i);
+            // close this activity
+            finish();
+        }
+    };
+    private final static int SPLASH_TIME_OUT = 3000;
 }

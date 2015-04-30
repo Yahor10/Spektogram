@@ -1,6 +1,5 @@
 package com.telegram.spektogram.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -18,6 +17,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        startActivity(SettingsActivity.buildStartIntent(this));
+
 
     }
 

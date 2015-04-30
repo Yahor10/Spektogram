@@ -42,4 +42,20 @@ public class PreferenceUtils {
     }
 
 
+    public static void setUserAuth(Context context,
+                                        boolean auth) {
+        SharedPreferences.Editor pEditor = PreferenceManager.getDefaultSharedPreferences(context)
+                .edit();
+        pEditor.putBoolean(PreferenceKeys.AUTH,
+                auth);
+        pEditor.commit();
+    }
+
+    public static boolean isUserAuth(Context context) {
+        SharedPreferences defaultSharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        return defaultSharedPreferences.getBoolean(
+                PreferenceKeys.AUTH, false);
+    }
+
 }

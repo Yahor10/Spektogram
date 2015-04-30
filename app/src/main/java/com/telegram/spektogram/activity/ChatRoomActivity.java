@@ -42,7 +42,6 @@ public class ChatRoomActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        startActivity(new Intent(this, SignInActivity.class));
 
         // Set Listener
 
