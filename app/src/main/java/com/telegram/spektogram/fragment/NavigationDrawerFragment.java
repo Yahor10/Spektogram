@@ -1,4 +1,4 @@
-package com.telegram.spektogram;
+package com.telegram.spektogram.fragment;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.telegram.spektogram.R;
 import com.telegram.spektogram.views.CustomDrawerAdapter;
 import com.telegram.spektogram.views.DrawerItem;
 
@@ -109,7 +110,9 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
         });
         dataList.add(new DrawerItem(getString(R.string.new_group), R.drawable.ic_drawer));
         dataList.add(new DrawerItem(getString(R.string.new_secret_chat), R.drawable.ic_drawer));
-        dataList.add(new DrawerItem("Settings", R.drawable.ic_drawer));
+        dataList.add(new DrawerItem(getString(R.string.contacts), R.drawable.ic_drawer));
+        dataList.add(new DrawerItem(getString(R.string.invite_friend), R.drawable.ic_drawer));
+        dataList.add(new DrawerItem(getString(R.string.settings), R.drawable.ic_drawer));
 
         adapter = new CustomDrawerAdapter(getActivity(), R.layout.custom_drawer_item,
                 dataList);

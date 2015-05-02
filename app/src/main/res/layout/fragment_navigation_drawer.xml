@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.telegram.spektogram.NavigationDrawerFragment"
+    tools:context="com.telegram.spektogram.fragment.NavigationDrawerFragment"
     android:background="@android:color/white">
 
 
@@ -11,8 +11,27 @@
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:background="@android:color/holo_red_dark"
+        android:gravity="center"
         android:id="@+id/headerView">
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="My name here"
+            android:id="@+id/userName"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="+12345678"
+            android:id="@+id/userPhone"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center_horizontal" />
     </LinearLayout>
 
     <ListView

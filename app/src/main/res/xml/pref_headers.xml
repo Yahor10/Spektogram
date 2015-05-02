@@ -2,14 +2,14 @@
 
     <!-- These settings headers are only used on tablets. -->
 
-    <header android:fragment="com.telegram.spektogram.SettingsActivity$GeneralPreferenceFragment"
+    <header android:fragment="com.telegram.spektogram.activity.SettingsActivity$GeneralPreferenceFragment"
         android:title="@string/pref_header_general" />
 
     <header
-        android:fragment="com.telegram.spektogram.SettingsActivity$ChatSettingsPreferenceFragment"
+        android:fragment="com.telegram.spektogram.activity.SettingsActivity$ChatSettingsPreferenceFragment"
         android:title="@string/pref_header_chat_settings" />
 
-    <header android:fragment="com.telegram.spektogram.SettingsActivity$UserPreferenceFragment"
+    <header android:fragment="com.telegram.spektogram.activity.SettingsActivity$UserPreferenceFragment"
         android:title="@string/pref_header_user_settings" />
 
 </preference-headers>

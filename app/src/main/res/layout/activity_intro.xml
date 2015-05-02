@@ -1,0 +1,30 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.telegram.spektogram.IntroActivity"
+    android:background="@drawable/intro_background">
+
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/imageView2"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/ic_launcher"
+        android:layout_centerHorizontal="true" />
+
+
+
+    <TextView android:text="@string/telegram_messenger" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true" />
+
+
+
+</RelativeLayout>

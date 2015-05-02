@@ -3,6 +3,9 @@ package com.telegram.spektogram.application;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.util.Log;
+
+import com.telegram.spektogram.preferences.PreferenceUtils;
 
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TG;
@@ -22,15 +25,12 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
     public void onCreate() {
         super.onCreate();
 
-     
-
             startTelegramApi();
 
     }
 
     private void startTelegramApi() {
-
-        TG.setUpdatesHandler(this);
+        Log.v(null, "init spektogram app...");
 
         File f = null;
         String path = "";
@@ -41,12 +41,16 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
                     .applicationInfo.dataDir + "/tdb/");
             if(!f.exists()) {
                 f.mkdir();
-                path = f.getAbsolutePath();
-                TG.setDir(path);
             }
+
+            path = f.getAbsolutePath();
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
+
+        TG.setUpdatesHandler(this);
+        TG.setDir(path);
 
         if(client == null) {
             client = TG.getClientInstance();
@@ -64,6 +68,20 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
     }
 
     public Client getClient() {
+        if(client == null) {
+            client = TG.getClientInstance();
+        }
         return client;
+    }
+
+    public void sendFunction(TdApi.TLFunction func, Client.ResultHandler handler){
+        if(!PreferenceUtils.isOfflineMode(this)) {
+            if (client == null) {
+                client = getClient();
+            }
+            client.send(func, handler);
+        }else{
+            // TODO send message about offline;
+        }
     }
 }

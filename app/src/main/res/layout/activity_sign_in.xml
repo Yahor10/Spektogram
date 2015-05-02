@@ -1,0 +1,66 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.telegram.spektogram.activity.SignInActivity">
+
+    <ImageView
+        android:src="@drawable/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/app_name"/>
+
+    <LinearLayout
+        android:id="@+id/main_login_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingTop="30dp"
+        android:paddingBottom="20dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        >
+
+        <EditText
+            android:id="@+id/login"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
+            android:singleLine="true"
+            android:hint="@string/login" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:hint="@string/password" />
+
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:onClick="login"
+            android:text="@string/sign_in"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/sign_up_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="signUp"
+        android:textColor="@android:color/white"
+        android:background="@null"
+        android:text="@string/sign_up_on_login"/>
+
+</RelativeLayout>

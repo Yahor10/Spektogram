@@ -1,7 +1,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <EditTextPreference
-        android:key="user_name"
+        android:key="user_first_name"
         android:title="@string/pref_title_display_name"
         android:defaultValue="@string/pref_default_display_name"
         android:summary="test"
@@ -10,5 +10,13 @@
         android:capitalize="words"
         android:singleLine="true"
         android:maxLines="1" />
+
+
+    <Preference
+        android:selectable="false"
+        android:enabled="true"
+        android:key="change_number"
+        android:title="@string/phone_number"
+        android:summary="@string/change_phonenumber" />
 
 </PreferenceScreen>
