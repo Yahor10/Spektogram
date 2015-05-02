@@ -27,6 +27,7 @@ public class ConstantsDB {
     // ======================================
 
     public static final String COLUMN_MESSAGE_KEY_OF_CHAT = "key_of_chat";
+    public static final String COLUMN_MESSAGE_ID_TELEGRAM = "message_id_telegram";
     public static final String COLUMN_MESSAGE_TEXT = "message_text";
     public static final String COLUMN_MESSAGE_TIME = "time_of_message";
     public static final String COLUMN_MESSAGE_DELIVERED = "delivered";
@@ -42,6 +43,7 @@ public class ConstantsDB {
     // ======================================
 
     public static final String COLUMN_USER_NAME = "user_name";
+    public static final String COLUMN_USER_ID_TELEGRAM = "user_id_telegram";
     public static final String COLUMN_USER_LASTNAME = "user_last_name";
     public static final String COLUMN_USER_FIRSTNAME = "user_first_name";
     public static final String COLUMN_USER_PHONE = "user_phone";

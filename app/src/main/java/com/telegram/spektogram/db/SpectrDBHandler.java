@@ -20,6 +20,15 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
 
     }
 
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        if (!db.isReadOnly()) {
+            // Enable foreign key constraints
+            db.execSQL("PRAGMA foreign_keys = ON;");
+        }
+    }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -35,6 +44,7 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
         String CREATE_TABLE_USER = "CREATE TABLE "
                 + ConstantsDB.TABLE_USERS + "("
                 + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
+                + ConstantsDB.COLUMN_USER_ID_TELEGRAM + " INTEGER,"
                 + ConstantsDB.COLUMN_USER_NAME + " TEXT,"
                 + ConstantsDB.COLUMN_USER_LASTNAME + " TEXT,"
                 + ConstantsDB.COLUMN_USER_FIRSTNAME + " TEXT,"
@@ -43,12 +53,13 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
 
         String CREATE_TABLE_MESSAGES = "CREATE TABLE " + ConstantsDB.TABLE_MESSAGES
                 + "(" + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
+                + ConstantsDB.COLUMN_MESSAGE_ID_TELEGRAM + " INTEGER,"
                 + ConstantsDB.COLUMN_MESSAGE_TEXT + " TEXT,"
                 + ConstantsDB.COLUMN_MESSAGE_TIME + " INTEGER,"
                 + ConstantsDB.COLUMN_MESSAGE_SENT + " INTEGER,"
                 + ConstantsDB.COLUMN_MESSAGE_DELIVERED + " INTEGER,"
                 + "FOREIGN KEY( " + ConstantsDB.COLUMN_MESSAGE_KEY_OF_CHAT + " ) REFERENCES "
-                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_ID + " )"
+                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_ID + " ) ON DELETE CASCADE"
                 + "FOREIGN KEY( " + ConstantsDB.COLUMN_MESSAGE_KEY_OF_USER + " ) REFERENCES "
                 + ConstantsDB.TABLE_USERS + " (" + ConstantsDB.COLUMN_ID + " )"
                 + ")";
@@ -57,7 +68,7 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
                 + "(" + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
                 + "FOREIGN KEY( "
                 + ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_CHAT + " ) REFERENCES "
-                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_ID + " )"
+                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_ID + " ) ON DELETE CASCADE"
                 + "FOREIGN KEY( "
                 + ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_MESSAGE + " ) REFERENCES "
                 + ConstantsDB.TABLE_MESSAGES + " (" + ConstantsDB.COLUMN_ID + " )"
@@ -69,7 +80,7 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
                 + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
                 + "FOREIGN KEY( "
                 + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_CHAT + " ) REFERENCES "
-                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_ID + " )"
+                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_ID + " ) ON DELETE CASCADE"
                 + "FOREIGN KEY( "
                 + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_USER + " ) REFERENCES "
                 + ConstantsDB.TABLE_USERS + " (" + ConstantsDB.COLUMN_ID + " )"
@@ -110,10 +121,10 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
             if (chat.type != null) {
                 if (chat.type instanceof TdApi.PrivateChatInfo) {
                     chat_name = ((TdApi.PrivateChatInfo) chat.type).user.firstName;
-                    values_chat.put(ConstantsDB.COLUMN_CHAT_TYPE,ConstantsDB.TYPE_CHAT_ONE_USER);
+                    values_chat.put(ConstantsDB.COLUMN_CHAT_TYPE, ConstantsDB.TYPE_CHAT_ONE_USER);
                 } else if (chat.type instanceof TdApi.GroupChatInfo) {
                     chat_name = ((TdApi.GroupChatInfo) chat.type).groupChat.title;
-                    values_chat.put(ConstantsDB.COLUMN_CHAT_TYPE,ConstantsDB.TYPE_CHAT_SEVERAL_USERS);
+                    values_chat.put(ConstantsDB.COLUMN_CHAT_TYPE, ConstantsDB.TYPE_CHAT_SEVERAL_USERS);
                 }
             }
 
@@ -121,11 +132,12 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
             values_chat.put(ConstantsDB.COLUMN_CHAT_ID_TELEGRAM, chat.id);
 
 
-            ContentValues values_user_to_chat = new ContentValues();;
+            ContentValues values_user_to_chat = new ContentValues();
+            ;
             values_user_to_chat.put(ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_CHAT, chat.id);
             if (chat.type instanceof TdApi.PrivateChatInfo || chat.type instanceof TdApi.UnknownPrivateChatInfo) {
                 values_user_to_chat.put(ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_CHAT, ((TdApi.PrivateChatInfo) chat.type).user.id);
-            }else{
+            } else {
                 values_user_to_chat.put(ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_CHAT, -1);
             }
 
@@ -219,7 +231,7 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
 
     }
 
-    public ArrayList<TdApi.Chat> getAllChats(){
+    public ArrayList<TdApi.Chat> getAllChats() {
 
         ArrayList<TdApi.Chat> returnChat = new ArrayList<TdApi.Chat>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -234,6 +246,8 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
                     .getColumnIndex(ConstantsDB.COLUMN_CHAT_ID_TELEGRAM);
             int columnChatName = cursor
                     .getColumnIndex(ConstantsDB.COLUMN_CHAT_NAME);
+            int columnChatType = cursor
+                    .getColumnIndex(ConstantsDB.COLUMN_CHAT_TYPE);
 
             if (cursor.getCount() != 0) {
                 cursor.moveToFirst();
@@ -243,22 +257,17 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
                     TdApi.Chat chat = new TdApi.Chat();
 
 
-
                     chat.id = cursor.getInt(columnIdChat);
-                    if (chat.type != null) {
-                        if (chat.type instanceof TdApi.PrivateChatInfo) {
-                              chat.type = new TdApi.PrivateChatInfo();
+
+                    if (cursor.getInt(columnChatType) == ConstantsDB.TYPE_CHAT_ONE_USER) {
+                        chat.type = new TdApi.PrivateChatInfo();
 //                            !!!
-                        } else if (chat.type instanceof TdApi.GroupChatInfo) {
-//                            chat_name = ((TdApi.GroupChatInfo) chat.type).groupChat.title;
-                        }
+                    } else if (cursor.getInt(columnChatType) == ConstantsDB.TYPE_CHAT_SEVERAL_USERS) {
+                        chat.type = new TdApi.GroupChatInfo();
+                        ((TdApi.GroupChatInfo) chat.type).groupChat = new TdApi.GroupChat();
+                        ((TdApi.GroupChatInfo) chat.type).groupChat.title = cursor.getString(columnChatName);
                     }
-//                    test.setNameTest(cursor.getString(columnTestName));
-//                    test.setDescribeTest(cursor.getString(columnDescribeTest));
-//                    test.setTypeTest(cursor.getInt(columnTypeTest));
-//                    test.setLanguage(cursor.getString(columnLanguage));
-//                    long id_key = cursor.getLong(columnIdKEY);
-                    // test.setTasks(getTasks(id_key));
+//
 
                     returnChat.add(chat);
                 } while (cursor.moveToNext());
@@ -278,7 +287,100 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
         db.close();
 
 
-        return null;
+        return returnChat;
+    }
+
+    private ArrayList<TdApi.User> getUsersByChatId(SQLiteDatabase db, int chat_id) {
+
+        ArrayList<TdApi.User> users = null;
+
+        String queryUserByChatId = "Select * FROM " + ConstantsDB.TABLE_USER_TO_CHATS
+                + " WHERE " + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_CHAT + " = " + "'"
+                + chat_id + "'";
+        Cursor cursor = db.rawQuery(queryUserByChatId, null);
+
+        int columnUserId = cursor
+                .getColumnIndex(ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_USER);
+
+        ArrayList<Integer> users_id = new ArrayList<Integer>();
+
+        if (cursor.getCount() != 0) {
+            cursor.moveToFirst();
+
+            boolean flagFinishReadCursor = false;
+
+            while (!flagFinishReadCursor) {
+                int id;
+                id = cursor.getInt(columnUserId);
+                users_id.add(id);
+                if (!cursor.moveToNext()) {
+                    flagFinishReadCursor = true;
+                }
+            }
+
+            cursor.close();
+        } else {
+            users = null;
+        }
+
+        return users;
+    }
+
+    private ArrayList<TdApi.User> getAllUsersByUserId(SQLiteDatabase db, ArrayList<Integer> users_id) {
+
+        ArrayList<TdApi.User> users = new ArrayList<TdApi.User>();
+
+        if (users_id == null || users_id.size() == 0) {
+            return null;
+        } else {
+            for (int id : users_id) {
+                TdApi.User user = getUserById(db, id);
+                if (user != null) {
+                    users.add(user);
+                }
+            }
+        }
+        return users;
+
+    }
+
+    private TdApi.User getUserById(SQLiteDatabase db, int user_id) {
+
+
+        String queryUserByUserId = "Select * FROM " + ConstantsDB.TABLE_USERS
+                + " WHERE " + ConstantsDB.COLUMN_USER_ID_TELEGRAM + " = " + "'"
+                + user_id + "'";
+        Cursor cursor = db.rawQuery(queryUserByUserId, null);
+
+
+        TdApi.User user;
+
+        if (cursor.getCount() != 0) {
+            cursor.moveToFirst();
+
+            user = new TdApi.User();
+
+            user.id = user_id;
+            int columnUserName = cursor
+                    .getColumnIndex(ConstantsDB.COLUMN_USER_NAME);
+            int columnUserFirstName = cursor
+                    .getColumnIndex(ConstantsDB.COLUMN_USER_FIRSTNAME);
+            int columnUserLastName = cursor
+                    .getColumnIndex(ConstantsDB.COLUMN_USER_LASTNAME);
+            int columnUserPhone = cursor
+                    .getColumnIndex(ConstantsDB.COLUMN_USER_PHONE);
+            user.username = cursor.getString(columnUserName);
+            user.firstName = cursor.getString(columnUserFirstName);
+            user.lastName = cursor.getString(columnUserLastName);
+            user.phoneNumber = cursor.getString(columnUserPhone);
+
+            cursor.close();
+        } else {
+            user = null;
+        }
+
+
+        return user;
     }
 
 
