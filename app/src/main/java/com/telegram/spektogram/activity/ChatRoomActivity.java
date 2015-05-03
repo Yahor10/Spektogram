@@ -15,10 +15,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.telegram.spektogram.db.SpectrDBHandler;
 import com.telegram.spektogram.fragment.NavigationDrawerFragment;
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.views.PopupMenu;
+
+import org.drinkless.td.libcore.telegram.TdApi;
+
+import java.util.ArrayList;
 
 
 public class ChatRoomActivity extends ActionBarActivity
@@ -48,6 +54,23 @@ public class ChatRoomActivity extends ActionBarActivity
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+//                TdApi.Chat chat = new TdApi.Chat();
+//                chat.id = 123;
+//                chat.type =  new  TdApi.PrivateChatInfo();
+//                ((TdApi.PrivateChatInfo)chat.type).user = new TdApi.User();
+//                ((TdApi.PrivateChatInfo)chat.type).user.firstName = "Alexandr";
+//                ((TdApi.PrivateChatInfo)chat.type).user.lastName= "Alexeevich";
+//                ((TdApi.PrivateChatInfo)chat.type).user.id = 321;
+//                ((TdApi.PrivateChatInfo)chat.type).user.username = "alex-pers";
+//                ((TdApi.PrivateChatInfo)chat.type).user.phoneNumber = "+375292044134";
+//
+//
+//                SpectrDBHandler spectrDBHandler = new SpectrDBHandler(getApplicationContext());
+//                spectrDBHandler.addUser(((TdApi.PrivateChatInfo)chat.type).user);
+//                spectrDBHandler.addChat(chat);
+//                ArrayList<TdApi.Chat> chats = spectrDBHandler.getAllChats();
+
                 PopupMenu menu = new PopupMenu(ChatRoomActivity.this);
                 Resources resources = getResources();
 

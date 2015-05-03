@@ -32,6 +32,7 @@ public class ConstantsDB {
     public static final String COLUMN_MESSAGE_TIME = "time_of_message";
     public static final String COLUMN_MESSAGE_DELIVERED = "delivered";
     public static final String COLUMN_MESSAGE_SENT = "sent";
+    public static final String COLUMN_MESSAGE_TYPE = "type_message";
     public static final String COLUMN_MESSAGE_KEY_OF_USER = "key_of_user";
 
     // ======================================
@@ -57,4 +58,10 @@ public class ConstantsDB {
 
     public static final int  TYPE_CHAT_ONE_USER = 1;
     public static final int  TYPE_CHAT_SEVERAL_USERS = 2;
+
+    // ======================================
+    public static final int  TYPE_MESSAGE_TEXT = 1;
+    public static final int  TYPE_MESSAGE_AUDIO = 2;
+    public static final int  TYPE_MESSAGE_VIDEO = 3;
+
 }

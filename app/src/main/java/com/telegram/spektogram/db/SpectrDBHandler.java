@@ -36,19 +36,19 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
 
         String CREATE_TABLE_RESULT = "CREATE TABLE "
                 + ConstantsDB.TABLE_CHATS + "(" + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
-                + ConstantsDB.COLUMN_CHAT_ID_TELEGRAM + " INTEGER,"
-                + ConstantsDB.COLUMN_CHAT_TYPE + " INTEGER,"
-                + ConstantsDB.COLUMN_CHAT_NAME + " TEXT"
+                + ConstantsDB.COLUMN_CHAT_ID_TELEGRAM + " INTEGER NOT NULL UNIQUE,"
+                + ConstantsDB.COLUMN_CHAT_TYPE + " INTEGER NOT NULL,"
+                + ConstantsDB.COLUMN_CHAT_NAME + " TEXT NOT NULL"
                 + ")";
 
         String CREATE_TABLE_USER = "CREATE TABLE "
                 + ConstantsDB.TABLE_USERS + "("
                 + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
-                + ConstantsDB.COLUMN_USER_ID_TELEGRAM + " INTEGER,"
+                + ConstantsDB.COLUMN_USER_ID_TELEGRAM + " INTEGER NOT NULL UNIQUE,"
                 + ConstantsDB.COLUMN_USER_NAME + " TEXT,"
                 + ConstantsDB.COLUMN_USER_LASTNAME + " TEXT,"
-                + ConstantsDB.COLUMN_USER_FIRSTNAME + " TEXT,"
-                + ConstantsDB.COLUMN_USER_PHONE + " TEXT,"
+                + ConstantsDB.COLUMN_USER_FIRSTNAME + " TEXT NOT NULL,"
+                + ConstantsDB.COLUMN_USER_PHONE + " TEXT"
                 + ")";
 
         String CREATE_TABLE_MESSAGES = "CREATE TABLE " + ConstantsDB.TABLE_MESSAGES
@@ -56,19 +56,24 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
                 + ConstantsDB.COLUMN_MESSAGE_ID_TELEGRAM + " INTEGER,"
                 + ConstantsDB.COLUMN_MESSAGE_TEXT + " TEXT,"
                 + ConstantsDB.COLUMN_MESSAGE_TIME + " INTEGER,"
+                + ConstantsDB.COLUMN_MESSAGE_TYPE + " INTEGER,"
                 + ConstantsDB.COLUMN_MESSAGE_SENT + " INTEGER,"
                 + ConstantsDB.COLUMN_MESSAGE_DELIVERED + " INTEGER,"
+                + ConstantsDB.COLUMN_MESSAGE_KEY_OF_CHAT + " INTEGER,"
+                + ConstantsDB.COLUMN_MESSAGE_KEY_OF_USER + " INTEGER,"
                 + "FOREIGN KEY( " + ConstantsDB.COLUMN_MESSAGE_KEY_OF_CHAT + " ) REFERENCES "
-                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_ID + " ) ON DELETE CASCADE"
+                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_ID + " ) ON DELETE CASCADE,"
                 + "FOREIGN KEY( " + ConstantsDB.COLUMN_MESSAGE_KEY_OF_USER + " ) REFERENCES "
                 + ConstantsDB.TABLE_USERS + " (" + ConstantsDB.COLUMN_ID + " )"
                 + ")";
 
         String CREATE_TABLE_LAST_MESSAGES = "CREATE TABLE " + ConstantsDB.TABLE_LAST_MESSAGE
                 + "(" + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
+                + ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_CHAT + " INTEGER,"
+                + ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_MESSAGE + " INTEGER,"
                 + "FOREIGN KEY( "
                 + ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_CHAT + " ) REFERENCES "
-                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_ID + " ) ON DELETE CASCADE"
+                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_ID + " ) ON DELETE CASCADE,"
                 + "FOREIGN KEY( "
                 + ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_MESSAGE + " ) REFERENCES "
                 + ConstantsDB.TABLE_MESSAGES + " (" + ConstantsDB.COLUMN_ID + " )"
@@ -78,12 +83,14 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
         String CREATE_TABLE_USET_TO_CHAT = "CREATE TABLE "
                 + ConstantsDB.TABLE_USER_TO_CHATS + "("
                 + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
+                + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_CHAT + " INTEGER NOT NULL,"
+                + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_USER + " INTEGER NOT NULL,"
                 + "FOREIGN KEY( "
                 + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_CHAT + " ) REFERENCES "
-                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_ID + " ) ON DELETE CASCADE"
+                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_CHAT_ID_TELEGRAM + " ) ON DELETE CASCADE,"
                 + "FOREIGN KEY( "
                 + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_USER + " ) REFERENCES "
-                + ConstantsDB.TABLE_USERS + " (" + ConstantsDB.COLUMN_ID + " )"
+                + ConstantsDB.TABLE_USERS + " (" + ConstantsDB.COLUMN_USER_ID_TELEGRAM + " )"
                 + ")";
 
 
@@ -133,12 +140,12 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
 
 
             ContentValues values_user_to_chat = new ContentValues();
-            ;
+
             values_user_to_chat.put(ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_CHAT, chat.id);
             if (chat.type instanceof TdApi.PrivateChatInfo || chat.type instanceof TdApi.UnknownPrivateChatInfo) {
-                values_user_to_chat.put(ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_CHAT, ((TdApi.PrivateChatInfo) chat.type).user.id);
+                values_user_to_chat.put(ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_USER, ((TdApi.PrivateChatInfo) chat.type).user.id);
             } else {
-                values_user_to_chat.put(ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_CHAT, -1);
+                values_user_to_chat.put(ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_USER, 321);
             }
 
             SQLiteDatabase db = this.getWritableDatabase();
@@ -183,6 +190,7 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
             values.put(ConstantsDB.COLUMN_USER_FIRSTNAME, user_first_name);
             values.put(ConstantsDB.COLUMN_USER_LASTNAME, user_last_name);
             values.put(ConstantsDB.COLUMN_USER_PHONE, user_phone);
+            values.put(ConstantsDB.COLUMN_USER_ID_TELEGRAM, user.id);
 
 
             SQLiteDatabase db = this.getWritableDatabase();
@@ -194,42 +202,6 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
 
     }
 
-
-    public void putMessage(TdApi.Message message, TdApi.Chat chat, TdApi.User user) {
-
-        if (message != null && chat != null && user != null) {
-            long chat_id = chat.id;
-            long user_id = user.id;
-
-
-            ContentValues values_message = new ContentValues();
-            values_message.put(ConstantsDB.COLUMN_MESSAGE_KEY_OF_CHAT, chat_id);
-            values_message.put(ConstantsDB.COLUMN_MESSAGE_KEY_OF_USER, user_id);
-            values_message.put(ConstantsDB.COLUMN_MESSAGE_TIME, message.date);
-            values_message.put(ConstantsDB.COLUMN_MESSAGE_SENT, 1);
-            values_message.put(ConstantsDB.COLUMN_MESSAGE_DELIVERED, 1);
-
-            if (message.message instanceof TdApi.MessageText) {
-                values_message.put(ConstantsDB.COLUMN_MESSAGE_TEXT, ((TdApi.MessageText) message.message).text);
-            } else {
-                values_message.put(ConstantsDB.COLUMN_MESSAGE_TEXT, "This message contains embedded data ");
-            }
-
-
-            ContentValues values_last_message = new ContentValues();
-            values_last_message.put(ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_CHAT, chat_id);
-            values_last_message.put(ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_MESSAGE, message.id);
-
-
-            SQLiteDatabase db = this.getWritableDatabase();
-
-            db.insert(ConstantsDB.TABLE_MESSAGES, null, values_message);
-            db.insert(ConstantsDB.TABLE_LAST_MESSAGE, null, values_last_message);
-
-            db.close();
-        }
-
-    }
 
     public ArrayList<TdApi.Chat> getAllChats() {
 
@@ -261,6 +233,10 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
 
                     if (cursor.getInt(columnChatType) == ConstantsDB.TYPE_CHAT_ONE_USER) {
                         chat.type = new TdApi.PrivateChatInfo();
+                        ArrayList<TdApi.User> users = getUsersByChatId(db, chat.id);
+                        if (users != null && users.size() > 0) {
+                            ((TdApi.PrivateChatInfo) chat.type).user = users.get(0);
+                        }
 //                            !!!
                     } else if (cursor.getInt(columnChatType) == ConstantsDB.TYPE_CHAT_SEVERAL_USERS) {
                         chat.type = new TdApi.GroupChatInfo();
@@ -290,7 +266,7 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
         return returnChat;
     }
 
-    private ArrayList<TdApi.User> getUsersByChatId(SQLiteDatabase db, int chat_id) {
+    private ArrayList<TdApi.User> getUsersByChatId(SQLiteDatabase db, long chat_id) {
 
         ArrayList<TdApi.User> users = null;
 
@@ -317,8 +293,10 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
                     flagFinishReadCursor = true;
                 }
             }
-
             cursor.close();
+
+            users = getAllUsersByUserId(db, users_id);
+
         } else {
             users = null;
         }
@@ -383,5 +361,117 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
         return user;
     }
 
+
+    public void putMessage(TdApi.Message message, TdApi.Chat chat, TdApi.User user) {
+
+        if (message != null && chat != null && user != null) {
+            long chat_id = chat.id;
+            long user_id = user.id;
+
+
+            ContentValues values_message = new ContentValues();
+            values_message.put(ConstantsDB.COLUMN_MESSAGE_KEY_OF_CHAT, chat_id);
+            values_message.put(ConstantsDB.COLUMN_MESSAGE_KEY_OF_USER, user_id);
+            values_message.put(ConstantsDB.COLUMN_MESSAGE_TIME, message.date);
+            values_message.put(ConstantsDB.COLUMN_MESSAGE_SENT, 1);
+            values_message.put(ConstantsDB.COLUMN_MESSAGE_DELIVERED, 1);
+
+            if (message.message instanceof TdApi.MessageText) {
+                values_message.put(ConstantsDB.COLUMN_MESSAGE_TEXT, ((TdApi.MessageText) message.message).text);
+                values_message.put(ConstantsDB.COLUMN_MESSAGE_DELIVERED, ConstantsDB.TYPE_MESSAGE_TEXT);
+            } else {
+                values_message.put(ConstantsDB.COLUMN_MESSAGE_TEXT, "This message contains embedded data ");
+                values_message.put(ConstantsDB.COLUMN_MESSAGE_DELIVERED, ConstantsDB.TYPE_MESSAGE_AUDIO);
+            }
+
+
+            ContentValues values_last_message = new ContentValues();
+            values_last_message.put(ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_CHAT, chat_id);
+            values_last_message.put(ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_MESSAGE, message.id);
+
+
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            db.insert(ConstantsDB.TABLE_MESSAGES, null, values_message);
+            db.insert(ConstantsDB.TABLE_LAST_MESSAGE, null, values_last_message);
+
+            db.close();
+        }
+
+    }
+
+    public ArrayList<TdApi.Message> getAllMessagesFromChat(int chat_id) {
+
+        ArrayList<TdApi.Message> returnMessages = new ArrayList<TdApi.Message>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.beginTransaction();
+        try {
+
+            String queryTest = "Select * FROM " + ConstantsDB.TABLE_MESSAGES
+                    + " WHERE " + ConstantsDB.COLUMN_MESSAGE_KEY_OF_CHAT + " = " + "'"
+                    + chat_id + "'";
+
+            Cursor cursor = db.rawQuery(queryTest, null);
+
+
+            int columnIdtelegram = cursor
+                    .getColumnIndex(ConstantsDB.COLUMN_MESSAGE_ID_TELEGRAM);
+            int columnText = cursor
+                    .getColumnIndex(ConstantsDB.COLUMN_MESSAGE_TEXT);
+            int columnTime = cursor
+                    .getColumnIndex(ConstantsDB.COLUMN_MESSAGE_TIME);
+            int columnDelivered = cursor
+                    .getColumnIndex(ConstantsDB.COLUMN_MESSAGE_DELIVERED);
+            int columnSent = cursor
+                    .getColumnIndex(ConstantsDB.COLUMN_MESSAGE_SENT);
+            int columnUserId = cursor
+                    .getColumnIndex(ConstantsDB.COLUMN_MESSAGE_KEY_OF_USER);
+            int columnType = cursor
+                    .getColumnIndex(ConstantsDB.COLUMN_MESSAGE_TYPE);
+
+            if (cursor.getCount() != 0) {
+                cursor.moveToFirst();
+
+                do {
+
+                    TdApi.Message message = new TdApi.Message();
+
+
+                    message.id = cursor.getInt(columnIdtelegram);
+                    message.date = cursor.getInt(columnTime);
+                    message.fromId = cursor.getInt(columnUserId);
+                    message.chatId = chat_id;
+
+
+                    if (cursor.getInt(columnType) == ConstantsDB.TYPE_MESSAGE_TEXT) {
+                        message.message = new TdApi.MessageText();
+                        ((TdApi.MessageText) message.message).text = cursor.getString(columnText);
+
+//                            !!!
+                    } else {
+                        message.message = new TdApi.MessageText();
+                        ((TdApi.MessageText) message.message).text = "отправка файлов в доработке";
+                    }
+//
+
+                    returnMessages.add(message);
+                } while (cursor.moveToNext());
+
+                cursor.close();
+                db.setTransactionSuccessful();
+            } else {
+                returnMessages = null;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            db.endTransaction();
+        }
+        db.close();
+        return null;
+
+    }
 
 }
