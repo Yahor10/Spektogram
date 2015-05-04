@@ -2,30 +2,38 @@ package com.telegram.spektogram.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.View;
 
+import com.telegram.spektogram.adapters.SignInPagerAdapter;
+import com.telegram.spektogram.callback.NextPageCallback;
+import com.telegram.spektogram.fragment.CodeFragment;
+import com.telegram.spektogram.fragment.PhoneNumberFragment;
 import com.telegram.spektogram.R;
 
 
-public class SignInActivity extends ActionBarActivity {
+public class SignInActivity extends ActionBarActivity implements NextPageCallback {
 
-    public static Intent buildStartIntent(Context context){
-        return new Intent(context,SignInActivity.class);
-    }
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+        setContentView(R.layout.activity_sign_up);
+        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager.setAdapter(new SignInPagerAdapter(getSupportFragmentManager()));
     }
 
-    public void login (View v) {
-
+    @Override
+    public void nextPage() {
+        viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
     }
 
-    public void signUp (View v) {
-        startActivity(new Intent(this, SignUpActivity.class));
+    public static Intent buildStartIntent(Context context){
+        return new Intent(context, SignInActivity.class);
     }
 }

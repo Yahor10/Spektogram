@@ -43,4 +43,11 @@
     <string name="change_phonenumber">Change your phone number</string>
     <string name="title_activity_contacts">ContactsActivity</string>
 
+    <string name="enter_code_here">Enter code here</string>
+    <string name="code_has_been_sent">Code has been sent to your device. It will arrive shortly. If there is something wrong with it, we\'ll call you in 2:00</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name (optional)</string>
+    <string name="area">Area</string>
+
+
 </resources>
