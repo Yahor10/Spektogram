@@ -25,7 +25,7 @@ public class ContactFetcher {
 				null, // the columns to retrieve (all)
 				selection, // the selection criteria (none)
 				null, // the selection args (none)
-				null // the sort order (default)
+				ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME+" ASC" // the sort order (default)
 		);
 
 		Cursor c = cursorLoader.loadInBackground();
