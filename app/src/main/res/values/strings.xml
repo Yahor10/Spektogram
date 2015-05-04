@@ -41,5 +41,6 @@
     <string name="title_activity_next_page_callback">NextPageCallback</string>
     <string name="title_activity_intro">IntroActivity</string>
     <string name="change_phonenumber">Change your phone number</string>
+    <string name="title_activity_contacts">ContactsActivity</string>
 
 </resources>
