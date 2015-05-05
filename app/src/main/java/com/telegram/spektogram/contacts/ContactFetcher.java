@@ -7,15 +7,26 @@ import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.support.v4.content.CursorLoader;
 
+import org.drinkless.td.libcore.telegram.TdApi;
+
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 
 // new ContactFetcher(this).fetchAll();
 public class ContactFetcher {
 	private Context context;
 	private final HashSet<String> azIndexer =new HashSet<String>();
+	private final Map<String, TdApi.User> userMap;
+
 	public ContactFetcher(Context c) {
 		this.context = c;
+		this.userMap =null;
+	}
+
+	public ContactFetcher(Context contactsActivity, Map<String, TdApi.User> userMap) {
+		this.context = contactsActivity;
+		this.userMap = userMap;
 	}
 
 	public ArrayList<Contact> fetchAll() {

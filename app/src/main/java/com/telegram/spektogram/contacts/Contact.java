@@ -1,5 +1,7 @@
 package com.telegram.spektogram.contacts;
 
+import org.drinkless.td.libcore.telegram.TdApi;
+
 import java.util.ArrayList;
 
 public class Contact extends BaseContactItem {
@@ -7,6 +9,7 @@ public class Contact extends BaseContactItem {
 	public String name;
 	public ArrayList<ContactEmail> emails;
 	public ArrayList<ContactPhone> numbers;
+	private TdApi.User user;
 
 	public Contact(String id, String name,int type) {
 		super(type);
@@ -28,6 +31,14 @@ public class Contact extends BaseContactItem {
 			result += " [" + email.address + " - " + email.type + "]";
 		}
 		return result;
+	}
+
+	public TdApi.User getUser() {
+		return user;
+	}
+
+	public void setUser(TdApi.User user) {
+		this.user = user;
 	}
 
 	public void addEmail(String address, String type) {

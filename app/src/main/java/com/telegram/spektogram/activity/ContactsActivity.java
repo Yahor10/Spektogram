@@ -4,20 +4,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.telegram.spektogram.R;
+import com.telegram.spektogram.application.ApplicationSpektogram;
 import com.telegram.spektogram.contacts.Contact;
 import com.telegram.spektogram.contacts.ContactFetcher;
 import com.telegram.spektogram.contacts.ContactsAdapter;
+import com.telegram.spektogram.preferences.PreferenceUtils;
+
+import org.drinkless.td.libcore.telegram.Client;
+import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ContactsActivity extends ActionBarActivity {
+public class ContactsActivity extends ActionBarActivity implements Client.ResultHandler {
     ArrayList<Contact> listContacts;
     ListView lvContacts;
+    private  Map<String,TdApi.User>userMap =null;
 
     public static Intent buildStartIntent(Context context){
         return new Intent(context,ContactsActivity.class);
@@ -28,12 +37,16 @@ public class ContactsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
 
-        listContacts = new ContactFetcher(this).fetchAll();
+        if(PreferenceUtils.isOfflineMode(getBaseContext())){
+
+        }
         lvContacts = (ListView) findViewById(R.id.lvContacts);
+        ApplicationSpektogram.getApplication(this).sendFunction(new TdApi.GetContacts(), this);
+
+        listContacts = new ContactFetcher(this).fetchAll();
         ContactsAdapter adapterContacts = new ContactsAdapter(this, listContacts);
         lvContacts.setAdapter(adapterContacts);
 
-        getActionBar().setIcon(R.mipmap.ic_launcher);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -57,4 +70,22 @@ public class ContactsActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onResult(TdApi.TLObject object) {
+        TdApi.Contacts contacts = (TdApi.Contacts) object;
+        TdApi.User[] users = contacts.users;
+        userMap = new HashMap<>(users.length);
+
+        for(TdApi.User user : users){
+            userMap.put(user.phoneNumber,user);
+        }
+
+        Log.v(null,"hash map" + userMap);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+    }
 }

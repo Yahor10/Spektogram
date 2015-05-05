@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.telephony.SmsMessage;
 import android.util.Log;
@@ -21,6 +20,7 @@ import com.telegram.spektogram.R;
 import com.telegram.spektogram.activity.ChatRoomActivity;
 import com.telegram.spektogram.application.ApplicationSpektogram;
 import com.telegram.spektogram.callback.NextPageCallback;
+import com.telegram.spektogram.preferences.PreferenceUtils;
 
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
@@ -70,6 +70,7 @@ public class CodeFragment extends Fragment {
                         @Override
                         public void run() {
                             Toast.makeText(getActivity(), "Authorized", Toast.LENGTH_SHORT).show();
+                            PreferenceUtils.setUserAuth(getActivity(),true);
                             startActivity(ChatRoomActivity.buildStartIntent(getActivity()));
                         }
                     });

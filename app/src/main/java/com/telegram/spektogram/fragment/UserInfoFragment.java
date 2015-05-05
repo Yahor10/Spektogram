@@ -55,6 +55,8 @@ public class UserInfoFragment extends Fragment {
                             getActivity().finish();
                         }
                     });
+                }else{
+
                 }
             }
         });
