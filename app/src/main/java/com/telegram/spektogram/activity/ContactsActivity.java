@@ -39,14 +39,22 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
+        lvContacts = (ListView) findViewById(R.id.lvContacts);
 
         if(PreferenceUtils.isOfflineMode(getBaseContext())){
-
+            loadContacts();
+        }else{
+            ApplicationSpektogram.getApplication(this).sendFunction(new TdApi.GetContacts(), this);
         }
-        lvContacts = (ListView) findViewById(R.id.lvContacts);
-        ApplicationSpektogram.getApplication(this).sendFunction(new TdApi.GetContacts(), this);
-
     }
+
+    private void loadContacts() {
+        final ContactFetcher contactFetcher = new ContactFetcher(ContactsActivity.this, userMap);
+        listContacts = contactFetcher.fetchAll();
+        adapterContacts = new ContactsAdapter(ContactsActivity.this, listContacts);
+        lvContacts.setAdapter(adapterContacts);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -85,11 +93,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
             @Override
             public void run() {
                 if(!isDestroyed()) {
-                    final ContactFetcher contactFetcher = new ContactFetcher(ContactsActivity.this, userMap);
-                    listContacts = contactFetcher.fetchAll();
-
-                    adapterContacts = new ContactsAdapter(ContactsActivity.this, listContacts);
-                    lvContacts.setAdapter(adapterContacts);
+                    loadContacts();
                 }
             }
         });

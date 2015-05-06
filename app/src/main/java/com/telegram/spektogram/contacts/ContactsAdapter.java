@@ -10,7 +10,11 @@ import android.widget.TextView;
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.enums.ContactType;
 
+import org.drinkless.td.libcore.telegram.TdApi;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class ContactsAdapter extends ArrayAdapter<Contact> {
 
@@ -87,13 +91,21 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
                     viewContactTelegramHolder.tvDate = (TextView) view.findViewById(R.id.tvDate);
 
                     view.setTag(viewContactTelegramHolder);
+
+
                 }else{
                     viewContactTelegramHolder = (ViewContactTelegramHolder) view.getTag();
                 }
 
                 viewContactTelegramHolder.tvName.setText(contact.name);
 
-                viewContactTelegramHolder.tvDate.setText("1236");
+                final TdApi.UserStatus status = contact.getUser().status;
+                if(status instanceof TdApi.UserStatusOffline){
+                    TdApi.UserStatusOffline offline = (TdApi.UserStatusOffline) status;
+                    SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
+                    String date = DATE_FORMAT.format( TimeUnit.SECONDS.toMillis(offline.wasOnline));
+                    viewContactTelegramHolder.tvDate.setText(date);
+                }
                 break;
             case Action:
                 if (view == null) {

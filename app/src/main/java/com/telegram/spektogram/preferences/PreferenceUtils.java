@@ -98,6 +98,15 @@ public class PreferenceUtils {
                 PreferenceKeys.OFFLINE_MODE, false);
     }
 
+    public static void setOfflineMode(Context context,
+                                      boolean offline) {
+        SharedPreferences.Editor pEditor = PreferenceManager.getDefaultSharedPreferences(context)
+                .edit();
+        pEditor.putBoolean(PreferenceKeys.OFFLINE_MODE,
+                offline);
+        pEditor.commit();
+    }
+
     public static void setTGinit(Context context,
                                    boolean init) {
         SharedPreferences.Editor pEditor = PreferenceManager.getDefaultSharedPreferences(context)

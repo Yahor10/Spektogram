@@ -56,6 +56,13 @@
             android:icon="@drawable/ic_drawer">
         </activity>
 
+        <receiver android:name=".receivers.NetworkChangeReceiver" android:label="NetworkChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE">
+                    <action android:name="android.net.wifi.WIFI_STATE_CHANGED">
+                    </action></action></intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

@@ -23,6 +23,7 @@ import android.widget.ListView;
 
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.activity.ContactsActivity;
+import com.telegram.spektogram.activity.SettingsActivity;
 import com.telegram.spektogram.views.CustomDrawerAdapter;
 import com.telegram.spektogram.views.DrawerItem;
 
@@ -287,6 +288,9 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
             case 2:
                 final Intent intent = ContactsActivity.buildStartIntent(getActivity());
                 startActivity(intent);
+                break;
+            case 4:
+                startActivity(SettingsActivity.buildStartIntent(getActivity()));
                 break;
         }
     }

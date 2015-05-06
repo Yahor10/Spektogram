@@ -74,12 +74,12 @@ public class ContactFetcher {
         String contactDisplayName = c.getString(nameIndex);
 
         ContactType type;
+        Contact header = null;
         final String substring = contactDisplayName.substring(0, 1);
         if (!azIndexer.contains(substring)) {
             azIndexer.add(substring);
             type = ContactType.Separator;
-            Contact header = new Contact(contactId, substring, type);
-            userContacts.add(header);
+            header = new Contact(contactId, substring, type);
         }
 
         type = ContactType.Contanct;
@@ -91,6 +91,9 @@ public class ContactFetcher {
         if(contact.getUser() != null) {
             telegramContacts.add(contact);
         }else{
+            if(header != null) {
+                userContacts.add(header);
+            }
             userContacts.add(contact);
         }
 
