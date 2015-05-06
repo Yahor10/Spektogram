@@ -1,21 +1,25 @@
 package com.telegram.spektogram.contacts;
 
+import com.telegram.spektogram.enums.ContactType;
+
 /**
  * Created by ychabatarou on 04.05.2015.
  */
 public class BaseContactItem {
 
-    public static final int TYPE_ITEM = 0;
-    public static final int TYPE_SEPARATOR = 1;
-    public static final int TYPE_ITEM_TELEGRAM = 3;
 
-    public int type;
 
-    public BaseContactItem(int type) {
+    public ContactType type;
+
+    public BaseContactItem(ContactType type) {
         this.type = type;
     }
 
-    public int getType() {
+    public ContactType getType() {
         return type;
+    }
+
+    public void setType(ContactType type) {
+        this.type = type;
     }
 }

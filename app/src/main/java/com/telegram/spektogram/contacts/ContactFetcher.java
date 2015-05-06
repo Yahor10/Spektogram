@@ -7,123 +7,150 @@ import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.support.v4.content.CursorLoader;
 
+import com.telegram.spektogram.enums.ContactType;
+
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 // new ContactFetcher(this).fetchAll();
 public class ContactFetcher {
-	private Context context;
-	private final HashSet<String> azIndexer =new HashSet<String>();
-	private final Map<String, TdApi.User> userMap;
+    private Context context;
+    private final HashSet<String> azIndexer = new HashSet<String>();
+    private final Map<String, TdApi.User> userMap;
 
-	public ContactFetcher(Context c) {
-		this.context = c;
-		this.userMap =null;
-	}
+    public ContactFetcher(Context c) {
+        this.context = c;
+        this.userMap = null;
+    }
 
-	public ContactFetcher(Context contactsActivity, Map<String, TdApi.User> userMap) {
-		this.context = contactsActivity;
-		this.userMap = userMap;
-	}
+    public ContactFetcher(Context contactsActivity, Map<String, TdApi.User> userMap) {
+        this.context = contactsActivity;
+        this.userMap = userMap;
+    }
 
-	public ArrayList<Contact> fetchAll() {
-		ArrayList<Contact> listContacts = new ArrayList<Contact>();
-		String selection = ContactsContract.Contacts.HAS_PHONE_NUMBER + " > 0 ";
-		CursorLoader cursorLoader = new CursorLoader(context, ContactsContract.Contacts.CONTENT_URI,
-				null, // the columns to retrieve (all)
-				selection, // the selection criteria (none)
-				null, // the selection args (none)
-				ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME+" ASC" // the sort order (default)
-		);
+    public ArrayList<Contact> fetchAll() {
+        ArrayList<Contact> listContacts = new ArrayList<Contact>();
+        String selection = ContactsContract.Contacts.HAS_PHONE_NUMBER + " > 0 ";
+        CursorLoader cursorLoader = new CursorLoader(context, ContactsContract.Contacts.CONTENT_URI,
+                null, // the columns to retrieve (all)
+                selection, // the selection criteria (none)
+                null, // the selection args (none)
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC" // the sort order (default)
+        );
 
-		Cursor c = cursorLoader.loadInBackground();
-		if (c.moveToFirst()) {
-			do {
-				 loadContactData(c,listContacts);
-			} while (c.moveToNext());
-		}
-		c.close();
-		return listContacts;
-	}
+        final List<Contact> actions = new ArrayList<Contact>();
 
-	private void loadContactData(Cursor c, ArrayList<Contact> listContacts) {
-		// Get Contact ID
-		int idIndex = c.getColumnIndex(ContactsContract.Contacts._ID);
-		String contactId = c.getString(idIndex);
-		// Get Contact Name
-		int nameIndex = c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-		String contactDisplayName = c.getString(nameIndex);
+        int action;
+        final Contact object = new Contact("-1", "add ", ContactType.Action);
+        actions.add(object);
+        final List<Contact> telegramContacts = new ArrayList<Contact>();
+        final List<Contact> userContacts = new ArrayList<Contact>();
 
-		int type = BaseContactItem.TYPE_ITEM;
-		final String substring = contactDisplayName.substring(0, 1);
-		if(!azIndexer.contains(substring)){
-			azIndexer.add(substring);
-			type = BaseContactItem.TYPE_SEPARATOR;
-			Contact header = new Contact(contactId, substring,type);
-			listContacts.add(header);
-		}
+        Cursor c = cursorLoader.loadInBackground();
+        if (c.moveToFirst()) {
+            do {
+                loadContactData(c,userContacts,telegramContacts);
+            } while (c.moveToNext());
+        }
+        c.close();
 
-		type = BaseContactItem.TYPE_ITEM;
-		Contact contact = new Contact(contactId, contactDisplayName,type);
-		fetchContactNumbers(c, contact);
-		fetchContactEmails(c, contact);
-		listContacts.add(contact);
 
-	}
+        listContacts.addAll(actions);
+        listContacts.addAll(telegramContacts);
+        listContacts.addAll(userContacts);
+        return listContacts;
+    }
 
-	public void fetchContactNumbers(Cursor cursor, Contact contact) {
-		// Get numbers
-		final String[] numberProjection = new String[] { Phone.NUMBER, Phone.TYPE, };
-		
-		Cursor phone = new CursorLoader(context, Phone.CONTENT_URI, numberProjection,
-				Phone.CONTACT_ID +" = ?", new String[] { String.valueOf(contact.id) }, null)
-				.loadInBackground();
+    private void loadContactData(Cursor c, List<Contact> userContacts, List<Contact> telegramContacts) {
+        // Get Contact ID
+        int idIndex = c.getColumnIndex(ContactsContract.Contacts._ID);
+        String contactId = c.getString(idIndex);
+        // Get Contact Name
+        int nameIndex = c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+        String contactDisplayName = c.getString(nameIndex);
 
-		if (phone.moveToFirst()) {
-			final int contactNumberColumnIndex = phone.getColumnIndex(Phone.NUMBER);
-			final int contactTypeColumnIndex = phone.getColumnIndex(Phone.TYPE);
+        ContactType type;
+        final String substring = contactDisplayName.substring(0, 1);
+        if (!azIndexer.contains(substring)) {
+            azIndexer.add(substring);
+            type = ContactType.Separator;
+            Contact header = new Contact(contactId, substring, type);
+            userContacts.add(header);
+        }
 
-			while (!phone.isAfterLast()) {
-				final String number = phone.getString(contactNumberColumnIndex);
-				final int type = phone.getInt(contactTypeColumnIndex);
-				String customLabel = "Custom";
-				CharSequence phoneType = Phone.getTypeLabel(
-						context.getResources(), type, customLabel);
-				contact.addNumber(number, phoneType.toString());
-				phone.moveToNext();
-			}
+        type = ContactType.Contanct;
+        Contact contact = new Contact(contactId, contactDisplayName, type);
 
-		}
-		phone.close();
-	}
+        fetchContactNumbers(c, contact);
+        fetchContactEmails(c, contact);
 
-	public void fetchContactEmails(Cursor cursor, Contact contact) {
-		// Get email
-		final String[] emailProjection = new String[] { Email.DATA, Email.TYPE };
+        if(contact.getUser() != null) {
+            telegramContacts.add(contact);
+        }else{
+            userContacts.add(contact);
+        }
 
-		Cursor email = new CursorLoader(context, Email.CONTENT_URI, emailProjection,
-				Email.CONTACT_ID + "= ?", new String[] { String.valueOf(contact.id) }, null)
-				.loadInBackground();
+    }
 
-		if (email.moveToFirst()) {
-			final int contactEmailColumnIndex = email.getColumnIndex(Email.DATA);
-			final int contactTypeColumnIndex = email.getColumnIndex(Email.TYPE);
+    public void fetchContactNumbers(Cursor cursor, Contact contact) {
+        // Get numbers
+        final String[] numberProjection = new String[]{Phone.NUMBER, Phone.TYPE,};
 
-			while (!email.isAfterLast()) {
-				final String address = email.getString(contactEmailColumnIndex);
-				final int type = email.getInt(contactTypeColumnIndex);
-				String customLabel = "Custom";
-				CharSequence emailType = Email.getTypeLabel(
-						context.getResources(), type, customLabel);
-				contact.addEmail(address, emailType.toString());
-				email.moveToNext();
-			}
+        Cursor phone = new CursorLoader(context, Phone.CONTENT_URI, numberProjection,
+                Phone.CONTACT_ID + " = ?", new String[]{String.valueOf(contact.id)}, null)
+                .loadInBackground();
 
-		}
+        if (phone.moveToFirst()) {
+            final int contactNumberColumnIndex = phone.getColumnIndex(Phone.NUMBER);
+            final int contactTypeColumnIndex = phone.getColumnIndex(Phone.TYPE);
 
-		email.close();
-	}
+            while (!phone.isAfterLast()) {
+                final String number = phone.getString(contactNumberColumnIndex);
+                final TdApi.User user = userMap != null ? userMap.get(number) : null;
+                if (user != null) {
+                    contact.setUser(user);
+                    contact.setType(ContactType.TelegramContact);
+                }
+                final int type = phone.getInt(contactTypeColumnIndex);
+                String customLabel = "Custom";
+                CharSequence phoneType = Phone.getTypeLabel(
+                        context.getResources(), type, customLabel);
+                contact.addNumber(number, phoneType.toString());
+                phone.moveToNext();
+            }
+
+        }
+        phone.close();
+    }
+
+    public void fetchContactEmails(Cursor cursor, Contact contact) {
+        // Get email
+        final String[] emailProjection = new String[]{Email.DATA, Email.TYPE};
+
+        Cursor email = new CursorLoader(context, Email.CONTENT_URI, emailProjection,
+                Email.CONTACT_ID + "= ?", new String[]{String.valueOf(contact.id)}, null)
+                .loadInBackground();
+
+        if (email.moveToFirst()) {
+            final int contactEmailColumnIndex = email.getColumnIndex(Email.DATA);
+            final int contactTypeColumnIndex = email.getColumnIndex(Email.TYPE);
+
+            while (!email.isAfterLast()) {
+                final String address = email.getString(contactEmailColumnIndex);
+                final int type = email.getInt(contactTypeColumnIndex);
+                String customLabel = "Custom";
+                CharSequence emailType = Email.getTypeLabel(
+                        context.getResources(), type, customLabel);
+                contact.addEmail(address, emailType.toString());
+                email.moveToNext();
+            }
+
+        }
+
+        email.close();
+    }
 }

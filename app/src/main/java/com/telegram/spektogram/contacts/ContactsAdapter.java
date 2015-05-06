@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.telegram.spektogram.R;
+import com.telegram.spektogram.enums.ContactType;
 
 import java.util.ArrayList;
 
@@ -44,10 +45,11 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
 
         ViewContactHolder contactHolder = null;
         ViewHeaderHolder headerHolder = null;
-
-        int type = getItemViewType(position);
+        ViewContactTelegramHolder viewContactTelegramHolder = null;
+        ViewActionHolder viewActionHolder = null;
+        ContactType type = contact.getType();
         switch (type) {
-            case BaseContactItem.TYPE_ITEM:
+            case Contanct:
                 if (view == null) {
                     contactHolder = new ViewContactHolder();
                     view = mInflater.inflate(R.layout.adapter_contact_item, null);
@@ -64,7 +66,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
                     contactHolder.tvPhone.setText(number);
                 }
                 break;
-            case BaseContactItem.TYPE_SEPARATOR:
+            case Separator:
                 if (view == null) {
                     headerHolder = new ViewHeaderHolder();
                     view = mInflater.inflate(R.layout.adapter_contact_header, null);
@@ -76,6 +78,36 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
                 }
                 headerHolder.tvName.setText(contact.name);
                 break;
+            case TelegramContact:
+                if (view == null) {
+                    viewContactTelegramHolder = new ViewContactTelegramHolder();
+                    view = mInflater.inflate(R.layout.adapter_contact_telegram, null);
+                    viewContactTelegramHolder.tvName = (TextView) view.findViewById(R.id.tvName);
+
+                    viewContactTelegramHolder.tvDate = (TextView) view.findViewById(R.id.tvDate);
+
+                    view.setTag(viewContactTelegramHolder);
+                }else{
+                    viewContactTelegramHolder = (ViewContactTelegramHolder) view.getTag();
+                }
+
+                viewContactTelegramHolder.tvName.setText(contact.name);
+
+                viewContactTelegramHolder.tvDate.setText("1236");
+                break;
+            case Action:
+                if (view == null) {
+                    viewActionHolder = new ViewActionHolder();
+                    view = mInflater.inflate(R.layout.adapter_contact_action, null);
+                    viewActionHolder.tvName = (TextView) view.findViewById(R.id.tvName);
+
+                    view.setTag(viewActionHolder);
+                }else{
+                    viewActionHolder = (ViewActionHolder) view.getTag();
+                }
+
+                viewActionHolder.tvName.setText(contact.name);
+                break;
         }
 
         return view;
@@ -83,13 +115,13 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
 
     @Override
     public int getViewTypeCount() {
-        return 2;
+        return 4;
     }
 
     @Override
     public int getItemViewType(int position) {
         final Contact item = getItem(position);
-        return item.getType();
+        return item.getType().ordinal();
     }
 
     public static class ViewContactHolder {
@@ -97,9 +129,18 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
         public TextView tvPhone;
     }
 
+    public static class ViewContactTelegramHolder {
+        public TextView tvName;
+        public TextView tvLastSeen;
+        public TextView tvDate;
+    }
+
     public static class ViewHeaderHolder {
         public TextView tvName;
     }
 
+    public static class ViewActionHolder {
+        public TextView tvName;
+    }
 
 }

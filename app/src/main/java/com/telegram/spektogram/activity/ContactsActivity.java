@@ -1,7 +1,9 @@
 package com.telegram.spektogram.activity;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -27,6 +29,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
     ArrayList<Contact> listContacts;
     ListView lvContacts;
     private  Map<String,TdApi.User>userMap =null;
+    private ContactsAdapter adapterContacts;
 
     public static Intent buildStartIntent(Context context){
         return new Intent(context,ContactsActivity.class);
@@ -42,10 +45,6 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         }
         lvContacts = (ListView) findViewById(R.id.lvContacts);
         ApplicationSpektogram.getApplication(this).sendFunction(new TdApi.GetContacts(), this);
-
-        listContacts = new ContactFetcher(this).fetchAll();
-        ContactsAdapter adapterContacts = new ContactsAdapter(this, listContacts);
-        lvContacts.setAdapter(adapterContacts);
 
     }
     @Override
@@ -70,10 +69,11 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         return super.onOptionsItemSelected(item);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onResult(TdApi.TLObject object) {
         TdApi.Contacts contacts = (TdApi.Contacts) object;
-        TdApi.User[] users = contacts.users;
+        final TdApi.User[] users = contacts.users;
         userMap = new HashMap<>(users.length);
 
         for(TdApi.User user : users){
@@ -84,7 +84,13 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if(!isDestroyed()) {
+                    final ContactFetcher contactFetcher = new ContactFetcher(ContactsActivity.this, userMap);
+                    listContacts = contactFetcher.fetchAll();
 
+                    adapterContacts = new ContactsAdapter(ContactsActivity.this, listContacts);
+                    lvContacts.setAdapter(adapterContacts);
+                }
             }
         });
     }

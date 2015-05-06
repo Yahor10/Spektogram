@@ -1,5 +1,7 @@
 package com.telegram.spektogram.contacts;
 
+import com.telegram.spektogram.enums.ContactType;
+
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ public class Contact extends BaseContactItem {
 	public ArrayList<ContactPhone> numbers;
 	private TdApi.User user;
 
-	public Contact(String id, String name,int type) {
+	public Contact(String id, String name,ContactType type) {
 		super(type);
 		this.id = id;
 		this.name = name;
@@ -19,18 +21,20 @@ public class Contact extends BaseContactItem {
 		this.numbers = new ArrayList<ContactPhone>();
 	}
 
+
 	@Override
 	public String toString() {
-		String result = name;
-		if (numbers.size() > 0) {
-			ContactPhone number = numbers.get(0);
-			result += " (" + number.number + " - " + number.type + ")";
+		String number;
+		if(!numbers.isEmpty()){
+			number = numbers.get(0).number;
+		} else{
+			number= "";
 		}
-		if (emails.size() > 0) {
-			ContactEmail email = emails.get(0);
-			result += " [" + email.address + " - " + email.type + "]";
-		}
-		return result;
+		return "Contact{" +
+				"name='" + name + '\'' +
+				", numbers=" + number + '\'' +
+				", type=" + type +
+				'}';
 	}
 
 	public TdApi.User getUser() {
@@ -41,6 +45,8 @@ public class Contact extends BaseContactItem {
 		this.user = user;
 	}
 
+
+
 	public void addEmail(String address, String type) {
 		emails.add(new ContactEmail(address, type));
 	}
@@ -48,4 +54,6 @@ public class Contact extends BaseContactItem {
 	public void addNumber(String number, String type) {
 		numbers.add(new ContactPhone(number, type));
 	}
+
+
 }
