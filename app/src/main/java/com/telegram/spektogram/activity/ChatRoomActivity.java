@@ -66,10 +66,18 @@ public class ChatRoomActivity extends ActionBarActivity
 //                ((TdApi.PrivateChatInfo)chat.type).user.phoneNumber = "+375292044134";
 //
 //
+//                TdApi.Message message = new TdApi.Message();
+//                message.id = 999;
+//                message.message=new TdApi.MessageText();
+//                ((TdApi.MessageText)message.message).text = "THIS IS SPARTA!";
+//                message.chatId = chat.id;
+//                message.fromId = ((TdApi.PrivateChatInfo)chat.type).user.id;
+//                message.date= (int) System.currentTimeMillis();
+
 //                SpectrDBHandler spectrDBHandler = new SpectrDBHandler(getApplicationContext());
 //                spectrDBHandler.addUser(((TdApi.PrivateChatInfo)chat.type).user);
 //                spectrDBHandler.addChat(chat);
-//                ArrayList<TdApi.Chat> chats = spectrDBHandler.getAllChats();
+//                spectrDBHandler.addMessage(message,chat.id,((TdApi.PrivateChatInfo)chat.type).user.id);
 
                 PopupMenu menu = new PopupMenu(ChatRoomActivity.this);
                 Resources resources = getResources();

@@ -51,9 +51,22 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
                 + ConstantsDB.COLUMN_USER_PHONE + " TEXT"
                 + ")";
 
+        String CREATE_TABLE_USET_TO_CHAT = "CREATE TABLE "
+                + ConstantsDB.TABLE_USER_TO_CHATS + "("
+                + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
+                + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_CHAT + " INTEGER,"
+                + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_USER + " INTEGER,"
+                + "FOREIGN KEY( "
+                + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_CHAT + " ) REFERENCES "
+                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_CHAT_ID_TELEGRAM + " ) ON DELETE CASCADE,"
+                + "FOREIGN KEY( "
+                + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_USER + " ) REFERENCES "
+                + ConstantsDB.TABLE_USERS + " (" + ConstantsDB.COLUMN_USER_ID_TELEGRAM + " )"
+                + ")";
+
         String CREATE_TABLE_MESSAGES = "CREATE TABLE " + ConstantsDB.TABLE_MESSAGES
                 + "(" + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
-                + ConstantsDB.COLUMN_MESSAGE_ID_TELEGRAM + " INTEGER,"
+                + ConstantsDB.COLUMN_MESSAGE_ID_TELEGRAM + " INTEGER NOT NULL UNIQUE,"
                 + ConstantsDB.COLUMN_MESSAGE_TEXT + " TEXT,"
                 + ConstantsDB.COLUMN_MESSAGE_TIME + " INTEGER,"
                 + ConstantsDB.COLUMN_MESSAGE_TYPE + " INTEGER,"
@@ -62,9 +75,9 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
                 + ConstantsDB.COLUMN_MESSAGE_KEY_OF_CHAT + " INTEGER,"
                 + ConstantsDB.COLUMN_MESSAGE_KEY_OF_USER + " INTEGER,"
                 + "FOREIGN KEY( " + ConstantsDB.COLUMN_MESSAGE_KEY_OF_CHAT + " ) REFERENCES "
-                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_ID + " ) ON DELETE CASCADE,"
+                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_CHAT_ID_TELEGRAM + " ) ON DELETE CASCADE,"
                 + "FOREIGN KEY( " + ConstantsDB.COLUMN_MESSAGE_KEY_OF_USER + " ) REFERENCES "
-                + ConstantsDB.TABLE_USERS + " (" + ConstantsDB.COLUMN_ID + " )"
+                + ConstantsDB.TABLE_USERS + " (" + ConstantsDB.COLUMN_USER_ID_TELEGRAM + " )"
                 + ")";
 
         String CREATE_TABLE_LAST_MESSAGES = "CREATE TABLE " + ConstantsDB.TABLE_LAST_MESSAGE
@@ -73,24 +86,10 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
                 + ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_MESSAGE + " INTEGER,"
                 + "FOREIGN KEY( "
                 + ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_CHAT + " ) REFERENCES "
-                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_ID + " ) ON DELETE CASCADE,"
-                + "FOREIGN KEY( "
-                + ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_MESSAGE + " ) REFERENCES "
-                + ConstantsDB.TABLE_MESSAGES + " (" + ConstantsDB.COLUMN_ID + " )"
-                + ")";
-
-
-        String CREATE_TABLE_USET_TO_CHAT = "CREATE TABLE "
-                + ConstantsDB.TABLE_USER_TO_CHATS + "("
-                + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
-                + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_CHAT + " INTEGER NOT NULL,"
-                + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_USER + " INTEGER NOT NULL,"
-                + "FOREIGN KEY( "
-                + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_CHAT + " ) REFERENCES "
                 + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_CHAT_ID_TELEGRAM + " ) ON DELETE CASCADE,"
                 + "FOREIGN KEY( "
-                + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_USER + " ) REFERENCES "
-                + ConstantsDB.TABLE_USERS + " (" + ConstantsDB.COLUMN_USER_ID_TELEGRAM + " )"
+                + ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_MESSAGE + " ) REFERENCES "
+                + ConstantsDB.TABLE_MESSAGES + " (" + ConstantsDB.COLUMN_MESSAGE_ID_TELEGRAM + " )"
                 + ")";
 
 
@@ -150,9 +149,8 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
 
             SQLiteDatabase db = this.getWritableDatabase();
 
-            db.insert(ConstantsDB.TABLE_CHATS, null, values_chat);
-
-            db.insert(ConstantsDB.TABLE_USER_TO_CHATS, null, values_user_to_chat);
+            long id_chat = db.insert(ConstantsDB.TABLE_CHATS, null, values_chat);
+            long id_chat_user = db.insert(ConstantsDB.TABLE_USER_TO_CHATS, null, values_user_to_chat);
 
             db.close();
         }
@@ -195,7 +193,8 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
 
             SQLiteDatabase db = this.getWritableDatabase();
 
-            db.insert(ConstantsDB.TABLE_USERS, null, values);
+             long id = db.insert(ConstantsDB.TABLE_USERS, null, values);
+
             db.close();
 
         }
@@ -362,14 +361,15 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
     }
 
 
-    public void putMessage(TdApi.Message message, TdApi.Chat chat, TdApi.User user) {
+    public void addMessage(TdApi.Message message, long chat, int user) {
 
-        if (message != null && chat != null && user != null) {
-            long chat_id = chat.id;
-            long user_id = user.id;
+        if (message != null && chat >= 0 && user >= 0) {
+            long chat_id = chat;
+            long user_id = user;
 
 
             ContentValues values_message = new ContentValues();
+            values_message.put(ConstantsDB.COLUMN_MESSAGE_ID_TELEGRAM, message.id);
             values_message.put(ConstantsDB.COLUMN_MESSAGE_KEY_OF_CHAT, chat_id);
             values_message.put(ConstantsDB.COLUMN_MESSAGE_KEY_OF_USER, user_id);
             values_message.put(ConstantsDB.COLUMN_MESSAGE_TIME, message.date);
@@ -392,8 +392,8 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
 
             SQLiteDatabase db = this.getWritableDatabase();
 
-            db.insert(ConstantsDB.TABLE_MESSAGES, null, values_message);
-            db.insert(ConstantsDB.TABLE_LAST_MESSAGE, null, values_last_message);
+            long id_message = db.insert(ConstantsDB.TABLE_MESSAGES, null, values_message);
+            long id_last_message = db.insert(ConstantsDB.TABLE_LAST_MESSAGE, null, values_last_message);
 
             db.close();
         }
