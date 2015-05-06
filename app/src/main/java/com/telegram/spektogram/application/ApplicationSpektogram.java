@@ -43,14 +43,16 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
                 f.mkdir();
             }
 
-            path = f.getAbsolutePath();
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
 
-
-        TG.setUpdatesHandler(this);
-        TG.setDir(path);
+        if(!PreferenceUtils.isTGinit(this)) {
+            path = f.getAbsolutePath();
+            TG.setUpdatesHandler(this);
+            TG.setDir(path);
+            PreferenceUtils.setTGinit(this,true);
+        }
 
         if(client == null) {
             client = TG.getClientInstance();
@@ -69,6 +71,18 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
 
     public Client getClient() {
         if(client == null) {
+            try {
+                File f = new File(getPackageManager()
+                        .getPackageInfo(getPackageName(), 0)
+                        .applicationInfo.dataDir + "/tdb/");
+                if(f.exists()){
+                    final String absolutePath = f.getAbsolutePath();
+                    TG.setDir(absolutePath);
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+
             client = TG.getClientInstance();
         }
         return client;

@@ -1,6 +1,7 @@
 package com.telegram.spektogram.activity;
 
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -10,29 +11,37 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.telegram.spektogram.db.SpectrDBHandler;
-import com.telegram.spektogram.fragment.NavigationDrawerFragment;
 import com.telegram.spektogram.R;
+import com.telegram.spektogram.application.ApplicationSpektogram;
+import com.telegram.spektogram.fragment.NavigationDrawerFragment;
 import com.telegram.spektogram.views.PopupMenu;
 
+import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
 
-import java.util.ArrayList;
 
 
 public class ChatRoomActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, PopupMenu.OnItemSelectedListener {
 
-    public static Intent buildStartIntent(Context context){
-        return new Intent(context,ChatRoomActivity.class);
+    private static final int SEND_PHOTO = 1;
+
+    private static final int SEND_GEO_LOCATION = 2;
+
+    private static final int SEND_VIDEO = 3;
+
+    public static Intent buildStartIntent(Context context) {
+        return new Intent(context, ChatRoomActivity.class);
     }
+
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -47,14 +56,14 @@ public class ChatRoomActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
+        getSupportActionBar().setTitle("");
 
         // Set Listener
 
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+// ALEX
 //                TdApi.Chat chat = new TdApi.Chat();
 //                chat.id = 123;
 //                chat.type =  new  TdApi.PrivateChatInfo();
@@ -77,16 +86,33 @@ public class ChatRoomActivity extends ActionBarActivity
 //                SpectrDBHandler spectrDBHandler = new SpectrDBHandler(getApplicationContext());
 //                spectrDBHandler.addUser(((TdApi.PrivateChatInfo)chat.type).user);
 //                spectrDBHandler.addChat(chat);
+
 //                spectrDBHandler.addMessage(message,chat.id,((TdApi.PrivateChatInfo)chat.type).user.id);
+// EGOR
+//                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChats(0,20), new Client.ResultHandler() {
+//                    @Override
+//                    public void onResult(TdApi.TLObject object) {
+//                        TdApi.Chats chats= (TdApi.Chats) object;
+//                        final TdApi.Chat[] arr = chats.chats;
+//                        for(TdApi.Chat chat : arr){
+//                            Log.v(null, "result test:" + chat.toString());
+//                        }
+//
+//                    }
+//                });
+
+
 
                 PopupMenu menu = new PopupMenu(ChatRoomActivity.this);
                 Resources resources = getResources();
 
                 menu.setHeaderTitle(resources.getString(R.string.messege));
 
-                menu.add(1,R.string.title_activity_chat).setIcon(
+                menu.add(SEND_PHOTO, R.string.title_activity_chat).setIcon(
                         resources.getDrawable(R.drawable.ic_drawer));
                 menu.show();
+
+                menu.setOnItemSelectedListener(ChatRoomActivity.this);
             }
         });
 
@@ -113,23 +139,28 @@ public class ChatRoomActivity extends ActionBarActivity
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_section1);
+
                 break;
             case 2:
-                mTitle = getString(R.string.title_section2);
+
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
+
                 break;
         }
     }
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setTitle("");
+        actionBar.setDisplayShowCustomEnabled(true);
+
+        actionBar.setCustomView(R.layout.ab_main);
+
     }
+
 
 
     @Override
@@ -140,6 +171,32 @@ public class ChatRoomActivity extends ActionBarActivity
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.chat, menu);
             restoreActionBar();
+
+            SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+            final MenuItem item = menu.findItem(R.id.search);
+            SearchView searchView = (SearchView) item.getActionView();
+
+            searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    getSupportActionBar().getCustomView().setVisibility(View.GONE);
+                    return false;
+                }
+            });
+
+//            MenuItemCompat.setShowAsAction(item, MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW
+//                    | MenuItem.SHOW_AS_ACTION_ALWAYS);
+//            MenuItemCompat.expandActionView(item);
+
             return true;
         }
         return super.onCreateOptionsMenu(menu);
@@ -158,6 +215,26 @@ public class ChatRoomActivity extends ActionBarActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onItemSelected(com.telegram.spektogram.views.MenuItem item) {
+        final int itemId = item.getItemId();
+        switch (itemId) {
+            case SEND_PHOTO:
+                final TdApi.InputMessagePhoto photo = new TdApi.InputMessagePhoto("");
+                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.SendMessage(1, photo), new Client.ResultHandler() {
+                    @Override
+                    public void onResult(TdApi.TLObject object) {
+                        Log.v(null, "result test:" + object.toString());
+                    }
+                });
+                break;
+            case SEND_GEO_LOCATION:
+
+                break;
+        }
     }
 
     /**

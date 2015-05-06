@@ -1,6 +1,7 @@
 package com.telegram.spektogram.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -11,7 +12,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,9 +20,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.telegram.spektogram.R;
+import com.telegram.spektogram.activity.ContactsActivity;
 import com.telegram.spektogram.views.CustomDrawerAdapter;
 import com.telegram.spektogram.views.DrawerItem;
 
@@ -262,10 +262,6 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
             return true;
         }
 
-        if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -278,7 +274,7 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setTitle(R.string.app_name);
+        actionBar.setTitle("");
     }
 
     private ActionBar getActionBar() {
@@ -287,11 +283,10 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.v(null, "pos" + position);
-
         switch (position){
             case 2:
-
+                final Intent intent = ContactsActivity.buildStartIntent(getActivity());
+                startActivity(intent);
                 break;
         }
     }
