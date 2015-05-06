@@ -25,12 +25,12 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
     public void onCreate() {
         super.onCreate();
 
-            startTelegramApi();
+        startTelegramApi();
 
     }
 
     private void startTelegramApi() {
-        Log.v(null, "init spektogram app...");
+        Log.v(Constants.LOG_TAG, "init spektogram app...");
 
         File f = null;
         String path = "";
@@ -39,7 +39,7 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
             f = new File(packageManager
                     .getPackageInfo(getPackageName(), 0)
                     .applicationInfo.dataDir + "/tdb/");
-            if(!f.exists()) {
+            if (!f.exists()) {
                 f.mkdir();
             }
 
@@ -47,14 +47,14 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
             e.printStackTrace();
         }
 
-        if(!PreferenceUtils.isTGinit(this)) {
+        if (!PreferenceUtils.isTGinit(this)) {
             path = f.getAbsolutePath();
             TG.setUpdatesHandler(this);
             TG.setDir(path);
-            PreferenceUtils.setTGinit(this,true);
+            PreferenceUtils.setTGinit(this, true);
         }
 
-        if(client == null) {
+        if (client == null) {
             client = TG.getClientInstance();
         }
     }
@@ -62,7 +62,7 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
 
     @Override
     public void onResult(TdApi.TLObject object) {
-
+        Log.i(Constants.LOG_TAG,"ApplicationSpektogram onResult update:" + object);
     }
 
     public static ApplicationSpektogram getApplication(Context context) {
@@ -70,12 +70,12 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
     }
 
     public Client getClient() {
-        if(client == null) {
+        if (client == null) {
             try {
                 File f = new File(getPackageManager()
                         .getPackageInfo(getPackageName(), 0)
                         .applicationInfo.dataDir + "/tdb/");
-                if(f.exists()){
+                if (f.exists()) {
                     final String absolutePath = f.getAbsolutePath();
                     TG.setDir(absolutePath);
                 }
@@ -88,13 +88,21 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
         return client;
     }
 
-    public void sendFunction(TdApi.TLFunction func, Client.ResultHandler handler){
-        if(!PreferenceUtils.isOfflineMode(this)) {
-            if (client == null) {
-                client = getClient();
-            }
+    public void sendFunction(TdApi.TLFunction func, Client.ResultHandler handler) {
+        if (!PreferenceUtils.isOfflineMode(this)) {
+            client = getClient();
             client.send(func, handler);
-        }else{
+        } else {
+            // TODO send message about offline;
+        }
+    }
+
+    public void sendChatMessageFunction(int chatId, TdApi.InputMessageContent inputMessageContent, Client.ResultHandler handler) {
+        if (!PreferenceUtils.isOfflineMode(this)) {
+            client = getClient();
+            final TdApi.SendMessage function = new TdApi.SendMessage(chatId, inputMessageContent);
+            client.send(function, handler);
+        } else {
             // TODO send message about offline;
         }
     }

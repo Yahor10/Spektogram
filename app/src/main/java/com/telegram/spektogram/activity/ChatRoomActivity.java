@@ -21,12 +21,13 @@ import android.view.ViewGroup;
 
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.application.ApplicationSpektogram;
+import com.telegram.spektogram.application.Constants;
 import com.telegram.spektogram.fragment.NavigationDrawerFragment;
+import com.telegram.spektogram.preferences.PreferenceUtils;
 import com.telegram.spektogram.views.PopupMenu;
 
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
-
 
 
 public class ChatRoomActivity extends ActionBarActivity
@@ -52,6 +53,8 @@ public class ChatRoomActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
+
+    long mId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,18 +81,61 @@ public class ChatRoomActivity extends ActionBarActivity
 //                SpectrDBHandler spectrDBHandler = new SpectrDBHandler(getApplicationContext());
 //                spectrDBHandler.addUser(((TdApi.PrivateChatInfo)chat.type).user);
 //                spectrDBHandler.addChat(chat);
-//                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChats(0,20), new Client.ResultHandler() {
-//                    @Override
-//                    public void onResult(TdApi.TLObject object) {
-//                        TdApi.Chats chats= (TdApi.Chats) object;
-//                        final TdApi.Chat[] arr = chats.chats;
-//                        for(TdApi.Chat chat : arr){
-//                            Log.v(null, "result test:" + chat.toString());
-//                        }
-//
-//                    }
-//                });
 
+           ;
+                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChats(0,20), new Client.ResultHandler() {
+                    @Override
+                    public void onResult(TdApi.TLObject object) {
+                        TdApi.Chats chats= (TdApi.Chats) object;
+                        final TdApi.Chat[] arr = chats.chats;
+                        for(TdApi.Chat chat : arr){
+                            Log.v(Constants.LOG_TAG, "result Chat:" + chat.toString());
+                            mId =  chat.id;
+                        }
+
+                    }
+                });
+//
+//
+                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetMe(), new Client.ResultHandler() {
+                    @Override
+                    public void onResult(TdApi.TLObject object) {
+                        Log.v(null, "TLObject onResult GetMe:" + object.toString());
+                        TdApi.User user = (TdApi.User) object;
+                        PreferenceUtils.setUserFirstName(ChatRoomActivity.this, user.firstName);
+                        PreferenceUtils.setUserLastName(ChatRoomActivity.this, user.lastName);
+                        Log.v(null, "TLObject onResult GetMe:" + object.toString());
+                    }
+                });
+
+                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChat(-13183666), new Client.ResultHandler() {
+                    @Override
+                    public void onResult(TdApi.TLObject object) {
+                        Log.v(Constants.LOG_TAG, "TLObject onResult GetChat:" + object.toString());
+                    }
+                });
+
+                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetGroupChat(-13183666), new Client.ResultHandler() {
+                    @Override
+                    public void onResult(TdApi.TLObject object) {
+                        Log.v(Constants.LOG_TAG, "TLObject onResult GetGroupChat:" + object.toString());
+                    }
+                });
+
+                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetGroupChatFull(-13183666), new Client.ResultHandler() {
+                    @Override
+                    public void onResult(TdApi.TLObject object) {
+                        Log.v(Constants.LOG_TAG, "TLObject onResult GetGroupChatFull:" + object.toString());
+                    }
+                });
+
+                ApplicationSpektogram.getApplication(getBaseContext()).sendChatMessageFunction(777000, new TdApi.InputMessageText("hello t1"), new Client.ResultHandler() {
+                    @Override
+                    public void onResult(TdApi.TLObject object) {
+                        Log.v(Constants.LOG_TAG, "TLObject onResult sendChatMessageFunction:" + object.toString());
+
+                    }
+                });
 
                 PopupMenu menu = new PopupMenu(ChatRoomActivity.this);
                 Resources resources = getResources();
@@ -148,7 +194,6 @@ public class ChatRoomActivity extends ActionBarActivity
         actionBar.setCustomView(R.layout.ab_main);
 
     }
-
 
 
     @Override

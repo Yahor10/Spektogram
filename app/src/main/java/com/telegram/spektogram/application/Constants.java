@@ -5,6 +5,8 @@ package com.telegram.spektogram.application;
  */
 public final class Constants {
 
+    public final static String LOG_TAG = "LOG_TAG_APP";
+
     public final static int API_ID = 34993;
 
     public final static String API_HASH = "9866dc29b504cedb40a86bb03bbe8c93";
