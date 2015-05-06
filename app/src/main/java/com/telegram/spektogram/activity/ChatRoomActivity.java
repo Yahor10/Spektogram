@@ -66,7 +66,7 @@ public class ChatRoomActivity extends ActionBarActivity
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+// ALEX
 //                TdApi.Chat chat = new TdApi.Chat();
 //                chat.id = 123;
 //                chat.type =  new  TdApi.PrivateChatInfo();
@@ -78,6 +78,14 @@ public class ChatRoomActivity extends ActionBarActivity
 //                ((TdApi.PrivateChatInfo)chat.type).user.phoneNumber = "+375292044134";
 //
 //
+//                TdApi.Message message = new TdApi.Message();
+//                message.id = 999;
+//                message.message=new TdApi.MessageText();
+//                ((TdApi.MessageText)message.message).text = "THIS IS SPARTA!";
+//                message.chatId = chat.id;
+//                message.fromId = ((TdApi.PrivateChatInfo)chat.type).user.id;
+//                message.date= (int) System.currentTimeMillis();
+
 //                SpectrDBHandler spectrDBHandler = new SpectrDBHandler(getApplicationContext());
 //                spectrDBHandler.addUser(((TdApi.PrivateChatInfo)chat.type).user);
 //                spectrDBHandler.addChat(chat);
