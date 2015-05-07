@@ -20,84 +20,85 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
 
     }
 
-    @Override
-    public void onOpen(SQLiteDatabase db) {
-        super.onOpen(db);
-        if (!db.isReadOnly()) {
-            // Enable foreign key constraints
-            db.execSQL("PRAGMA foreign_keys = ON;");
-        }
-    }
+//    @Override
+//    public void onOpen(SQLiteDatabase db) {
+//        super.onOpen(db);
+//        if (!db.isReadOnly()) {
+//            // Enable foreign key constraints
+//            db.execSQL("PRAGMA foreign_keys = ON;");
+//        }
+//    }
 
 
     @Override
     public void onCreate(SQLiteDatabase db) {
 
 
-        String CREATE_TABLE_RESULT = "CREATE TABLE "
-                + ConstantsDB.TABLE_CHATS + "(" + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
-                + ConstantsDB.COLUMN_CHAT_ID_TELEGRAM + " INTEGER NOT NULL UNIQUE,"
-                + ConstantsDB.COLUMN_CHAT_TYPE + " INTEGER NOT NULL,"
-                + ConstantsDB.COLUMN_CHAT_NAME + " TEXT NOT NULL"
-                + ")";
+//        String CREATE_TABLE_RESULT = "CREATE TABLE "
+//                + ConstantsDB.TABLE_CHATS + "(" + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
+//                + ConstantsDB.COLUMN_CHAT_ID_TELEGRAM + " INTEGER NOT NULL UNIQUE,"
+//                + ConstantsDB.COLUMN_CHAT_TYPE + " INTEGER NOT NULL,"
+//                + ConstantsDB.COLUMN_CHAT_NAME + " TEXT NOT NULL"
+//                + ")";
 
         String CREATE_TABLE_USER = "CREATE TABLE "
                 + ConstantsDB.TABLE_USERS + "("
                 + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
                 + ConstantsDB.COLUMN_USER_ID_TELEGRAM + " INTEGER NOT NULL UNIQUE,"
+                + ConstantsDB.COLUMN_USER_IS_CONTACT + " INTEGER,"
                 + ConstantsDB.COLUMN_USER_NAME + " TEXT,"
                 + ConstantsDB.COLUMN_USER_LASTNAME + " TEXT,"
                 + ConstantsDB.COLUMN_USER_FIRSTNAME + " TEXT NOT NULL,"
                 + ConstantsDB.COLUMN_USER_PHONE + " TEXT"
                 + ")";
 
-        String CREATE_TABLE_USET_TO_CHAT = "CREATE TABLE "
-                + ConstantsDB.TABLE_USER_TO_CHATS + "("
-                + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
-                + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_CHAT + " INTEGER,"
-                + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_USER + " INTEGER,"
-                + "FOREIGN KEY( "
-                + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_CHAT + " ) REFERENCES "
-                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_CHAT_ID_TELEGRAM + " ) ON DELETE CASCADE,"
-                + "FOREIGN KEY( "
-                + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_USER + " ) REFERENCES "
-                + ConstantsDB.TABLE_USERS + " (" + ConstantsDB.COLUMN_USER_ID_TELEGRAM + " )"
-                + ")";
+//        String CREATE_TABLE_USET_TO_CHAT = "CREATE TABLE "
+//                + ConstantsDB.TABLE_USER_TO_CHATS + "("
+//                + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
+//                + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_CHAT + " INTEGER,"
+//                + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_USER + " INTEGER,"
+//                + "FOREIGN KEY( "
+//                + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_CHAT + " ) REFERENCES "
+//                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_CHAT_ID_TELEGRAM + " ) ON DELETE CASCADE,"
+//                + "FOREIGN KEY( "
+//                + ConstantsDB.COLUMN_USER_TO_CHAT_FOREIGN_KEY_USER + " ) REFERENCES "
+//                + ConstantsDB.TABLE_USERS + " (" + ConstantsDB.COLUMN_USER_ID_TELEGRAM + " )"
+//                + ")";
+//
+//        String CREATE_TABLE_MESSAGES = "CREATE TABLE " + ConstantsDB.TABLE_MESSAGES
+//                + "(" + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
+//                + ConstantsDB.COLUMN_MESSAGE_ID_TELEGRAM + " INTEGER NOT NULL UNIQUE,"
+//                + ConstantsDB.COLUMN_MESSAGE_TEXT + " TEXT,"
+//                + ConstantsDB.COLUMN_MESSAGE_TIME + " INTEGER,"
+//                + ConstantsDB.COLUMN_MESSAGE_TYPE + " INTEGER,"
+//                + ConstantsDB.COLUMN_MESSAGE_SENT + " INTEGER,"
+//                + ConstantsDB.COLUMN_MESSAGE_DELIVERED + " INTEGER,"
+//                + ConstantsDB.COLUMN_MESSAGE_KEY_OF_CHAT + " INTEGER,"
+//                + ConstantsDB.COLUMN_MESSAGE_KEY_OF_USER + " INTEGER,"
+//                + "FOREIGN KEY( " + ConstantsDB.COLUMN_MESSAGE_KEY_OF_CHAT + " ) REFERENCES "
+//                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_CHAT_ID_TELEGRAM + " ) ON DELETE CASCADE,"
+//                + "FOREIGN KEY( " + ConstantsDB.COLUMN_MESSAGE_KEY_OF_USER + " ) REFERENCES "
+//                + ConstantsDB.TABLE_USERS + " (" + ConstantsDB.COLUMN_USER_ID_TELEGRAM + " )"
+//                + ")";
+//
+//        String CREATE_TABLE_LAST_MESSAGES = "CREATE TABLE " + ConstantsDB.TABLE_LAST_MESSAGE
+//                + "(" + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
+//                + ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_CHAT + " INTEGER,"
+//                + ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_MESSAGE + " INTEGER,"
+//                + "FOREIGN KEY( "
+//                + ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_CHAT + " ) REFERENCES "
+//                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_CHAT_ID_TELEGRAM + " ) ON DELETE CASCADE,"
+//                + "FOREIGN KEY( "
+//                + ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_MESSAGE + " ) REFERENCES "
+//                + ConstantsDB.TABLE_MESSAGES + " (" + ConstantsDB.COLUMN_MESSAGE_ID_TELEGRAM + " )"
+//                + ")";
 
-        String CREATE_TABLE_MESSAGES = "CREATE TABLE " + ConstantsDB.TABLE_MESSAGES
-                + "(" + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
-                + ConstantsDB.COLUMN_MESSAGE_ID_TELEGRAM + " INTEGER NOT NULL UNIQUE,"
-                + ConstantsDB.COLUMN_MESSAGE_TEXT + " TEXT,"
-                + ConstantsDB.COLUMN_MESSAGE_TIME + " INTEGER,"
-                + ConstantsDB.COLUMN_MESSAGE_TYPE + " INTEGER,"
-                + ConstantsDB.COLUMN_MESSAGE_SENT + " INTEGER,"
-                + ConstantsDB.COLUMN_MESSAGE_DELIVERED + " INTEGER,"
-                + ConstantsDB.COLUMN_MESSAGE_KEY_OF_CHAT + " INTEGER,"
-                + ConstantsDB.COLUMN_MESSAGE_KEY_OF_USER + " INTEGER,"
-                + "FOREIGN KEY( " + ConstantsDB.COLUMN_MESSAGE_KEY_OF_CHAT + " ) REFERENCES "
-                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_CHAT_ID_TELEGRAM + " ) ON DELETE CASCADE,"
-                + "FOREIGN KEY( " + ConstantsDB.COLUMN_MESSAGE_KEY_OF_USER + " ) REFERENCES "
-                + ConstantsDB.TABLE_USERS + " (" + ConstantsDB.COLUMN_USER_ID_TELEGRAM + " )"
-                + ")";
 
-        String CREATE_TABLE_LAST_MESSAGES = "CREATE TABLE " + ConstantsDB.TABLE_LAST_MESSAGE
-                + "(" + ConstantsDB.COLUMN_ID + " INTEGER PRIMARY KEY,"
-                + ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_CHAT + " INTEGER,"
-                + ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_MESSAGE + " INTEGER,"
-                + "FOREIGN KEY( "
-                + ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_CHAT + " ) REFERENCES "
-                + ConstantsDB.TABLE_CHATS + " (" + ConstantsDB.COLUMN_CHAT_ID_TELEGRAM + " ) ON DELETE CASCADE,"
-                + "FOREIGN KEY( "
-                + ConstantsDB.COLUMN_LAST_MESSAGE_KEY_OF_MESSAGE + " ) REFERENCES "
-                + ConstantsDB.TABLE_MESSAGES + " (" + ConstantsDB.COLUMN_MESSAGE_ID_TELEGRAM + " )"
-                + ")";
-
-
-        db.execSQL(CREATE_TABLE_RESULT);
-        db.execSQL(CREATE_TABLE_MESSAGES);
-        db.execSQL(CREATE_TABLE_LAST_MESSAGES);
+//        db.execSQL(CREATE_TABLE_RESULT);
+//        db.execSQL(CREATE_TABLE_MESSAGES);
+//        db.execSQL(CREATE_TABLE_LAST_MESSAGES);
         db.execSQL(CREATE_TABLE_USER);
-        db.execSQL(CREATE_TABLE_USET_TO_CHAT);
+//        db.execSQL(CREATE_TABLE_USET_TO_CHAT);
 
     }
 
@@ -105,18 +106,18 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
 
-        db.execSQL("DROP TABLE IF EXISTS " + ConstantsDB.TABLE_CHATS);
-        db.execSQL("DROP TABLE IF EXISTS " + ConstantsDB.TABLE_MESSAGES);
-        db.execSQL("DROP TABLE IF EXISTS " + ConstantsDB.TABLE_LAST_MESSAGE);
+//        db.execSQL("DROP TABLE IF EXISTS " + ConstantsDB.TABLE_CHATS);
+//        db.execSQL("DROP TABLE IF EXISTS " + ConstantsDB.TABLE_MESSAGES);
+//        db.execSQL("DROP TABLE IF EXISTS " + ConstantsDB.TABLE_LAST_MESSAGE);
         db.execSQL("DROP TABLE IF EXISTS " + ConstantsDB.TABLE_USERS);
-        db.execSQL("DROP TABLE IF EXISTS " + ConstantsDB.TABLE_USER_TO_CHATS);
+//        db.execSQL("DROP TABLE IF EXISTS " + ConstantsDB.TABLE_USER_TO_CHATS);
 
         onCreate(db);
 
     }
 
-
-    public void addChat(TdApi.Chat chat) {
+    @Deprecated
+    protected void addChat(TdApi.Chat chat) {
 
         if (chat != null) {
             String chat_name = "Spectogram";
@@ -157,7 +158,29 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
 
     }
 
-    public void addUser(TdApi.User user) {
+    public void addUsers(ArrayList<TdApi.User> users) {
+        if (users != null) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.beginTransaction();
+            try {
+                for(TdApi.User u: users){
+                    addUser(db,u,true);
+                }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            } finally {
+                db.endTransaction();
+            }
+            db.close();
+        }
+
+    }
+
+
+    private void addUser(SQLiteDatabase db, TdApi.User user, boolean isContact) {
 
 
         if (user != null) {
@@ -183,25 +206,28 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
                 user_phone = user.phoneNumber;
             }
 
+            int flag_is_contact = 0;
+            if (isContact) {
+                flag_is_contact = 1;
+            }
+
             ContentValues values = new ContentValues();
             values.put(ConstantsDB.COLUMN_USER_NAME, user_name);
             values.put(ConstantsDB.COLUMN_USER_FIRSTNAME, user_first_name);
             values.put(ConstantsDB.COLUMN_USER_LASTNAME, user_last_name);
             values.put(ConstantsDB.COLUMN_USER_PHONE, user_phone);
             values.put(ConstantsDB.COLUMN_USER_ID_TELEGRAM, user.id);
+            values.put(ConstantsDB.COLUMN_USER_IS_CONTACT, flag_is_contact);
 
 
-            SQLiteDatabase db = this.getWritableDatabase();
+            long id = db.insert(ConstantsDB.TABLE_USERS, null, values);
 
-             long id = db.insert(ConstantsDB.TABLE_USERS, null, values);
-
-            db.close();
-
+                id +=0;
         }
 
     }
 
-
+    @Deprecated
     public ArrayList<TdApi.Chat> getAllChats() {
 
         ArrayList<TdApi.Chat> returnChat = new ArrayList<TdApi.Chat>();
@@ -265,7 +291,8 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
         return returnChat;
     }
 
-    private ArrayList<TdApi.User> getUsersByChatId(SQLiteDatabase db, long chat_id) {
+    @Deprecated
+    public ArrayList<TdApi.User> getUsersByChatId(SQLiteDatabase db, long chat_id) {
 
         ArrayList<TdApi.User> users = null;
 
@@ -360,7 +387,7 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
         return user;
     }
 
-
+    @Deprecated
     public void addMessage(TdApi.Message message, long chat, int user) {
 
         if (message != null && chat >= 0 && user >= 0) {
@@ -400,6 +427,7 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
 
     }
 
+    @Deprecated
     public ArrayList<TdApi.Message> getAllMessagesFromChat(int chat_id) {
 
         ArrayList<TdApi.Message> returnMessages = new ArrayList<TdApi.Message>();
@@ -472,6 +500,39 @@ public class SpectrDBHandler extends SQLiteOpenHelper {
         db.close();
         return null;
 
+    }
+
+
+    public boolean getFlagUserIsContactByUserId(int user_telegram_id) {
+
+        String queryUserByUserId = "Select * FROM " + ConstantsDB.TABLE_USERS
+                + " WHERE " + ConstantsDB.COLUMN_USER_ID_TELEGRAM + " = " + "'"
+                + user_telegram_id + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryUserByUserId, null);
+
+        boolean isContact = false;
+
+        if (cursor.getCount() != 0) {
+            cursor.moveToFirst();
+
+
+            int columnUserIsContactFlag = cursor
+                    .getColumnIndex(ConstantsDB.COLUMN_USER_IS_CONTACT);
+
+            int flag = cursor.getInt(columnUserIsContactFlag);
+
+            if (flag == 1) {
+                isContact = true;
+            }
+
+
+            cursor.close();
+        }
+        db.close();
+
+
+        return isContact;
     }
 
 }

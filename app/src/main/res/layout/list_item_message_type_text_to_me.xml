@@ -7,18 +7,23 @@
 
     <ImageView
         android:id="@+id/img_user_photo"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_alignParentBottom="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
         android:src="@mipmap/ic_launcher" />
 
     <ImageView
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:layout_alignParentBottom="true"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/img_user_photo"
-        android:src="@drawable/ic_drawer" />
+        android:rotation="180"
+        android:src="@drawable/triangle_message_to_me" />
 
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_toRightOf="@+id/img_user_photo"></FrameLayout>
 
 
 </RelativeLayout>

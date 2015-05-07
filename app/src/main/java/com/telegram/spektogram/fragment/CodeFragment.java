@@ -71,6 +71,14 @@ public class CodeFragment extends Fragment {
                         public void run() {
                             Toast.makeText(getActivity(), "Authorized", Toast.LENGTH_SHORT).show();
                             PreferenceUtils.setUserAuth(getActivity(),true);
+
+//                            ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.GetContacts(),new Client.ResultHandler() {
+//                                @Override
+//                                public void onResult(TdApi.TLObject object) {
+//                                    Log.v("CONTACTS", "TLObject onResult GetChat:" + object.toString());
+//                                }
+//                            });
+
                             startActivity(ChatRoomActivity.buildStartIntent(getActivity()));
                         }
                     });

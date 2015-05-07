@@ -5,10 +5,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import com.telegram.spektogram.activity.ChatRoomActivity;
 import com.telegram.spektogram.activity.SignInActivity;
+import com.telegram.spektogram.application.ApplicationSpektogram;
+import com.telegram.spektogram.db.SpectrDBHandler;
 import com.telegram.spektogram.preferences.PreferenceUtils;
+
+import org.drinkless.td.libcore.telegram.Client;
+import org.drinkless.td.libcore.telegram.TdApi;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class IntroActivity extends Activity {
@@ -52,6 +61,22 @@ public class IntroActivity extends Activity {
             if(!PreferenceUtils.isUserAuth(baseContext)) {
                 i = SignInActivity.buildStartIntent(baseContext);
             }else{
+
+
+                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetContacts(), new Client.ResultHandler() {
+                    @Override
+                    public void onResult(TdApi.TLObject object) {
+                        Log.v("CONTACTS", "TLObject onResult GetChat:" + object.toString());
+                        TdApi.User[] contacts = ((TdApi.Contacts)object).users;
+                        ArrayList<TdApi.User> users = new ArrayList<TdApi.User>(Arrays.asList(contacts));
+                        SpectrDBHandler spectrDBHandler = new SpectrDBHandler(getApplicationContext());
+                        spectrDBHandler.addUsers(users);
+
+                    }
+                });
+
+
+
                 i = ChatRoomActivity.buildStartIntent(baseContext);
             }
 //            startActivity(SettingsActivity.buildStartIntent(baseContext));

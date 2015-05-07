@@ -23,7 +23,6 @@ public class ConstantsDB {
     public static final String COLUMN_CHAT_TYPE = "chat_type";
 
 
-
     // ======================================
 
     public static final String COLUMN_MESSAGE_KEY_OF_CHAT = "key_of_chat";
@@ -48,6 +47,7 @@ public class ConstantsDB {
     public static final String COLUMN_USER_LASTNAME = "user_last_name";
     public static final String COLUMN_USER_FIRSTNAME = "user_first_name";
     public static final String COLUMN_USER_PHONE = "user_phone";
+    public static final String COLUMN_USER_IS_CONTACT = "user_is_contact";
 
     // ======================================
 
@@ -56,12 +56,12 @@ public class ConstantsDB {
 
     // ======================================
 
-    public static final int  TYPE_CHAT_ONE_USER = 1;
-    public static final int  TYPE_CHAT_SEVERAL_USERS = 2;
+    public static final int TYPE_CHAT_ONE_USER = 1;
+    public static final int TYPE_CHAT_SEVERAL_USERS = 2;
 
     // ======================================
-    public static final int  TYPE_MESSAGE_TEXT = 1;
-    public static final int  TYPE_MESSAGE_AUDIO = 2;
-    public static final int  TYPE_MESSAGE_VIDEO = 3;
+    public static final int TYPE_MESSAGE_TEXT = 1;
+    public static final int TYPE_MESSAGE_AUDIO = 2;
+    public static final int TYPE_MESSAGE_VIDEO = 3;
 
 }
