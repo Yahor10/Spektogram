@@ -5,9 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.telegram.spektogram.R;
+import com.telegram.spektogram.activity.ContactsActivity;
 import com.telegram.spektogram.enums.ContactType;
 
 import org.drinkless.td.libcore.telegram.TdApi;
@@ -20,10 +23,13 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
 
     private final LayoutInflater mInflater;
     private final ArrayList<Contact> mContacts;
+    private final ListView lvContacts;
 
     public ContactsAdapter(Context context, ArrayList<Contact> contacts) {
         super(context, 0, contacts);
         mContacts = contacts;
+        ContactsActivity activity = (ContactsActivity) context;
+       lvContacts = activity.getLvContacts();
         // Instantiates a new AlphabetIndexer bound to the column used to sort contact names.
         // The cursor is left null, because it has not yet been retrieved.
         mInflater = (LayoutInflater) context
@@ -87,6 +93,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
                     viewContactTelegramHolder = new ViewContactTelegramHolder();
                     view = mInflater.inflate(R.layout.adapter_contact_telegram, null);
                     viewContactTelegramHolder.tvName = (TextView) view.findViewById(R.id.tvName);
+                    viewContactTelegramHolder.checkBox = (CheckBox) view.findViewById(R.id.checkBox);
 
                     viewContactTelegramHolder.tvDate = (TextView) view.findViewById(R.id.tvDate);
 
@@ -98,6 +105,8 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
                 }
 
                 viewContactTelegramHolder.tvName.setText(contact.name);
+                final boolean itemChecked = lvContacts.isItemChecked(position);
+                viewContactTelegramHolder.checkBox.setChecked(itemChecked);
 
                 final TdApi.UserStatus status = contact.getUser().status;
                 if(status instanceof TdApi.UserStatusOffline){
@@ -122,6 +131,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
                 break;
         }
 
+
         return view;
     }
 
@@ -143,7 +153,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
 
     public static class ViewContactTelegramHolder {
         public TextView tvName;
-        public TextView tvLastSeen;
+        public CheckBox checkBox;
         public TextView tvDate;
     }
 

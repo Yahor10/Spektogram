@@ -32,7 +32,7 @@ public class ContactFetcher {
         this.userMap = userMap;
     }
 
-    public ArrayList<Contact> fetchAll() {
+    public ArrayList<Contact> fetchAll(List<Contact> actions) {
         ArrayList<Contact> listContacts = new ArrayList<Contact>();
         String selection = ContactsContract.Contacts.HAS_PHONE_NUMBER + " > 0 ";
         CursorLoader cursorLoader = new CursorLoader(context, ContactsContract.Contacts.CONTENT_URI,
@@ -42,11 +42,8 @@ public class ContactFetcher {
                 ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC" // the sort order (default)
         );
 
-        final List<Contact> actions = new ArrayList<Contact>();
 
-        int action;
-        final Contact object = new Contact("-1", "add ", ContactType.Action);
-        actions.add(object);
+
         final List<Contact> telegramContacts = new ArrayList<Contact>();
         final List<Contact> userContacts = new ArrayList<Contact>();
 
@@ -62,6 +59,34 @@ public class ContactFetcher {
         listContacts.addAll(actions);
         listContacts.addAll(telegramContacts);
         listContacts.addAll(userContacts);
+        return listContacts;
+    }
+
+    public ArrayList<Contact> fetchTelegramContacts(List<Contact> actions) {
+        ArrayList<Contact> listContacts = new ArrayList<Contact>();
+        String selection = ContactsContract.Contacts.HAS_PHONE_NUMBER + " > 0 ";
+        CursorLoader cursorLoader = new CursorLoader(context, ContactsContract.Contacts.CONTENT_URI,
+                null, // the columns to retrieve (all)
+                selection, // the selection criteria (none)
+                null, // the selection args (none)
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC" // the sort order (default)
+        );
+
+
+
+
+        final List<Contact> telegramContacts = new ArrayList<Contact>();
+
+        Cursor c = cursorLoader.loadInBackground();
+        if (c.moveToFirst()) {
+            do {
+                loadTelegramContacts(c, telegramContacts);
+            } while (c.moveToNext());
+        }
+        c.close();
+
+        listContacts.addAll(actions);
+        listContacts.addAll(telegramContacts);
         return listContacts;
     }
 
@@ -97,6 +122,25 @@ public class ContactFetcher {
             userContacts.add(contact);
         }
 
+    }
+
+    private void loadTelegramContacts(Cursor c, List<Contact> telegramContacts) {
+        // Get Contact ID
+        int idIndex = c.getColumnIndex(ContactsContract.Contacts._ID);
+        String contactId = c.getString(idIndex);
+        // Get Contact Name
+        int nameIndex = c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+        String contactDisplayName = c.getString(nameIndex);
+
+        ContactType type = ContactType.TelegramContact;
+        Contact contact = new Contact(contactId, contactDisplayName, type);
+
+        fetchContactNumbers(c, contact);
+        fetchContactEmails(c, contact);
+
+        if(contact.getUser() != null) {
+            telegramContacts.add(contact);
+        }
     }
 
     public void fetchContactNumbers(Cursor cursor, Contact contact) {
