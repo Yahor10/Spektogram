@@ -40,11 +40,19 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
     private  Map<String,TdApi.User>userMap =null;
     private ContactsAdapter adapterContacts;
     public static String EXTRA_TELEGRAM = "EXTRA_TELEGRAM";
+    public static String EXTRA_NEW_GROUP = "EXTRA_NEW_GROUP";
 
 
     public static Intent buildStartIntent(Context context,boolean onlyTelegram){
         final Intent intent = new Intent(context, ContactsActivity.class);
         intent.putExtra(EXTRA_TELEGRAM,onlyTelegram);
+        return intent;
+    }
+
+    public static Intent buildStartIntent(Context context,boolean onlyTelegram,boolean newGroup){
+        final Intent intent = new Intent(context, ContactsActivity.class);
+        intent.putExtra(EXTRA_TELEGRAM,onlyTelegram);
+        intent.putExtra(EXTRA_NEW_GROUP,newGroup);
         return intent;
     }
 
@@ -98,7 +106,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
     }
 
     private void loadTelegramContacts() {
-        boolean createNewGroup = false;
+        boolean createNewGroup = getIntent().getBooleanExtra(EXTRA_NEW_GROUP, false);
 
         List<Contact>actions = new ArrayList<Contact>(3);
         final Contact object = new Contact("-1", "new group ", ContactType.Action);
@@ -106,10 +114,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
 
         if(createNewGroup){
             actions.clear();
-
         }
-
-
 
         final ContactFetcher contactFetcher = new ContactFetcher(this, userMap);
         ArrayList<Contact> listContacts = contactFetcher.fetchTelegramContacts(actions);
@@ -140,7 +145,23 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         switch (id){
             case R.id.action_accept:
                 SparseBooleanArray checked = lvContacts.getCheckedItemPositions();
-                Log.v(Constants.LOG_TAG,"ch" + checked.keyAt(0));
+                int ids [] = new int[checked.size()];
+                if(checked != null) {
+                    for(int i = 0; i < checked.size();i++) {
+                        final int keyAt = checked.keyAt(i);
+                        ContactsAdapter adapter = (ContactsAdapter) getLvContacts().getAdapter();
+                        final Contact contact = adapter.getItem(keyAt);
+                        final TdApi.User user = contact.getUser();
+                        ids[i] = user.id;
+                    }
+
+                    ApplicationSpektogram.getApplication(this).getClient().send(new TdApi.CreateGroupChat(ids, "test group chat"), new Client.ResultHandler() {
+                        @Override
+                        public void onResult(TdApi.TLObject object) {
+                            Log.v(Constants.LOG_TAG,"CreateGroupChat" + object);
+                        }
+                    });
+                }
                 break;
         }
 
