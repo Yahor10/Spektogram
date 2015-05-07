@@ -4,6 +4,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_accept">Accept</string>
 
     <string name="title_activity_chat">ChatActivity</string>
 
@@ -44,6 +45,7 @@
     <string name="first_name">First name</string>
     <string name="last_name">Last name (optional)</string>
     <string name="area">Area</string>
+    <string name="title_activity_select_action">SelectActionActivity</string>
 
 
 </resources>

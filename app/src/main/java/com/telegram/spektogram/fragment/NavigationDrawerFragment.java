@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -284,9 +285,13 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        final FragmentActivity activity = getActivity();
         switch (position){
+            case 0:
+                startActivity(ContactsActivity.buildStartIntent(activity,true,true));
+                break;
             case 2:
-                final Intent intent = ContactsActivity.buildStartIntent(getActivity());
+                final Intent intent = ContactsActivity.buildStartIntent(activity,false);
                 startActivity(intent);
                 break;
             case 4:
