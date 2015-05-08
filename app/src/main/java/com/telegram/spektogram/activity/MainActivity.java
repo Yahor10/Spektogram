@@ -37,6 +37,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private static final int SEND_GEO_LOCATION = 114;
 
+    private static final int SEND_FILE = 115;
+
 
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
@@ -128,6 +130,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                         resources.getDrawable(R.drawable.ic_attach_photo));
                 menu.add(SEND_VIDEO, R.string.send_video).setIcon(
                         resources.getDrawable(R.drawable.ic_attach_photo));
+                menu.add(SEND_FILE, R.string.send_file).setIcon(
+                        resources.getDrawable(R.drawable.ic_attach));
+                menu.add(SEND_GEO_LOCATION, R.string.send_location).setIcon(
+                        resources.getDrawable(R.drawable.ic_drawer));
                 menu.show();
 
                 menu.setOnItemSelectedListener(this);
