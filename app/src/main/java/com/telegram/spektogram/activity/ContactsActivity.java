@@ -9,13 +9,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.application.ApplicationSpektogram;
@@ -34,7 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ContactsActivity extends ActionBarActivity implements Client.ResultHandler,AdapterView.OnItemClickListener {
+public class ContactsActivity extends ActionBarActivity implements Client.ResultHandler,AdapterView.OnItemClickListener, ViewTreeObserver.OnGlobalLayoutListener {
     ArrayList<Contact> listContacts;
     ListView lvContacts;
     private  Map<String,TdApi.User>userMap =null;
@@ -90,13 +96,24 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         actionBar.setCustomView(R.layout.ab_main);
 
+        final View customView = actionBar.getCustomView();
+        final View viewById = customView.findViewById(R.id.title);
+        String s= getString(R.string.app_name);
+
+        SpannableString ss1=  new SpannableString(s);
+        final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
+        ss1.setSpan(bss, 0, 6, 0); // set size
+        ss1.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 6, 0);// set color
+
+        TextView tv= (TextView) findViewById(R.id.title);
+        tv.setText(ss1);
     }
 
     private void loadContacts() {
         final ContactFetcher contactFetcher = new ContactFetcher(ContactsActivity.this, userMap);
 
         List<Contact>actions = new ArrayList<Contact>(3);
-        final Contact object = new Contact("-1", "create chat ", ContactType.Action);
+        final Contact object = new Contact("-1", "invite friend", ContactType.Action);
         actions.add(object);
 
         listContacts = contactFetcher.fetchAll(actions);
@@ -109,7 +126,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         boolean createNewGroup = getIntent().getBooleanExtra(EXTRA_NEW_GROUP, false);
 
         List<Contact>actions = new ArrayList<Contact>(3);
-        final Contact object = new Contact("-1", "new group ", ContactType.Action);
+        final Contact object = new Contact("-1", "new group", ContactType.Action);
         actions.add(object);
 
         if(createNewGroup){
@@ -123,14 +140,27 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        final MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_contacts, menu);
+//        getMenuInflater().inflate(R.menu.menu_contacts, menu);
 
-        getMenuInflater().inflate(R.menu.menu_contacts, menu);
 
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        final MenuItem item = menu.findItem(R.id.action_t);
+        CharSequence menuTitle = item.getTitle();
+
+        SpannableString styledMenuTitle = new SpannableString(menuTitle);
+        styledMenuTitle.setSpan(new ForegroundColorSpan(Color.YELLOW), 0, menuTitle.length(), 0);
+        item.setTitle(styledMenuTitle);
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -178,6 +208,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         for(TdApi.User user : users){
             userMap.put(user.phoneNumber,user);
         }
+
         Log.v(null,"hash map" + userMap);
         runOnUiThread(new Runnable() {
             @Override
@@ -203,5 +234,10 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
 
     public ListView getLvContacts() {
         return lvContacts;
+    }
+
+    @Override
+    public void onGlobalLayout() {
+
     }
 }
