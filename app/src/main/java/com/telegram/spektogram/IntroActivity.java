@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.telegram.spektogram.activity.ChatRoomActivity;
+import com.telegram.spektogram.activity.MainActivity;
 import com.telegram.spektogram.activity.SignInActivity;
 import com.telegram.spektogram.application.ApplicationSpektogram;
 import com.telegram.spektogram.db.SpectrDBHandler;
@@ -79,8 +80,8 @@ public class IntroActivity extends Activity {
 
                 i = ChatRoomActivity.buildStartIntent(baseContext);
             }
-//            startActivity(SettingsActivity.buildStartIntent(baseContext));
-            startActivity(i);
+            startActivity(MainActivity.buildStartIntent(baseContext));
+//            startActivity(i);
             // close this activity
             finish();
         }
