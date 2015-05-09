@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txt_chat_name"
                 android:enabled="true"
-                
+
                 android:singleLine="true"
                 android:text="Hi Spectr"
                 android:textAppearance="?android:attr/textAppearanceSmall"

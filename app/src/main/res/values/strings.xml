@@ -17,7 +17,11 @@
     <string name="forward">reply</string>
     <string name="copy">copy</string>
     <string name="delete">copy</string>
-    <string name="messege">Messege</string>
+    <string name="message">Message</string>
+    <string name="take_picture">Take Picture</string>
+    <string name="send_video">Send Video</string>
+    <string name="send_file">Send File</string>S
+    <string name="send_location">Send Location</string>
 
     <string name="title_activity_sign_in">Sign In</string>
     <string name="login">Login</string>

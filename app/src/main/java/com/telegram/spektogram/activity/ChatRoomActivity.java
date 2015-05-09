@@ -21,15 +21,11 @@ import android.view.ViewGroup;
 
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.application.ApplicationSpektogram;
-import com.telegram.spektogram.application.Constants;
 import com.telegram.spektogram.fragment.NavigationDrawerFragment;
 import com.telegram.spektogram.views.PopupMenu;
 
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class ChatRoomActivity extends ActionBarActivity
@@ -128,7 +124,7 @@ public class ChatRoomActivity extends ActionBarActivity
                 PopupMenu menu = new PopupMenu(ChatRoomActivity.this);
                 Resources resources = getResources();
 
-                menu.setHeaderTitle(resources.getString(R.string.messege));
+                menu.setHeaderTitle(resources.getString(R.string.message));
 
                 menu.add(SEND_PHOTO, R.string.title_activity_chat).setIcon(
                         resources.getDrawable(R.drawable.ic_drawer));
