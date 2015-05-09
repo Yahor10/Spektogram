@@ -156,7 +156,8 @@ public class ContactFetcher {
             final int contactTypeColumnIndex = phone.getColumnIndex(Phone.TYPE);
 
             while (!phone.isAfterLast()) {
-                final String number = phone.getString(contactNumberColumnIndex);
+                String number = phone.getString(contactNumberColumnIndex);
+                number = number.replaceAll("\\+","");
                 final TdApi.User user = userMap != null ? userMap.get(number) : null;
                 if (user != null) {
                     contact.setUser(user);

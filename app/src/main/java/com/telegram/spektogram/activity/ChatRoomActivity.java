@@ -22,13 +22,14 @@ import android.view.ViewGroup;
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.application.ApplicationSpektogram;
 import com.telegram.spektogram.application.Constants;
-import com.telegram.spektogram.db.SpectrDBHandler;
 import com.telegram.spektogram.fragment.NavigationDrawerFragment;
-import com.telegram.spektogram.preferences.PreferenceUtils;
 import com.telegram.spektogram.views.PopupMenu;
 
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class ChatRoomActivity extends ActionBarActivity
@@ -56,41 +57,18 @@ public class ChatRoomActivity extends ActionBarActivity
 
 
     long mId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
         getSupportActionBar().setTitle("");
 
-        // Set Listener
 
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-// ALEX
-//                TdApi.Chat chat = new TdApi.Chat();
-//                chat.id = 123;
-//                chat.type =  new  TdApi.PrivateChatInfo();
-//                ((TdApi.PrivateChatInfo)chat.type).user = new TdApi.User();
-//                ((TdApi.PrivateChatInfo)chat.type).user.firstName = "Alexandr";
-//                ((TdApi.PrivateChatInfo)chat.type).user.lastName= "Alexeevich";
-//                ((TdApi.PrivateChatInfo)chat.type).user.id = 321;
-//                ((TdApi.PrivateChatInfo)chat.type).user.username = "alex-pers";
-//                ((TdApi.PrivateChatInfo)chat.type).user.phoneNumber = "+375292044134";
-//
-//
-//                TdApi.Message message = new TdApi.Message();
-//                message.id = 999;
-//                message.message=new TdApi.MessageText();
-//                ((TdApi.MessageText)message.message).text = "THIS IS SPARTA!";
-//                message.chatId = chat.id;
-//                message.fromId = ((TdApi.PrivateChatInfo)chat.type).user.id;
-//                message.date= (int) System.currentTimeMillis();
 
-//                SpectrDBHandler spectrDBHandler = new SpectrDBHandler(getApplicationContext());
-//                spectrDBHandler.addUser(((TdApi.PrivateChatInfo)chat.type).user);
-//                spectrDBHandler.addChat(chat);
-//
 //                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChats(0,20), new Client.ResultHandler() {
 //                    @Override
 //                    public void onResult(TdApi.TLObject object) {
@@ -124,7 +102,6 @@ public class ChatRoomActivity extends ActionBarActivity
 //                });
 
 
-
 //                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetGroupChat(-13183666), new Client.ResultHandler() {
 //                    @Override
 //                    public void onResult(TdApi.TLObject object) {
@@ -146,8 +123,6 @@ public class ChatRoomActivity extends ActionBarActivity
 //
 //                    }
 //                });
-
-
 
 
                 PopupMenu menu = new PopupMenu(ChatRoomActivity.this);
