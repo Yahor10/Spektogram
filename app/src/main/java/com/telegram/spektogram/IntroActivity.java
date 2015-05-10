@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.telegram.spektogram.activity.ChatRoomActivity;
-import com.telegram.spektogram.activity.MainActivity;
 import com.telegram.spektogram.activity.SignInActivity;
 import com.telegram.spektogram.application.ApplicationSpektogram;
 import com.telegram.spektogram.db.SpectrDBHandler;

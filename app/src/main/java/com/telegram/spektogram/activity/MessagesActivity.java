@@ -22,15 +22,15 @@ import com.telegram.spektogram.R;
 import com.telegram.spektogram.application.ApplicationSpektogram;
 import com.telegram.spektogram.views.PopupMenu;
 
+import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.io.File;
 
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener, PopupMenu.OnItemSelectedListener {
+public class MessagesActivity extends ActionBarActivity implements View.OnClickListener, PopupMenu.OnItemSelectedListener {
 
     private static final int SEND_PHOTO = 111;
-
 
 
     private static final int SEND_VIDEO = 113;
@@ -38,6 +38,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private static final int SEND_GEO_LOCATION = 114;
 
     private static final int SEND_FILE = 115;
+
+    public static final String KEY_EXTRA_CHAT_ID = "key_chat";
 
 
     private TextWatcher textWatcher = new TextWatcher() {
@@ -67,7 +69,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private ImageView attach;
 
     public static Intent buildStartIntent(Context context) {
-        return new Intent(context, MainActivity.class);
+        return new Intent(context, MessagesActivity.class);
     }
 
     private EditText messageText;
@@ -77,6 +79,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        startActivity(SignInActivity.buildStartIntent(this));
+
+        long id = getIntent().getLongExtra(KEY_EXTRA_CHAT_ID, -1);
+        ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChat(), new Client.ResultHandler() {
+
+            @Override
+            public void onResult(TdApi.TLObject object) {
+
+            }
+        });
 
         getSupportActionBar().setTitle("");
         messageText = (EditText) findViewById(R.id.message);
@@ -153,7 +164,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private void startCameraActivity() {
         File root = new File(Environment.getExternalStorageDirectory()
-                + File.separator + "Your Floder Name"+ File.separator);
+                + File.separator + "Your Floder Name" + File.separator);
         root.mkdirs();
         File sdImageMainDirectory = new File(root, "myPicName.jpg");
         Uri outputFileUri = Uri.fromFile(sdImageMainDirectory);

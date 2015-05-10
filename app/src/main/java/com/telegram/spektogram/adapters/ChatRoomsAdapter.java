@@ -79,7 +79,7 @@ public class ChatRoomsAdapter extends BaseAdapter {
                 return chat.id;
             }
         }
-        return -1;
+        return i;
     }
 
 
@@ -93,7 +93,7 @@ public class ChatRoomsAdapter extends BaseAdapter {
 
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.list_item_chat_room, null);
-            view.setTag(holder);
+
 
             holder.background = (View) view
                     .findViewById(R.id.frame_chat_about);
@@ -103,6 +103,7 @@ public class ChatRoomsAdapter extends BaseAdapter {
             holder.last_message = (TextView) view.findViewById(R.id.txt_last_message);
             holder.time_last_message = (TextView) view.findViewById(R.id.txt_chat_last_message_time);
             holder.not_saw_messages = (TextView) view.findViewById(R.id.txt_chat_not_saw_count_message);
+            view.setTag(holder);
 
         } else {
             holder = (ViewHolder) view.getTag();
@@ -114,7 +115,10 @@ public class ChatRoomsAdapter extends BaseAdapter {
     }
 
 
-    class ViewHolder {
+   public  class ViewHolder {
+
+       public TdApi.Chat chat;
+
         View background;
         ImageView user_photo;
         TextView chat_name;
@@ -124,6 +128,8 @@ public class ChatRoomsAdapter extends BaseAdapter {
 
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         public void setData(TdApi.Chat chat) {
+
+            this.chat = chat;
 
             if (Math.abs(chat.id % 2) == 0) {
                 background.setBackground(context.getResources().getDrawable(R.drawable.gradient_list_item_chat_room_blue));

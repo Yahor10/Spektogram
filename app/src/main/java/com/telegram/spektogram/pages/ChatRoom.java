@@ -1,15 +1,16 @@
 package com.telegram.spektogram.pages;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.telegram.spektogram.R;
+import com.telegram.spektogram.activity.MessagesActivity;
 import com.telegram.spektogram.adapters.ChatRoomsAdapter;
 import com.telegram.spektogram.application.ApplicationSpektogram;
 
@@ -40,7 +41,11 @@ public class ChatRoom extends Fragment implements Client.ResultHandler {
         chatslistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(getActivity(), MessagesActivity.class);
+                TdApi.Chat chat = ((ChatRoomsAdapter.ViewHolder) view.getTag()).chat;
+                intent.putExtra(MessagesActivity.KEY_EXTRA_CHAT_ID, chat.id);
+                getActivity().startActivity(intent);
             }
         });
 
@@ -53,10 +58,11 @@ public class ChatRoom extends Fragment implements Client.ResultHandler {
         final TdApi.Chat[] arr = chats.chats;
         ArrayList<TdApi.Chat> chatArrayList = new ArrayList<TdApi.Chat>(Arrays.asList(arr));
 
-        adapter = new ChatRoomsAdapter(getActivity().getLayoutInflater(), getActivity().getApplicationContext(), chatArrayList);
+        adapter = new ChatRoomsAdapter(getActivity().getLayoutInflater(), getActivity(), chatArrayList);
 
         adapter.notifyDataSetChanged();
         chatslistView.setAdapter(adapter);
+        chatslistView.notifyAll();
 
     }
 }
