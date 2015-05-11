@@ -11,8 +11,9 @@
         android:id="@+id/lvContacts"
         android:layout_width="match_parent"
         android:divider="@android:color/white"
-        android:dividerHeight="1dp"
+        android:dividerHeight="1px"
         android:layout_height="wrap_content"
+        android:headerDividersEnabled="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" >
     </ListView>

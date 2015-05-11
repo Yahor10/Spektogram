@@ -91,7 +91,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
 
     public static Intent buildStartIntent(Context context,boolean onlyTelegram){
         final Intent intent = new Intent(context, ContactsActivity.class);
-        intent.putExtra(EXTRA_TELEGRAM,onlyTelegram);
+        intent.putExtra(EXTRA_TELEGRAM, onlyTelegram);
         return intent;
     }
 
@@ -150,19 +150,28 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         actionBar.setTitle("");
         actionBar.setDisplayShowCustomEnabled(true);
 
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         actionBar.setCustomView(R.layout.ab_main);
 
-        final View customView = actionBar.getCustomView();
-        final View viewById = customView.findViewById(R.id.title);
         String s= getString(R.string.app_name);
 
-        SpannableString ss1=  new SpannableString(s);
+        final boolean newGroup = getIntent().getBooleanExtra(EXTRA_NEW_GROUP, false);
+        final TextView tv= (TextView) findViewById(R.id.title);
         final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
-        ss1.setSpan(bss, 0, 6, 0); // set size
-        ss1.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 6, 0);// set color
-
-        TextView tv= (TextView) findViewById(R.id.title);
+        SpannableString ss1 = new SpannableString(s);
+        if(newGroup){
+            final String string = getString(R.string.new_group);
+            ss1 = new SpannableString(string);
+            ss1.setSpan(bss, 0, 3, 0); // set size
+            ss1.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 3, 0);// set color
+        }else {
+            ss1 = new SpannableString(s);
+            ss1.setSpan(bss, 0, 6, 0); // set size
+            ss1.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 6, 0);// set color
+        }
         tv.setText(ss1);
     }
 
@@ -195,6 +204,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         ContactsAdapter adapterContacts = new ContactsAdapter(this, listContacts);
         lvContacts.setAdapter(adapterContacts);
 
+
     }
 
     @Override
@@ -202,22 +212,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         // Inflate the menu; this adds items to the action bar if it is present.
         final MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_contacts, menu);
-//        getMenuInflater().inflate(R.menu.menu_contacts, menu);
-
-
         return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        final MenuItem item = menu.findItem(R.id.action_t);
-        CharSequence menuTitle = item.getTitle();
-
-        SpannableString styledMenuTitle = new SpannableString(menuTitle);
-        styledMenuTitle.setSpan(new ForegroundColorSpan(Color.YELLOW), 0, menuTitle.length(), 0);
-        item.setTitle(styledMenuTitle);
-
-        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -292,7 +287,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
 
         final Contact item = adapter.getItem(position);
         if(item.getType() == ContactType.Action && item.name.equals(getString(R.string.create_new_group))){
-            startActivity(ContactsActivity.buildStartIntent(this,true,true));
+            startActivity(ContactsActivity.buildStartIntent(this, true,true));
         }
         adapter.notifyDataSetChanged();
     }

@@ -6,6 +6,4 @@
         android:icon="@drawable/ic_attach_check"
         android:orderInCategory="1" app:showAsAction="always" />
 
-    <item android:id="@+id/action_t" android:title="Test"
-        android:orderInCategory="2" app:showAsAction="always" />
 </menu>
