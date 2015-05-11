@@ -2,9 +2,11 @@ package com.telegram.spektogram.application;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import com.telegram.spektogram.notifications.NotificationUtils;
 import com.telegram.spektogram.preferences.PreferenceUtils;
 
 import org.drinkless.td.libcore.telegram.Client;
@@ -18,15 +20,18 @@ import java.io.File;
  */
 public class ApplicationSpektogram extends android.app.Application implements Client.ResultHandler {
 
-
     private Client client;
 
+    final static public String BROADCAST_UPDATE_USER_NUMBER = "BROADCAST_UPDATE_USER_NUMBER";
+    final static public String BROADCAST_UPDATE_USER_PHOTO = "BROADCAST_UPDATE_USER_PHOTO";
+    final static public String BROADCAST_UPDATE_USER_NAME = "BROADCAST_UPDATE_USER_NAME";
+    final static public String BROADCAST_UPDATE_USER_STATUS = "BROADCAST_UPDATE_USER_STATUS";
+
+    final static public  String EXTRA_UPDATE_USER_ID = "EXTRA_UPDATE_USER_ID";
     @Override
     public void onCreate() {
         super.onCreate();
-
         startTelegramApi();
-
     }
 
     private void startTelegramApi() {
@@ -62,7 +67,99 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
 
     @Override
     public void onResult(TdApi.TLObject object) {
-        Log.i(Constants.LOG_TAG,"ApplicationSpektogram onResult update:" + object);
+        Log.i(Constants.LOG_TAG, "ApplicationSpektogram onResult update:" + object);
+
+        if(object instanceof TdApi.UpdateNewMessage){
+            TdApi.UpdateNewMessage newMessage = (TdApi.UpdateNewMessage) object;
+            updateNewMessage(newMessage);
+        }else if(object instanceof TdApi.UpdateUserStatus){
+
+        }else if(object instanceof TdApi.UpdateChatTitle){
+
+        }else if(object instanceof TdApi.UpdateDeleteMessages){
+
+        }else if(object instanceof TdApi.UpdateUserPhoneNumber){
+            TdApi.UpdateUserPhoneNumber number = (TdApi.UpdateUserPhoneNumber) object;
+            updateUserNumber(number);
+        }else if(object instanceof TdApi.UpdateUserName){
+            TdApi.UpdateUserName userName = (TdApi.UpdateUserName) object;
+            updateUserName(userName);
+        }else if(object instanceof TdApi.UpdateUserStatus){
+            TdApi.UpdateUserStatus status = (TdApi.UpdateUserStatus) object;
+            updateUserStatus(status);
+        }
+    }
+
+    private void updateUserNumber(final TdApi.UpdateUserPhoneNumber number) {
+        final int userId = number.userId;
+
+        sendFunction(new TdApi.GetMe(), new Client.ResultHandler() {
+            @Override
+            public void onResult(TdApi.TLObject object) {
+                TdApi.User user = (TdApi.User) object;
+                if (user.id != userId) {
+                    // change another user
+                }
+            }
+        });
+
+        sendBroadcast(new Intent(BROADCAST_UPDATE_USER_NUMBER));
+    }
+
+    private void updateUserName(final TdApi.UpdateUserName name) {
+        final int userId = name.userId;
+
+        sendFunction(new TdApi.GetMe(), new Client.ResultHandler() {
+            @Override
+            public void onResult(TdApi.TLObject object) {
+                TdApi.User user = (TdApi.User) object;
+                if (user.id != userId) {
+                    // change another user
+                    final Intent intent = new Intent(BROADCAST_UPDATE_USER_NAME);
+                    intent.putExtra(EXTRA_UPDATE_USER_ID, userId);
+                    sendBroadcast(intent);
+                }
+            }
+        });
+
+    }
+
+    private void updateUserStatus(final TdApi.UpdateUserStatus status) {
+        final int userId = status.userId;
+
+        sendFunction(new TdApi.GetMe(), new Client.ResultHandler() {
+            @Override
+            public void onResult(TdApi.TLObject object) {
+                TdApi.User user = (TdApi.User) object;
+                if (user.id != userId) {
+                    final Intent intent = new Intent(BROADCAST_UPDATE_USER_STATUS);
+                    intent.putExtra(EXTRA_UPDATE_USER_ID, userId);
+                    sendBroadcast(intent);
+                }
+            }
+        });
+
+    }
+
+    private void updateNewMessage(TdApi.UpdateNewMessage newMessage) {
+        final TdApi.Message message = newMessage.message;
+        final int fromId = message.fromId;
+        final TdApi.MessageContent content = message.message;
+
+        if(content instanceof TdApi.MessageText){
+            final TdApi.MessageText text = (TdApi.MessageText) content;
+
+
+            client.send(new TdApi.GetUser(fromId), new Client.ResultHandler() {
+                @Override
+                public void onResult(TdApi.TLObject object) {
+                    Log.i(Constants.LOG_TAG, "ApplicationSpektogram onResult update text:" + object);
+                    TdApi.User user = (TdApi.User) object;
+                    String name = user.firstName;
+                    NotificationUtils.buildSimpleNotification(ApplicationSpektogram.this, name, text.text);
+                }
+            });
+        }
     }
 
     public static ApplicationSpektogram getApplication(Context context) {
@@ -99,7 +196,7 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
 
     public void sendChatMessageFunction(int chatId, TdApi.InputMessageContent inputMessageContent, Client.ResultHandler handler) {
         if (!PreferenceUtils.isOfflineMode(this)) {
-            client = getClient();
+//            client = getClient();
             final TdApi.SendMessage function = new TdApi.SendMessage(chatId, inputMessageContent);
             client.send(function, handler);
         } else {

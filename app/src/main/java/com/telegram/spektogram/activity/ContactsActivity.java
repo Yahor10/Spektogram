@@ -1,8 +1,10 @@
 package com.telegram.spektogram.activity;
 
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -49,6 +51,44 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
     public static String EXTRA_NEW_GROUP = "EXTRA_NEW_GROUP";
 
 
+    private  final BroadcastReceiver updateStatusReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final int id = intent.getIntExtra(ApplicationSpektogram.EXTRA_UPDATE_USER_ID, -1);
+            final TdApi.GetUserFull func = new TdApi.GetUserFull(id);
+            ApplicationSpektogram.getApplication(context).sendFunction(func, new Client.ResultHandler() {
+                @Override
+                public void onResult(TdApi.TLObject object) {
+                    if(object instanceof TdApi.User) {
+                        TdApi.User user = (TdApi.User) object;
+                        userMap.remove(user.phoneNumber);
+                        userMap.put(user.phoneNumber, user);
+                        loadContacts();
+                    }
+                }
+            });
+        }
+    };
+
+    private  final BroadcastReceiver updateUserNameReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final int id = intent.getIntExtra(ApplicationSpektogram.EXTRA_UPDATE_USER_ID, -1);
+            final TdApi.GetUserFull func = new TdApi.GetUserFull(id);
+            ApplicationSpektogram.getApplication(context).sendFunction(func, new Client.ResultHandler() {
+                @Override
+                public void onResult(TdApi.TLObject object) {
+                    if(object instanceof TdApi.User) {
+                        TdApi.User user = (TdApi.User) object;
+                        userMap.remove(user.phoneNumber);
+                        userMap.put(user.phoneNumber, user);
+                        loadContacts();
+                    }
+                }
+            });
+        }
+    };
+
     public static Intent buildStartIntent(Context context,boolean onlyTelegram){
         final Intent intent = new Intent(context, ContactsActivity.class);
         intent.putExtra(EXTRA_TELEGRAM,onlyTelegram);
@@ -57,8 +97,8 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
 
     public static Intent buildStartIntent(Context context,boolean onlyTelegram,boolean newGroup){
         final Intent intent = new Intent(context, ContactsActivity.class);
-        intent.putExtra(EXTRA_TELEGRAM,onlyTelegram);
-        intent.putExtra(EXTRA_NEW_GROUP,newGroup);
+        intent.putExtra(EXTRA_TELEGRAM, onlyTelegram);
+        intent.putExtra(EXTRA_NEW_GROUP, newGroup);
         return intent;
     }
 
@@ -83,6 +123,23 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
             }
         }else{
             ApplicationSpektogram.getApplication(this).sendFunction(new TdApi.GetContacts(), this);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        registerReceiver(updateStatusReceiver, new IntentFilter(ApplicationSpektogram.BROADCAST_UPDATE_USER_STATUS));
+        registerReceiver(updateUserNameReceiver, new IntentFilter(ApplicationSpektogram.BROADCAST_UPDATE_USER_NAME));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            unregisterReceiver(updateStatusReceiver);
+            unregisterReceiver(updateStatusReceiver);
+        }catch (Exception e) {
         }
     }
 
@@ -209,7 +266,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
             userMap.put(user.phoneNumber,user);
         }
 
-        Log.v(null,"hash map" + userMap);
+        Log.v(null, "hash map" + userMap);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -221,8 +278,11 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
                         loadContacts();
                     }
                 }
+
             }
         });
+
+
     }
 
     @Override

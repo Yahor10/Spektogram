@@ -56,6 +56,7 @@ public class IntroActivity extends Activity {
         public void run() {
             // This method will be executed once the timer is over
             // Start your app main activity
+
             final Context baseContext = getBaseContext();
             Intent i = null;
             if(!PreferenceUtils.isUserAuth(baseContext)) {
@@ -76,13 +77,14 @@ public class IntroActivity extends Activity {
                 });
 
 
-
                 i = ChatRoomActivity.buildStartIntent(baseContext);
             }
 //            startActivity(MainActivity.buildStartIntent(baseContext));
             startActivity(i);
             // close this activity
+
             finish();
+
         }
     };
     private final static int SPLASH_TIME_OUT = 3000;

@@ -129,7 +129,7 @@ public class MessagesActivity extends ActionBarActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.send:
                 final TdApi.InputMessageText inputMessageText = new TdApi.InputMessageText(messageText.getText().toString());
-                ApplicationSpektogram.getApplication(this).sendChatMessageFunction(-1, inputMessageText, null);
+                ApplicationSpektogram.getApplication(this).sendChatMessageFunction(77700, inputMessageText, null);
                 break;
             case R.id.attach:
                 PopupMenu menu = new PopupMenu(this);
