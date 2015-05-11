@@ -50,6 +50,7 @@
     <string name="last_name">Last name (optional)</string>
     <string name="area">Area</string>
     <string name="title_activity_select_action">SelectActionActivity</string>
+    <string name="create_new_group">Create new group</string>
 
 
 </resources>

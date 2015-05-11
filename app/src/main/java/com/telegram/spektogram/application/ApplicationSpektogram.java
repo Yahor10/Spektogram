@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import com.telegram.spektogram.R;
 import com.telegram.spektogram.notifications.NotificationUtils;
 import com.telegram.spektogram.preferences.PreferenceUtils;
 
@@ -87,6 +88,9 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
         }else if(object instanceof TdApi.UpdateUserStatus){
             TdApi.UpdateUserStatus status = (TdApi.UpdateUserStatus) object;
             updateUserStatus(status);
+        }else if(object instanceof TdApi.UpdateNewAuthorization){
+            TdApi.UpdateNewAuthorization newAuthorization = (TdApi.UpdateNewAuthorization) object;
+            updateNewAuth(newAuthorization);
         }
     }
 
@@ -147,19 +151,28 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
         final TdApi.MessageContent content = message.message;
 
         if(content instanceof TdApi.MessageText){
-            final TdApi.MessageText text = (TdApi.MessageText) content;
+            updateNewMessageText(fromId, (TdApi.MessageText) content);
+        }else if(content instanceof TdApi.MessagePhoto){
 
+        }else if(content instanceof TdApi.MessageDocument){
 
-            client.send(new TdApi.GetUser(fromId), new Client.ResultHandler() {
-                @Override
-                public void onResult(TdApi.TLObject object) {
-                    Log.i(Constants.LOG_TAG, "ApplicationSpektogram onResult update text:" + object);
-                    TdApi.User user = (TdApi.User) object;
-                    String name = user.firstName;
-                    NotificationUtils.buildSimpleNotification(ApplicationSpektogram.this, name, text.text);
-                }
-            });
         }
+    }
+
+    private void updateNewMessageText(int fromId, TdApi.MessageText content) {
+        final TdApi.MessageText text = content;
+        client.send(new TdApi.GetUser(fromId), new Client.ResultHandler() {
+            @Override
+            public void onResult(TdApi.TLObject object) {
+                TdApi.User user = (TdApi.User) object;
+                String name = user.firstName;
+                NotificationUtils.buildSimpleNotification(ApplicationSpektogram.this, name, text.text);
+            }
+        });
+    }
+
+    private void updateNewAuth(TdApi.UpdateNewAuthorization newAuthorization){
+        NotificationUtils.buildSimpleNotification(ApplicationSpektogram.this, getString(R.string.app_name), "loggin from" + newAuthorization.device);
     }
 
     public static ApplicationSpektogram getApplication(Context context) {

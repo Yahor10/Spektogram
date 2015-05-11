@@ -11,10 +11,10 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.telegram.spektogram.R;
-import com.telegram.spektogram.activity.ChatActivity;
 import com.telegram.spektogram.activity.ChatRoomActivity;
-import com.telegram.spektogram.activity.MainActivity;
 import com.telegram.spektogram.application.Constants;
+
+
 
 public  class NotificationUtils {
 

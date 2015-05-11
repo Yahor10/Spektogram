@@ -170,7 +170,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         final ContactFetcher contactFetcher = new ContactFetcher(ContactsActivity.this, userMap);
 
         List<Contact>actions = new ArrayList<Contact>(3);
-        final Contact object = new Contact("-1", "invite friend", ContactType.Action);
+        final Contact object = new Contact("-1", getString(R.string.create_new_group), ContactType.Action);
         actions.add(object);
 
         listContacts = contactFetcher.fetchAll(actions);
@@ -287,8 +287,13 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        final SparseBooleanArray checkedItemPositions = lvContacts.getCheckedItemPositions();
+
         ContactsAdapter adapter = (ContactsAdapter) getLvContacts().getAdapter();
+
+        final Contact item = adapter.getItem(position);
+        if(item.getType() == ContactType.Action && item.name.equals(getString(R.string.create_new_group))){
+            startActivity(ContactsActivity.buildStartIntent(this,true,true));
+        }
         adapter.notifyDataSetChanged();
     }
 
