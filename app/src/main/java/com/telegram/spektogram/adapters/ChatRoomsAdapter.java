@@ -6,7 +6,7 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,20 +21,17 @@ import java.util.Date;
 /**
  * Created by alex-pers on 4/29/15.
  */
-public class ChatRoomsAdapter extends BaseAdapter {
+public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
     LayoutInflater inflater;
     Context context;
     ArrayList<TdApi.Chat> chats;
 
-    public ChatRoomsAdapter(LayoutInflater inflater, Context context) {
-        this.inflater = inflater;
-        this.context = context;
-    }
-
     public ChatRoomsAdapter(LayoutInflater inflater, Context context, ArrayList<TdApi.Chat> chats) {
+        super(context, 0, chats);
         this.inflater = inflater;
         this.context = context;
         this.chats = chats;
+
     }
 
     public ArrayList<TdApi.Chat> getChats() {
@@ -60,11 +57,11 @@ public class ChatRoomsAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
-
+    public TdApi.Chat getItem(int i) {
         if (chats != null) {
             TdApi.Chat chat = chats.get(i);
             if (chat != null) {
+
                 return chat;
             }
         }
@@ -83,10 +80,8 @@ public class ChatRoomsAdapter extends BaseAdapter {
     }
 
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-
         ViewHolder holder;
 
         if (view == null) {

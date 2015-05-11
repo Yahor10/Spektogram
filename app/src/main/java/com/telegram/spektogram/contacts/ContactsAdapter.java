@@ -1,6 +1,7 @@
 package com.telegram.spektogram.contacts;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +25,16 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
     private final LayoutInflater mInflater;
     private final ArrayList<Contact> mContacts;
     private final ListView lvContacts;
+    private final boolean mNewGroup;
+    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 
     public ContactsAdapter(Context context, ArrayList<Contact> contacts) {
         super(context, 0, contacts);
         mContacts = contacts;
         ContactsActivity activity = (ContactsActivity) context;
-       lvContacts = activity.getLvContacts();
+        lvContacts = activity.getLvContacts();
+        final Intent intent = activity.getIntent();
+        mNewGroup = intent.getBooleanExtra(ContactsActivity.EXTRA_NEW_GROUP, false);
         // Instantiates a new AlphabetIndexer bound to the column used to sort contact names.
         // The cursor is left null, because it has not yet been retrieved.
         mInflater = (LayoutInflater) context
@@ -67,7 +72,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
                     contactHolder.tvPhone = (TextView) view.findViewById(R.id.tvPhone);
                     view.setTag(contactHolder);
                 } else {
-                     contactHolder = (ViewContactHolder) view.getTag();
+                    contactHolder = (ViewContactHolder) view.getTag();
                 }
                 contactHolder.tvName.setText(contact.name);
 
@@ -83,7 +88,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
                     headerHolder.tvName = (TextView) view.findViewById(R.id.tvName);
 
                     view.setTag(headerHolder);
-                }else{
+                } else {
                     headerHolder = (ViewHeaderHolder) view.getTag();
                 }
                 headerHolder.tvName.setText(contact.name);
@@ -96,23 +101,26 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
                     viewContactTelegramHolder.checkBox = (CheckBox) view.findViewById(R.id.checkBox);
 
                     viewContactTelegramHolder.tvDate = (TextView) view.findViewById(R.id.tvDate);
-
                     view.setTag(viewContactTelegramHolder);
-
-
-                }else{
+                } else {
                     viewContactTelegramHolder = (ViewContactTelegramHolder) view.getTag();
                 }
 
                 viewContactTelegramHolder.tvName.setText(contact.name);
-                final boolean itemChecked = lvContacts.isItemChecked(position);
-                viewContactTelegramHolder.checkBox.setChecked(itemChecked);
+
+                if (mNewGroup) {
+                    viewContactTelegramHolder.checkBox.setVisibility(View.VISIBLE);
+                    final boolean itemChecked = lvContacts.isItemChecked(position);
+                    viewContactTelegramHolder.checkBox.setChecked(itemChecked);
+                } else {
+                    viewContactTelegramHolder.checkBox.setVisibility(View.GONE)
+                    ;
+                }
 
                 final TdApi.UserStatus status = contact.getUser().status;
-                if(status instanceof TdApi.UserStatusOffline){
+                if (status instanceof TdApi.UserStatusOffline) {
                     TdApi.UserStatusOffline offline = (TdApi.UserStatusOffline) status;
-                    SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
-                    String date = DATE_FORMAT.format( TimeUnit.SECONDS.toMillis(offline.wasOnline));
+                    String date = DATE_FORMAT.format(TimeUnit.SECONDS.toMillis(offline.wasOnline));
                     viewContactTelegramHolder.tvDate.setText(date);
                 }
                 break;
@@ -123,10 +131,9 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
                     viewActionHolder.tvName = (TextView) view.findViewById(R.id.tvName);
 
                     view.setTag(viewActionHolder);
-                }else{
+                } else {
                     viewActionHolder = (ViewActionHolder) view.getTag();
                 }
-
                 viewActionHolder.tvName.setText(contact.name);
                 break;
         }

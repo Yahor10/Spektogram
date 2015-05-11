@@ -1,5 +1,6 @@
 package com.telegram.spektogram.pages;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,9 +35,6 @@ public class ChatRoom extends Fragment implements Client.ResultHandler {
         View view;
         view = inflater.inflate(R.layout.page_chat_room, null);
 
-        ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.GetChats(0, 20), this);
-
-
         chatslistView = (ListView) view.findViewById(R.id.list_chats);
         chatslistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -49,20 +47,25 @@ public class ChatRoom extends Fragment implements Client.ResultHandler {
             }
         });
 
+        ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.GetChats(0, 20), this);
+
         return view;
     }
 
     @Override
     public void onResult(TdApi.TLObject object) {
         TdApi.Chats chats = (TdApi.Chats) object;
+
         final TdApi.Chat[] arr = chats.chats;
-        ArrayList<TdApi.Chat> chatArrayList = new ArrayList<TdApi.Chat>(Arrays.asList(arr));
+        final ArrayList<TdApi.Chat> chatArrayList = new ArrayList<TdApi.Chat>(Arrays.asList(arr));
 
-        adapter = new ChatRoomsAdapter(getActivity().getLayoutInflater(), getActivity(), chatArrayList);
-
-        adapter.notifyDataSetChanged();
-        chatslistView.setAdapter(adapter);
-        chatslistView.notifyAll();
-
+        final Activity activity = getActivity();
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter = new ChatRoomsAdapter(activity.getLayoutInflater(),activity, chatArrayList);
+                chatslistView.setAdapter(adapter);
+            }
+        });
     }
 }
