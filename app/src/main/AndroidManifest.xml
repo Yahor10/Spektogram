@@ -53,6 +53,12 @@
             android:icon="@drawable/ic_drawer" >
         </activity>
 
+        <activity
+            android:name="com.lamerman.FileDialog"
+             >
+        </activity>
+
+
         <receiver
             android:name=".receivers.NetworkChangeReceiver"
             android:label="NetworkChangeReceiver" >
