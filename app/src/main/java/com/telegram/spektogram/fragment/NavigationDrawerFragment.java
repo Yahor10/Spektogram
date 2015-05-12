@@ -66,6 +66,9 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+    private TextView name;
+    private TextView phone;
+
 
     private final List<DrawerItem> dataList = new ArrayList<>();
     CustomDrawerAdapter adapter;
@@ -96,6 +99,34 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
         super.onActivityCreated(savedInstanceState);
         // Indicate that this fragment would like to influence the set of actions in the action bar.
         setHasOptionsMenu(true);
+
+
+
+        final ApplicationSpektogram application = ApplicationSpektogram.getApplication(getActivity());
+        final TdApi.GetMe function = new TdApi.GetMe();
+
+
+        application.sendFunction(function, new Client.ResultHandler() {
+            @Override
+            public void onResult(TdApi.TLObject object) {
+                Log.e("TAG", object.toString());
+                if (object instanceof TdApi.User) {
+                    if (getActivity() != null) {
+                        final TdApi.User user = (TdApi.User) object;
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                name.setText(new StringBuilder().append(user.firstName).append(" ").append(user.lastName).toString());
+                                phone.setText(new StringBuilder().append("+").append(user.phoneNumber).toString());
+                            }
+                        });
+                    }
+                } else {
+                }
+            }
+        });
+
+
     }
 
     @Override
@@ -103,6 +134,9 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
                              Bundle savedInstanceState) {
         View inflate = inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
+        name = (TextView) inflate.findViewById(R.id.userName);
+        phone = (TextView) inflate.findViewById(R.id.userPhone);
+
         mDrawerListView = (ListView) inflate.findViewById(R.id.list);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -288,7 +322,7 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
         final FragmentActivity activity = getActivity();
         switch (position){
             case 0:
-                startActivity(ContactsActivity.buildStartIntent(activity,true,true));
+                startActivity(ContactsActivity.buildStartIntent(activity,true,true,false));
                 break;
             case 2:
                 final Intent intent = ContactsActivity.buildStartIntent(activity,false);

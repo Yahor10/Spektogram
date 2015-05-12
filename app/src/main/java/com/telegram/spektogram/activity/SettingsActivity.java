@@ -230,6 +230,7 @@ public class SettingsActivity extends PreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("example_text"));
             bindPreferenceSummaryToValue(findPreference("example_list"));
+
         }
     }
 
@@ -249,6 +250,15 @@ public class SettingsActivity extends PreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
 
+
+            findPreference("change_chat_background").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    final Activity activity = getActivity();
+                    startActivity(SelectBackgroundActivity.buildStartIntent(activity));
+                    return false;
+                }
+            });
         }
     }
 

@@ -26,6 +26,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
     private final ArrayList<Contact> mContacts;
     private final ListView lvContacts;
     private final boolean mNewGroup;
+    private final boolean mNewMessage;
     private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 
     public ContactsAdapter(Context context, ArrayList<Contact> contacts) {
@@ -35,6 +36,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
         lvContacts = activity.getLvContacts();
         final Intent intent = activity.getIntent();
         mNewGroup = intent.getBooleanExtra(ContactsActivity.EXTRA_NEW_GROUP, false);
+        mNewMessage = intent.getBooleanExtra(ContactsActivity.EXTRA_NEW_MESSAGE, false);
         // Instantiates a new AlphabetIndexer bound to the column used to sort contact names.
         // The cursor is left null, because it has not yet been retrieved.
         mInflater = (LayoutInflater) context
@@ -112,9 +114,10 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
                     viewContactTelegramHolder.checkBox.setVisibility(View.VISIBLE);
                     final boolean itemChecked = lvContacts.isItemChecked(position);
                     viewContactTelegramHolder.checkBox.setChecked(itemChecked);
-                } else {
-                    viewContactTelegramHolder.checkBox.setVisibility(View.GONE)
-                    ;
+                } else if(mNewMessage){
+                    viewContactTelegramHolder.checkBox.setVisibility(View.GONE);
+                }else{
+                    viewContactTelegramHolder.checkBox.setVisibility(View.GONE);
                 }
 
                 final TdApi.UserStatus status = contact.getUser().status;

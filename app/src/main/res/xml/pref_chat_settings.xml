@@ -3,25 +3,33 @@
     <!-- A 'parent' preference, which enables/disables child preferences (below)
          when checked/unchecked. -->
 
-    <PreferenceCategory
-        android:title="Download">
+    <PreferenceCategory android:title="@string/download">
 
-    <CheckBoxPreference
-        android:key="automatic_download_photo"
-        android:title="@string/pref_title_automatic_photo_download"
-        android:defaultValue="true" />
-
-
-    <CheckBoxPreference
-        android:key="automatic_download_audio"
-        android:title="@string/pref_title_automatic_audio_download"
-        android:defaultValue="false" />
-
-    <!-- Allows the user to choose a ringtone in the 'notification' category. -->
-    <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
-    <!-- NOTE: RingtonePreference's summary should be set to its value by the activity code. -->
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="automatic_download_photo"
+            android:title="@string/pref_title_automatic_photo_download" />
 
 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="automatic_download_audio"
+            android:title="@string/pref_title_automatic_audio_download" />
+
+        <!-- Allows the user to choose a ringtone in the 'notification' category. -->
+        <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
+        <!-- NOTE: RingtonePreference's summary should be set to its value by the activity code. -->
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/chat_background">
+        <Preference
+            android:selectable="true"
+            android:enabled="true"
+            android:key="change_chat_background"
+            android:title="@string/change_chat_background"
+             />
     </PreferenceCategory>
 
 </PreferenceScreen>

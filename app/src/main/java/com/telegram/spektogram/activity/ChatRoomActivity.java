@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lamerman.FileDialog;
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.application.ApplicationSpektogram;
 import com.telegram.spektogram.fragment.NavigationDrawerFragment;
@@ -131,6 +132,20 @@ public class ChatRoomActivity extends ActionBarActivity
                 menu.show();
 
                 menu.setOnItemSelectedListener(ChatRoomActivity.this);
+
+                Intent intent = new Intent(getBaseContext(), FileDialog.class);
+                intent.putExtra(FileDialog.START_PATH, "/sdcard");
+
+                //can user select directories or not
+                intent.putExtra(FileDialog.CAN_SELECT_DIR, true);
+
+                //alternatively you can set file filter
+                //intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "png" });
+
+//                startActivityForResult(intent, 1);
+
+                startActivity(ContactsActivity.buildStartIntent(getApplicationContext(),true,false,true));
+
             }
         });
 

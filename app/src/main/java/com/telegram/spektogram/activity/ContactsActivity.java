@@ -42,16 +42,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ContactsActivity extends ActionBarActivity implements Client.ResultHandler,AdapterView.OnItemClickListener, ViewTreeObserver.OnGlobalLayoutListener {
+public class ContactsActivity extends ActionBarActivity implements Client.ResultHandler, AdapterView.OnItemClickListener, ViewTreeObserver.OnGlobalLayoutListener {
     ArrayList<Contact> listContacts;
     ListView lvContacts;
-    private  Map<String,TdApi.User>userMap =null;
+    private Map<String, TdApi.User> userMap = null;
     private ContactsAdapter adapterContacts;
     public static String EXTRA_TELEGRAM = "EXTRA_TELEGRAM";
     public static String EXTRA_NEW_GROUP = "EXTRA_NEW_GROUP";
+    public static String EXTRA_NEW_MESSAGE = "EXTRA_NEW_MESSAGE";
 
 
-    private  final BroadcastReceiver updateStatusReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver updateStatusReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final int id = intent.getIntExtra(ApplicationSpektogram.EXTRA_UPDATE_USER_ID, -1);
@@ -59,7 +60,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
             ApplicationSpektogram.getApplication(context).sendFunction(func, new Client.ResultHandler() {
                 @Override
                 public void onResult(TdApi.TLObject object) {
-                    if(object instanceof TdApi.User) {
+                    if (object instanceof TdApi.User) {
                         TdApi.User user = (TdApi.User) object;
                         userMap.remove(user.phoneNumber);
                         userMap.put(user.phoneNumber, user);
@@ -70,7 +71,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         }
     };
 
-    private  final BroadcastReceiver updateUserNameReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver updateUserNameReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final int id = intent.getIntExtra(ApplicationSpektogram.EXTRA_UPDATE_USER_ID, -1);
@@ -78,7 +79,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
             ApplicationSpektogram.getApplication(context).sendFunction(func, new Client.ResultHandler() {
                 @Override
                 public void onResult(TdApi.TLObject object) {
-                    if(object instanceof TdApi.User) {
+                    if (object instanceof TdApi.User) {
                         TdApi.User user = (TdApi.User) object;
                         userMap.remove(user.phoneNumber);
                         userMap.put(user.phoneNumber, user);
@@ -89,16 +90,17 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         }
     };
 
-    public static Intent buildStartIntent(Context context,boolean onlyTelegram){
+    public static Intent buildStartIntent(Context context, boolean onlyTelegram) {
         final Intent intent = new Intent(context, ContactsActivity.class);
         intent.putExtra(EXTRA_TELEGRAM, onlyTelegram);
         return intent;
     }
 
-    public static Intent buildStartIntent(Context context,boolean onlyTelegram,boolean newGroup){
+    public static Intent buildStartIntent(Context context, boolean onlyTelegram, boolean newGroup,boolean newMessage) {
         final Intent intent = new Intent(context, ContactsActivity.class);
         intent.putExtra(EXTRA_TELEGRAM, onlyTelegram);
         intent.putExtra(EXTRA_NEW_GROUP, newGroup);
+        intent.putExtra(EXTRA_NEW_MESSAGE, newMessage);
         return intent;
     }
 
@@ -113,15 +115,15 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         lvContacts.setOnItemClickListener(this);
         lvContacts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-        boolean onlyTelegram = getIntent().getBooleanExtra(EXTRA_TELEGRAM,false);
+        boolean onlyTelegram = getIntent().getBooleanExtra(EXTRA_TELEGRAM, false);
 
-        if(PreferenceUtils.isOfflineMode(getBaseContext())){
-            if(onlyTelegram){
+        if (PreferenceUtils.isOfflineMode(getBaseContext())) {
+            if (onlyTelegram) {
                 loadTelegramContacts();
-            }else{
+            } else {
                 loadContacts();
             }
-        }else{
+        } else {
             ApplicationSpektogram.getApplication(this).sendFunction(new TdApi.GetContacts(), this);
         }
     }
@@ -139,7 +141,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         try {
             unregisterReceiver(updateStatusReceiver);
             unregisterReceiver(updateStatusReceiver);
-        }catch (Exception e) {
+        } catch (Exception e) {
         }
     }
 
@@ -156,18 +158,25 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         actionBar.setCustomView(R.layout.ab_main);
 
-        String s= getString(R.string.app_name);
+        String s = getString(R.string.app_name);
 
         final boolean newGroup = getIntent().getBooleanExtra(EXTRA_NEW_GROUP, false);
-        final TextView tv= (TextView) findViewById(R.id.title);
+        final boolean newMewssage = getIntent().getBooleanExtra(EXTRA_NEW_MESSAGE, false);
+        final TextView tv = (TextView) findViewById(R.id.title);
         final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
         SpannableString ss1 = new SpannableString(s);
-        if(newGroup){
+
+        if (newGroup) {
             final String string = getString(R.string.new_group);
             ss1 = new SpannableString(string);
             ss1.setSpan(bss, 0, 3, 0); // set size
             ss1.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 3, 0);// set color
-        }else {
+        } else if (newMewssage) {
+            final String string = getString(R.string.new_message);
+            ss1 = new SpannableString(string);
+            ss1.setSpan(bss, 0, 3, 0); // set size
+            ss1.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 3, 0);// set color
+        } else {
             ss1 = new SpannableString(s);
             ss1.setSpan(bss, 0, 6, 0); // set size
             ss1.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 6, 0);// set color
@@ -178,7 +187,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
     private void loadContacts() {
         final ContactFetcher contactFetcher = new ContactFetcher(ContactsActivity.this, userMap);
 
-        List<Contact>actions = new ArrayList<Contact>(3);
+        List<Contact> actions = new ArrayList<Contact>(3);
         final Contact object = new Contact("-1", getString(R.string.create_new_group), ContactType.Action);
         actions.add(object);
 
@@ -191,19 +200,16 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
     private void loadTelegramContacts() {
         boolean createNewGroup = getIntent().getBooleanExtra(EXTRA_NEW_GROUP, false);
 
-        List<Contact>actions = new ArrayList<Contact>(3);
-        final Contact object = new Contact("-1", "new group", ContactType.Action);
-        actions.add(object);
+        List<Contact> actions = new ArrayList<Contact>(3);
 
-        if(createNewGroup){
+        if (createNewGroup) {
             actions.clear();
         }
 
         final ContactFetcher contactFetcher = new ContactFetcher(this, userMap);
-        ArrayList<Contact> listContacts = contactFetcher.fetchTelegramContacts(actions);
+        ArrayList<Contact> listContacts = contactFetcher.fetchTelegramContacts(null);
         ContactsAdapter adapterContacts = new ContactsAdapter(this, listContacts);
         lvContacts.setAdapter(adapterContacts);
-
 
     }
 
@@ -224,12 +230,12 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
 
         //noinspection SimplifiableIfStatement
 
-        switch (id){
+        switch (id) {
             case R.id.action_accept:
                 SparseBooleanArray checked = lvContacts.getCheckedItemPositions();
-                int ids [] = new int[checked.size()];
-                if(checked != null) {
-                    for(int i = 0; i < checked.size();i++) {
+                int ids[] = new int[checked.size()];
+                if (checked != null) {
+                    for (int i = 0; i < checked.size(); i++) {
                         final int keyAt = checked.keyAt(i);
                         ContactsAdapter adapter = (ContactsAdapter) getLvContacts().getAdapter();
                         final Contact contact = adapter.getItem(keyAt);
@@ -240,7 +246,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
                     ApplicationSpektogram.getApplication(this).getClient().send(new TdApi.CreateGroupChat(ids, "test group chat"), new Client.ResultHandler() {
                         @Override
                         public void onResult(TdApi.TLObject object) {
-                            Log.v(Constants.LOG_TAG,"CreateGroupChat" + object);
+                            Log.v(Constants.LOG_TAG, "CreateGroupChat" + object);
                         }
                     });
                 }
@@ -257,8 +263,8 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         final TdApi.User[] users = contacts.users;
         userMap = new HashMap<>(users.length);
 
-        for(TdApi.User user : users){
-            userMap.put(user.phoneNumber,user);
+        for (TdApi.User user : users) {
+            userMap.put(user.phoneNumber, user);
         }
 
         Log.v(null, "hash map" + userMap);
@@ -286,8 +292,8 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         ContactsAdapter adapter = (ContactsAdapter) getLvContacts().getAdapter();
 
         final Contact item = adapter.getItem(position);
-        if(item.getType() == ContactType.Action && item.name.equals(getString(R.string.create_new_group))){
-            startActivity(ContactsActivity.buildStartIntent(this, true,true));
+        if (item.getType() == ContactType.Action && item.name.equals(getString(R.string.create_new_group))) {
+            startActivity(ContactsActivity.buildStartIntent(this, true, true,false));
         }
         adapter.notifyDataSetChanged();
     }
