@@ -15,6 +15,8 @@ import com.telegram.spektogram.R;
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 
@@ -40,11 +42,24 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
 
     public void setChats(ArrayList<TdApi.Chat> chats) {
         this.chats = chats;
+
+        Collections.sort(this.chats, new Comparator<TdApi.Chat>() {
+            @TargetApi(Build.VERSION_CODES.KITKAT)
+            public int compare(TdApi.Chat s1, TdApi.Chat s2) {
+                return Integer.compare(s1.topMessage.date, s2.topMessage.date);
+            }
+        });
     }
 
     public void addChat(TdApi.Chat chat) {
 
         chats.add(chat);
+        Collections.sort(this.chats, new Comparator<TdApi.Chat>() {
+            @TargetApi(Build.VERSION_CODES.KITKAT)
+            public int compare(TdApi.Chat s1, TdApi.Chat s2) {
+                return Integer.compare(s1.topMessage.date, s2.topMessage.date);
+            }
+        });
     }
 
     @Override
@@ -110,9 +125,9 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
     }
 
 
-   public  class ViewHolder {
+    public class ViewHolder {
 
-       public TdApi.Chat chat;
+        public TdApi.Chat chat;
 
         View background;
         ImageView user_photo;

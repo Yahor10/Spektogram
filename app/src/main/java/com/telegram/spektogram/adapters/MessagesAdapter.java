@@ -16,6 +16,8 @@ import com.telegram.spektogram.R;
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -47,10 +49,23 @@ public class MessagesAdapter extends BaseAdapter {
 
     public void setMessages(ArrayList<TdApi.Message> messages) {
         this.messages = messages;
+
+        Collections.sort(this.messages, new Comparator<TdApi.Message>() {
+            @TargetApi(Build.VERSION_CODES.KITKAT)
+            public int compare(TdApi.Message s1, TdApi.Message s2) {
+                return Integer.compare(s1.date, s2.date);
+            }
+        });
     }
 
     public void addMessages(ArrayList<TdApi.Messages> messageses) {
         this.messages.addAll(messages);
+        Collections.sort(this.messages, new Comparator<TdApi.Message>() {
+            @TargetApi(Build.VERSION_CODES.KITKAT)
+            public int compare(TdApi.Message s1, TdApi.Message s2) {
+                return Integer.compare(s1.date, s2.date);
+            }
+        });
     }
 
     public int getId_owner_user() {
