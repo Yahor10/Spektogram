@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="My name here"
+
             android:id="@+id/userName"
             android:textColor="@android:color/white"
             android:layout_gravity="center_horizontal" />
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="+12345678"
+
             android:id="@+id/userPhone"
             android:textColor="@android:color/white"
             android:layout_gravity="center_horizontal" />
