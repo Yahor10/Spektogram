@@ -288,7 +288,7 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
         final FragmentActivity activity = getActivity();
         switch (position){
             case 0:
-                startActivity(ContactsActivity.buildStartIntent(activity,true,true));
+                startActivity(ContactsActivity.buildStartIntent(activity,true,true,false));
                 break;
             case 2:
                 final Intent intent = ContactsActivity.buildStartIntent(activity,false);

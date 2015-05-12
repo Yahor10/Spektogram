@@ -96,10 +96,11 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         return intent;
     }
 
-    public static Intent buildStartIntent(Context context, boolean onlyTelegram, boolean newGroup) {
+    public static Intent buildStartIntent(Context context, boolean onlyTelegram, boolean newGroup,boolean newMessage) {
         final Intent intent = new Intent(context, ContactsActivity.class);
         intent.putExtra(EXTRA_TELEGRAM, onlyTelegram);
         intent.putExtra(EXTRA_NEW_GROUP, newGroup);
+        intent.putExtra(EXTRA_NEW_MESSAGE, newMessage);
         return intent;
     }
 
@@ -292,7 +293,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
 
         final Contact item = adapter.getItem(position);
         if (item.getType() == ContactType.Action && item.name.equals(getString(R.string.create_new_group))) {
-            startActivity(ContactsActivity.buildStartIntent(this, true, true));
+            startActivity(ContactsActivity.buildStartIntent(this, true, true,false));
         }
         adapter.notifyDataSetChanged();
     }

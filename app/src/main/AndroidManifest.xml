@@ -52,12 +52,8 @@
             android:name=".activity.ContactsActivity"
             android:icon="@drawable/ic_drawer" >
         </activity>
-
-        <activity
-            android:name="com.lamerman.FileDialog"
-             >
+        <activity android:name="com.lamerman.FileDialog" >
         </activity>
-
 
         <receiver
             android:name=".receivers.NetworkChangeReceiver"
@@ -70,6 +66,10 @@
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".activity.SelectBackgroundActivity"
+            android:label="@string/title_activity_select_background" >
+        </activity>
     </application>
 
 </manifest>

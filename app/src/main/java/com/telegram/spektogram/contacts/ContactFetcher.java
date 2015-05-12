@@ -85,7 +85,6 @@ public class ContactFetcher {
         }
         c.close();
 
-        listContacts.addAll(actions);
         listContacts.addAll(telegramContacts);
         return listContacts;
     }

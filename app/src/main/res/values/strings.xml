@@ -52,6 +52,10 @@
     <string name="area">Area</string>
     <string name="title_activity_select_action">SelectActionActivity</string>
     <string name="create_new_group">Create new group</string>
+    <string name="download">Download</string>
+    <string name="chat_background">Chat background</string>
+    <string name="change_chat_background">Change chat background</string>
+    <string name="title_activity_select_background">SelectBackgroundActivity</string>
 
 
 </resources>

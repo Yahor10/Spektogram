@@ -142,7 +142,9 @@ public class ChatRoomActivity extends ActionBarActivity
                 //alternatively you can set file filter
                 //intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "png" });
 
-                startActivityForResult(intent, 1);
+//                startActivityForResult(intent, 1);
+
+                startActivity(ContactsActivity.buildStartIntent(getApplicationContext(),true,false,true));
 
             }
         });

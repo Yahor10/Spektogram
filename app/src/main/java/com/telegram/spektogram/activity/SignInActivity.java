@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.widget.HorizontalScrollView;
 
 import com.telegram.spektogram.adapters.SignInPagerAdapter;
 import com.telegram.spektogram.callback.NextPageCallback;
@@ -26,6 +27,7 @@ public class SignInActivity extends ActionBarActivity implements NextPageCallbac
         setContentView(R.layout.activity_sign_up);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setAdapter(new SignInPagerAdapter(getSupportFragmentManager()));
+
     }
 
     @Override
