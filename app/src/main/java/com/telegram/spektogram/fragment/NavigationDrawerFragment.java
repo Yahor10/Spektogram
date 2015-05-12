@@ -13,6 +13,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,12 +22,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.activity.ContactsActivity;
 import com.telegram.spektogram.activity.SettingsActivity;
+import com.telegram.spektogram.application.ApplicationSpektogram;
 import com.telegram.spektogram.views.CustomDrawerAdapter;
 import com.telegram.spektogram.views.DrawerItem;
+
+import org.drinkless.td.libcore.telegram.Client;
+import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +42,7 @@ import java.util.List;
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
-public class NavigationDrawerFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class NavigationDrawerFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     /**
      * Remember the position of the selected item.
@@ -99,7 +105,6 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
         super.onActivityCreated(savedInstanceState);
         // Indicate that this fragment would like to influence the set of actions in the action bar.
         setHasOptionsMenu(true);
-
 
 
         final ApplicationSpektogram application = ApplicationSpektogram.getApplication(getActivity());
@@ -320,12 +325,12 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final FragmentActivity activity = getActivity();
-        switch (position){
+        switch (position) {
             case 0:
-                startActivity(ContactsActivity.buildStartIntent(activity,true,true,false));
+                startActivity(ContactsActivity.buildStartIntent(activity, true, true, false));
                 break;
             case 2:
-                final Intent intent = ContactsActivity.buildStartIntent(activity,false);
+                final Intent intent = ContactsActivity.buildStartIntent(activity, false);
                 startActivity(intent);
                 break;
             case 4:

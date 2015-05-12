@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/gradient_list_item_chat_room_red"
+    android:background="@drawable/gradient_list_item_from_me_green_yellow"
     android:minHeight="60dp"
     android:orientation="vertical">
 
@@ -10,7 +10,7 @@
         android:id="@+id/img_user_photo"
         android:layout_width="40dp"
         android:layout_height="40dp"
-
+        android:scaleType="centerCrop"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:src="@drawable/user_photo" />

@@ -143,7 +143,7 @@ public class MessagesAdapter extends BaseAdapter {
                 if (message.message instanceof TdApi.MessageText) {
                     txt_message.setText(((TdApi.MessageText) message.message).text);
                 } else {
-                    txt_message.setText("Вам переслали файл.");
+                    txt_message.setText("Не текстовое сообщение");
                 }
                 DateFormat df = new android.text.format.DateFormat();
                 Date date = new Date();
