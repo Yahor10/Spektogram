@@ -14,6 +14,7 @@ import com.telegram.spektogram.R;
 import com.telegram.spektogram.activity.MessagesActivity;
 import com.telegram.spektogram.adapters.ChatRoomsAdapter;
 import com.telegram.spektogram.application.ApplicationSpektogram;
+import com.telegram.spektogram.preferences.PreferenceUtils;
 
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
@@ -42,12 +43,15 @@ public class ChatRoom extends Fragment implements Client.ResultHandler {
 
                 Intent intent = new Intent(getActivity(), MessagesActivity.class);
                 TdApi.Chat chat = ((ChatRoomsAdapter.ViewHolder) view.getTag()).chat;
-                intent.putExtra(MessagesActivity.KEY_EXTRA_CHAT_ID, chat.id);
+                ApplicationSpektogram.chat = chat;
                 getActivity().startActivity(intent);
             }
         });
 
         ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.GetChats(0, 20), this);
+
+
+
 
         return view;
     }
@@ -63,7 +67,7 @@ public class ChatRoom extends Fragment implements Client.ResultHandler {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                adapter = new ChatRoomsAdapter(activity.getLayoutInflater(),activity, chatArrayList);
+                adapter = new ChatRoomsAdapter(activity.getLayoutInflater(), activity, chatArrayList);
                 chatslistView.setAdapter(adapter);
             }
         });

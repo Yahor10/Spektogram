@@ -28,6 +28,9 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
     final static public String BROADCAST_UPDATE_USER_NAME = "BROADCAST_UPDATE_USER_NAME";
     final static public String BROADCAST_UPDATE_USER_STATUS = "BROADCAST_UPDATE_USER_STATUS";
 
+
+    public static TdApi.Chat chat; // kostil'
+
     final static public  String EXTRA_UPDATE_USER_ID = "EXTRA_UPDATE_USER_ID";
     @Override
     public void onCreate() {

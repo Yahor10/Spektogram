@@ -70,8 +70,17 @@ public class CodeFragment extends Fragment {
                         @Override
                         public void run() {
                             Toast.makeText(getActivity(), "Authorized", Toast.LENGTH_SHORT).show();
-                            PreferenceUtils.setUserAuth(getActivity(),true);
+                            PreferenceUtils.setUserAuth(getActivity(), true);
 
+                            ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.GetMe(), new Client.ResultHandler() {
+
+                                @Override
+                                public void onResult(TdApi.TLObject object) {
+
+                                    TdApi.User me = (TdApi.User) object;
+                                    PreferenceUtils.setMyUserId(getActivity().getBaseContext(), me.id);
+                                }
+                            });
 //                            ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.GetContacts(),new Client.ResultHandler() {
 //                                @Override
 //                                public void onResult(TdApi.TLObject object) {
@@ -119,7 +128,7 @@ public class CodeFragment extends Fragment {
                 }
 
             } catch (Exception e) {
-                Log.e("SmsReceiver", "Exception smsReceiver" +e);
+                Log.e("SmsReceiver", "Exception smsReceiver" + e);
 
             }
         }

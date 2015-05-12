@@ -10,7 +10,7 @@ import android.preference.PreferenceManager;
 public class PreferenceUtils {
 
     public static void setUserFirstName(Context context,
-                                 String userName) {
+                                        String userName) {
         SharedPreferences.Editor pEditor = PreferenceManager.getDefaultSharedPreferences(context)
                 .edit();
         pEditor.putString(PreferenceKeys.USER_FIRST_NAME,
@@ -26,7 +26,7 @@ public class PreferenceUtils {
     }
 
     public static void setUserLastName(Context context,
-                                        String userName) {
+                                       String userName) {
         SharedPreferences.Editor pEditor = PreferenceManager.getDefaultSharedPreferences(context)
                 .edit();
         pEditor.putString(PreferenceKeys.USER_FIRST_NAME,
@@ -42,7 +42,7 @@ public class PreferenceUtils {
     }
 
     public static void setPhoneCodeHash(Context context,
-                                   String code) {
+                                        String code) {
         SharedPreferences.Editor pEditor = PreferenceManager.getDefaultSharedPreferences(context)
                 .edit();
         pEditor.putString(PreferenceKeys.PHONE_CODE_HASH,
@@ -59,7 +59,7 @@ public class PreferenceUtils {
 
 
     public static void setUserAuth(Context context,
-                                        boolean auth) {
+                                   boolean auth) {
         SharedPreferences.Editor pEditor = PreferenceManager.getDefaultSharedPreferences(context)
                 .edit();
         pEditor.putBoolean(PreferenceKeys.AUTH,
@@ -76,7 +76,7 @@ public class PreferenceUtils {
 
 
     public static void setPhoneNumber(Context context,
-                                   String phone) {
+                                      String phone) {
         SharedPreferences.Editor pEditor = PreferenceManager.getDefaultSharedPreferences(context)
                 .edit();
         pEditor.putString(PreferenceKeys.PHONE_NUMBER,
@@ -108,7 +108,7 @@ public class PreferenceUtils {
     }
 
     public static void setTGinit(Context context,
-                                   boolean init) {
+                                 boolean init) {
         SharedPreferences.Editor pEditor = PreferenceManager.getDefaultSharedPreferences(context)
                 .edit();
         pEditor.putBoolean(PreferenceKeys.TG_INIT,
@@ -121,6 +121,23 @@ public class PreferenceUtils {
                 .getDefaultSharedPreferences(context);
         return defaultSharedPreferences.getBoolean(
                 PreferenceKeys.TG_INIT, false);
+    }
+
+
+    public static int getMyUserId(Context context) {
+        SharedPreferences defaultSharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        return defaultSharedPreferences.getInt(
+                PreferenceKeys.MY_USER_ID, -1);
+    }
+
+    public static void setMyUserId(Context context,
+                                   int myUserId) {
+        SharedPreferences.Editor pEditor = PreferenceManager.getDefaultSharedPreferences(context)
+                .edit();
+        pEditor.putInt(PreferenceKeys.MY_USER_ID,
+                myUserId);
+        pEditor.commit();
     }
 
 }

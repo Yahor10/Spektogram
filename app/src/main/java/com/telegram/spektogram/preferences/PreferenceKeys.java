@@ -20,5 +20,7 @@ public class PreferenceKeys {
 
     public final static String TG_INIT = "tg_init";
 
+    public final static String MY_USER_ID = "my_user_id";
+
 
 }
