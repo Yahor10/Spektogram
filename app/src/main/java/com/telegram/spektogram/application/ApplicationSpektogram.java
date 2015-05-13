@@ -27,11 +27,16 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
     final static public String BROADCAST_UPDATE_USER_PHOTO = "BROADCAST_UPDATE_USER_PHOTO";
     final static public String BROADCAST_UPDATE_USER_NAME = "BROADCAST_UPDATE_USER_NAME";
     final static public String BROADCAST_UPDATE_USER_STATUS = "BROADCAST_UPDATE_USER_STATUS";
+    final static public String BROADCAST_UPDATE_FILE_PROGGRESS = "BROADCAST_UPDATE_FILE_PROGGRESS";
+    final static public String BROADCAST_UPDATE_FILE_DOWNLOADED = "BROADCAST_UPDATE_FILE_DOWNLOADED";
 
 
     public static TdApi.Chat chat; // kostil'
 
     final static public  String EXTRA_UPDATE_USER_ID = "EXTRA_UPDATE_USER_ID";
+    final static public  String EXTRA_UPDATE_FILE_ID = "EXTRA_UPDATE_FILE_ID";
+    final static public  String EXTRA_UPDATE_FILE_SIZE= "EXTRA_UPDATE_FILE_SIZE";
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -94,6 +99,12 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
         }else if(object instanceof TdApi.UpdateNewAuthorization){
             TdApi.UpdateNewAuthorization newAuthorization = (TdApi.UpdateNewAuthorization) object;
             updateNewAuth(newAuthorization);
+        }else if(object instanceof TdApi.UpdateFile){
+
+        }else if(object instanceof TdApi.UpdateFileProgress){
+            TdApi.UpdateFileProgress progress = (TdApi.UpdateFileProgress) object;
+            int id = progress.fileId;
+            int percent = progress.ready / progress.size;
         }
     }
 

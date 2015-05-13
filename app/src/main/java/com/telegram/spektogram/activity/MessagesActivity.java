@@ -3,6 +3,7 @@ package com.telegram.spektogram.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.lamerman.FileDialog;
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.adapters.MessagesAdapter;
 import com.telegram.spektogram.application.ApplicationSpektogram;
@@ -47,6 +49,8 @@ public class MessagesActivity extends ActionBarActivity implements View.OnClickL
 
     MessagesAdapter adapter;
     ListView list;
+
+    private ImageView ivPhoto;
 
 
     private TextWatcher textWatcher = new TextWatcher() {
@@ -228,8 +232,19 @@ public class MessagesActivity extends ActionBarActivity implements View.OnClickL
             case SEND_PHOTO:
                 startCameraActivity();
                 break;
+            case SEND_VIDEO:
+                break;
+            case SEND_FILE:
+                startFileActivity();
+                break;
         }
     }
+
+
+
+    String TAG = "debug: ";
+    Uri attachImageUri;
+    Uri attachVideoUri;
 
     private void startCameraActivity() {
         File root = new File(Environment.getExternalStorageDirectory()
@@ -243,17 +258,70 @@ public class MessagesActivity extends ActionBarActivity implements View.OnClickL
         startActivityForResult(cameraIntent, SEND_PHOTO);
     }
 
+    private void startCameraActivityVideo() {
+        File root = new File(Environment.getExternalStorageDirectory()
+                + File.separator + "Spektogram" + File.separator);
+        root.mkdirs();
+
+        File sdImageMainDirectory = new File(root, "myVideoName.mp4");
+
+        Log.d(TAG, "fileName = " + sdImageMainDirectory);
+
+        Uri outputFileUri = Uri.fromFile(sdImageMainDirectory);
+        attachVideoUri = outputFileUri;
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        startActivityForResult(cameraIntent, SEND_VIDEO);
+    }
+
+    private void startFileActivity() {
+        Intent intent = new Intent(getBaseContext(), FileDialog.class);
+        intent.putExtra(FileDialog.START_PATH, "/sdcard");
+
+        //can user select directories or not
+        intent.putExtra(FileDialog.CAN_SELECT_DIR, true);
+
+        //alternatively you can set file filter
+        //intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "png" });
+
+        startActivityForResult(intent, SEND_FILE);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 101 && resultCode == -1) {
-            try {
-                Uri outputFileUri = data.getData();
-//                selectedImagePath = getPath(outputFileUri);
-            } catch (Exception ex) {
-                Log.v("OnCameraCallBack", ex.getMessage());
+        if (requestCode == SEND_PHOTO) {
+            if (resultCode == RESULT_OK) {
+                if (data == null) {
+                    Log.d(TAG, "Intent is null");
+                } else {
+                    Log.d(TAG, "Photo uri: " + data.getData());
+                    Bundle bndl = data.getExtras();
+                    if (bndl != null) {
+                        Object obj = data.getExtras().get("data");
+                        if (obj instanceof Bitmap) {
+                            Bitmap bitmap = (Bitmap) obj;
+                            Log.d(TAG, "bitmap " + bitmap.getWidth() + " x "
+                                    + bitmap.getHeight());
+                            ivPhoto.setImageBitmap(bitmap);
+                        }
+                    }
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                Log.d(TAG, "Canceled");
+            }
+        }
 
+        if (requestCode == SEND_VIDEO) {
+            if (resultCode == RESULT_OK) {
+                if (data == null) {
+                    Log.d(TAG, "Intent is null");
+                } else {
+                    Log.d(TAG, "Video uri: " + data.getData());
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                Log.d(TAG, "Canceled");
             }
         }
     }

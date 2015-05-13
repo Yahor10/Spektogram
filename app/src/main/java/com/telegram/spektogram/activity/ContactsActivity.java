@@ -9,6 +9,10 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.SpannableString;
@@ -28,6 +32,7 @@ import android.widget.TextView;
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.application.ApplicationSpektogram;
 import com.telegram.spektogram.application.Constants;
+import com.telegram.spektogram.contacts.AllContactsFragment;
 import com.telegram.spektogram.contacts.Contact;
 import com.telegram.spektogram.contacts.ContactFetcher;
 import com.telegram.spektogram.contacts.ContactsAdapter;
@@ -89,6 +94,8 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
             });
         }
     };
+    private ViewPager mPager;
+    private FragmentManager fm;
 
     public static Intent buildStartIntent(Context context, boolean onlyTelegram) {
         final Intent intent = new Intent(context, ContactsActivity.class);
@@ -110,13 +117,18 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         setContentView(R.layout.activity_contacts);
 
         restoreActionBar();
+        mPager = (ViewPager) findViewById(R.id.pager);
 
-        lvContacts = (ListView) findViewById(R.id.lvContacts);
-        lvContacts.setOnItemClickListener(this);
-        lvContacts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        /** Getting a reference to FragmentManager */
+        fm = getSupportFragmentManager();
 
+
+//        lvContacts = (ListView) findViewById(R.id.lvContacts);
+//        lvContacts.setOnItemClickListener(this);
+//        lvContacts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+//
         boolean onlyTelegram = getIntent().getBooleanExtra(EXTRA_TELEGRAM, false);
-
+//
         if (PreferenceUtils.isOfflineMode(getBaseContext())) {
             if (onlyTelegram) {
                 loadTelegramContacts();
@@ -140,7 +152,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         super.onStop();
         try {
             unregisterReceiver(updateStatusReceiver);
-            unregisterReceiver(updateStatusReceiver);
+            unregisterReceiver(updateUserNameReceiver);
         } catch (Exception e) {
         }
     }
@@ -157,6 +169,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         actionBar.setCustomView(R.layout.ab_main);
+
 
         String s = getString(R.string.app_name);
 
@@ -272,12 +285,16 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
             @Override
             public void run() {
                 if (!isDestroyed()) {
-                    boolean onlyTelegram = getIntent().getBooleanExtra(EXTRA_TELEGRAM, false);
-                    if (onlyTelegram) {
-                        loadTelegramContacts();
-                    } else {
-                        loadContacts();
-                    }
+
+                    MyFragmentPagerAdapter fragmentPagerAdapter = new MyFragmentPagerAdapter(fm);
+                    /** Setting the FragmentPagerAdapter object to the viewPager object */
+                    mPager.setAdapter(fragmentPagerAdapter);
+//                    boolean onlyTelegram = getIntent().getBooleanExtra(EXTRA_TELEGRAM, false);
+//                    if (onlyTelegram) {
+//                        loadTelegramContacts();
+//                    } else {
+//                        loadContacts();
+//                    }
                 }
 
             }
@@ -305,5 +322,52 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
     @Override
     public void onGlobalLayout() {
 
+    }
+
+    public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
+
+        final int PAGE_COUNT = 2;
+
+        /** Constructor of the class */
+        public MyFragmentPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        /** This method will be invoked when a page is requested to create */
+        @Override
+        public Fragment getItem(int arg0) {
+            Bundle data = new Bundle();
+            switch(arg0){
+
+                /** tab1 is selected */
+                case 0:
+                    AllContactsFragment fragment1 = new AllContactsFragment(userMap);
+                    return fragment1;
+
+                /** tab2 is selected */
+                case 1:
+                    AllContactsFragment fragment2 = new AllContactsFragment(userMap);
+                    return fragment2;
+            }
+            return null;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "All contacts";
+                case 1:
+                    return "Tab Two";
+            }
+
+            return null;
+        }
+
+        /** Returns the number of pages */
+        @Override
+        public int getCount() {
+            return PAGE_COUNT;
+        }
     }
 }
