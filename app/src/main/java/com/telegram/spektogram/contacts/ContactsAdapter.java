@@ -140,6 +140,8 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
                     }else{
                         viewContactTelegramHolder.imageView.setImageResource(R.drawable.user_photo);
                     }
+                }else if(photoSmall instanceof TdApi.FileEmpty){
+                    viewContactTelegramHolder.imageView.setImageResource(R.drawable.user_photo);
                 }
 
                 final TdApi.UserStatus status = user.status;
