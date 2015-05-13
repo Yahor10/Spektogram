@@ -22,5 +22,7 @@ public class PreferenceKeys {
 
     public final static String MY_USER_ID = "my_user_id";
 
+    public final static String IS_CHAT_ACTIVITY_BACKGROUND= "chat_background";
+
 
 }

@@ -39,6 +39,7 @@ public class AllContactsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflate = inflater.inflate(R.layout.fragment_contacts, null);
         list  = (ListView) inflate.findViewById(R.id.lvContacts);
+//        this.listView.setEmptyView(findViewById(R.id.emptyElement));
         loadContacts();
         return inflate;
     }

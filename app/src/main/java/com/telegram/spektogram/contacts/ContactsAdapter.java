@@ -2,16 +2,21 @@ package com.telegram.spektogram.contacts;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.activity.ContactsActivity;
+import com.telegram.spektogram.application.ApplicationSpektogram;
+import com.telegram.spektogram.application.Constants;
 import com.telegram.spektogram.enums.ContactType;
 
 import org.drinkless.td.libcore.telegram.TdApi;
@@ -99,7 +104,9 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
                 if (view == null) {
                     viewContactTelegramHolder = new ViewContactTelegramHolder();
                     view = mInflater.inflate(R.layout.adapter_contact_telegram, null);
+
                     viewContactTelegramHolder.tvName = (TextView) view.findViewById(R.id.tvName);
+                    viewContactTelegramHolder.imageView= (ImageView) view.findViewById(R.id.imageContact);
                     viewContactTelegramHolder.checkBox = (CheckBox) view.findViewById(R.id.checkBox);
 
                     viewContactTelegramHolder.tvDate = (TextView) view.findViewById(R.id.tvDate);
@@ -120,7 +127,22 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
                     viewContactTelegramHolder.checkBox.setVisibility(View.GONE);
                 }
 
-                final TdApi.UserStatus status = contact.getUser().status;
+                final TdApi.User user = contact.getUser();
+                Log.v(Constants.LOG_TAG,"cache user" +user);
+                final TdApi.File photoSmall = user.photoSmall;
+                if(photoSmall instanceof TdApi.FileLocal) {
+                    TdApi.FileLocal local = (TdApi.FileLocal) photoSmall;
+                    Log.v(Constants.LOG_TAG,"cache local" +local);
+                    final Bitmap bitmapFromMemCache = ApplicationSpektogram.getApplication(getContext()).getBitmapFromMemCache(local.path);
+                    Log.v(Constants.LOG_TAG,"cache item" + local.path);
+                    if(bitmapFromMemCache != null){
+                        viewContactTelegramHolder.imageView.setImageBitmap(bitmapFromMemCache);
+                    }else{
+                        viewContactTelegramHolder.imageView.setImageResource(R.drawable.user_photo);
+                    }
+                }
+
+                final TdApi.UserStatus status = user.status;
                 if (status instanceof TdApi.UserStatusOffline) {
                     TdApi.UserStatusOffline offline = (TdApi.UserStatusOffline) status;
                     String date = DATE_FORMAT.format(TimeUnit.SECONDS.toMillis(offline.wasOnline));
@@ -162,6 +184,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
     }
 
     public static class ViewContactTelegramHolder {
+        public ImageView imageView;
         public TextView tvName;
         public CheckBox checkBox;
         public TextView tvDate;

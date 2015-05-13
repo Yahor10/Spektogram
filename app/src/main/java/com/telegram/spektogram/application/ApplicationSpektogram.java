@@ -4,6 +4,9 @@ package com.telegram.spektogram.application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v4.util.LruCache;
 import android.util.Log;
 
 import com.telegram.spektogram.R;
@@ -20,6 +23,8 @@ import java.io.File;
  * Created by ychabatarou on 27.04.2015.
  */
 public class ApplicationSpektogram extends android.app.Application implements Client.ResultHandler {
+
+    private LruCache<String, Bitmap> mMemoryCache;
 
     private Client client;
 
@@ -40,7 +45,27 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
     @Override
     public void onCreate() {
         super.onCreate();
+        createLruCache();
+
+
         startTelegramApi();
+    }
+
+    private void createLruCache() {
+        // int in its constructor.
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+
+        // Use 1/8th of the available memory for this memory cache.
+        final int cacheSize = maxMemory / 8;
+
+        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                // The cache size will be measured in kilobytes rather than
+                // number of items.
+                return bitmap.getByteCount() / 1024;
+            }
+        };
     }
 
     private void startTelegramApi() {
@@ -100,11 +125,18 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
             TdApi.UpdateNewAuthorization newAuthorization = (TdApi.UpdateNewAuthorization) object;
             updateNewAuth(newAuthorization);
         }else if(object instanceof TdApi.UpdateFile){
-
+            TdApi.UpdateFile file = (TdApi.UpdateFile) object;
+            Log.v(Constants.LOG_TAG,"UpdateFile");
+            final String path = file.path;
+            final Bitmap bitmap = BitmapFactory.decodeFile(path);
+            addBitmapToMemoryCache(path,bitmap);
         }else if(object instanceof TdApi.UpdateFileProgress){
+            Log.v(Constants.LOG_TAG,"UpdateFileProgress");
             TdApi.UpdateFileProgress progress = (TdApi.UpdateFileProgress) object;
             int id = progress.fileId;
             int percent = progress.ready / progress.size;
+        }else if(object instanceof TdApi.UpdateUserPhoto){
+            TdApi.UpdateUserPhoto photo = (TdApi.UpdateUserPhoto) object;
         }
     }
 
@@ -210,6 +242,16 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
             client = TG.getClientInstance();
         }
         return client;
+    }
+
+    public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+        if (getBitmapFromMemCache(key) == null) {
+            mMemoryCache.put(key, bitmap);
+        }
+    }
+
+    public Bitmap getBitmapFromMemCache(String key) {
+        return mMemoryCache.get(key);
     }
 
     public void sendFunction(TdApi.TLFunction func, Client.ResultHandler handler) {

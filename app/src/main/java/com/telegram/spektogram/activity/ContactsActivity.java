@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -43,6 +44,7 @@ import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -136,6 +138,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
                 loadContacts();
             }
         } else {
+            Log.v(Constants.LOG_TAG,"launch contact request...");
             ApplicationSpektogram.getApplication(this).sendFunction(new TdApi.GetContacts(), this);
         }
     }
@@ -272,33 +275,56 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onResult(TdApi.TLObject object) {
-        TdApi.Contacts contacts = (TdApi.Contacts) object;
-        final TdApi.User[] users = contacts.users;
-        userMap = new HashMap<>(users.length);
+        Log.v(Constants.LOG_TAG, "TLObject onResult contacts:" + object.toString());
+        if(object instanceof TdApi.Contacts) {
+            TdApi.Contacts contacts = (TdApi.Contacts) object;
+            final TdApi.User[] users = contacts.users;
+            userMap = new HashMap<>(users.length);
 
-        for (TdApi.User user : users) {
-            userMap.put(user.phoneNumber, user);
-        }
+            for (TdApi.User user : users) {
+                userMap.put(user.phoneNumber, user);
+            }
 
-        Log.v(null, "hash map" + userMap);
+            final Collection<TdApi.User> values = userMap.values();
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (!isDestroyed()) {
+            for (TdApi.User user : values) {
+                final TdApi.File fileSmall = user.photoSmall;
+                if(fileSmall instanceof TdApi.FileEmpty) {
+                    final TdApi.FileEmpty photoSmall = (TdApi.FileEmpty) fileSmall;
+                    if(photoSmall.id != 0) {
+                        ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.DownloadFile(photoSmall.id), ContactsActivity.this);
+                    }
+                }else if(fileSmall instanceof TdApi.FileLocal){
+                    TdApi.FileLocal file = (TdApi.FileLocal) fileSmall;
+                    ApplicationSpektogram.getApplication(getBaseContext()).addBitmapToMemoryCache(file.path, BitmapFactory.decodeFile(file.path));
+                }
+            }
+            }
+        });
 
-                    MyFragmentPagerAdapter fragmentPagerAdapter = new MyFragmentPagerAdapter(fm);
-                    /** Setting the FragmentPagerAdapter object to the viewPager object */
-                    mPager.setAdapter(fragmentPagerAdapter);
+            Log.v(Constants.LOG_TAG, "hash map" + userMap);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (!isDestroyed()) {
+
+                        MyFragmentPagerAdapter fragmentPagerAdapter = new MyFragmentPagerAdapter(fm);
+                        /** Setting the FragmentPagerAdapter object to the viewPager object */
+                        mPager.setAdapter(fragmentPagerAdapter);
 //                    boolean onlyTelegram = getIntent().getBooleanExtra(EXTRA_TELEGRAM, false);
 //                    if (onlyTelegram) {
 //                        loadTelegramContacts();
 //                    } else {
 //                        loadContacts();
 //                    }
-                }
+                    }
 
-            }
-        });
+                }
+            });
+        }
 
 
     }
