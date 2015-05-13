@@ -34,11 +34,11 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
     private final boolean mNewMessage;
     private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 
-    public ContactsAdapter(Context context, ArrayList<Contact> contacts) {
+    public ContactsAdapter(Context context, ArrayList<Contact> contacts, ListView list) {
         super(context, 0, contacts);
         mContacts = contacts;
         ContactsActivity activity = (ContactsActivity) context;
-        lvContacts = activity.getLvContacts();
+        lvContacts = list;
         final Intent intent = activity.getIntent();
         mNewGroup = intent.getBooleanExtra(ContactsActivity.EXTRA_NEW_GROUP, false);
         mNewMessage = intent.getBooleanExtra(ContactsActivity.EXTRA_NEW_MESSAGE, false);

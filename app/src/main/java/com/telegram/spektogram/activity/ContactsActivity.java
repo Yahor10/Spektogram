@@ -35,7 +35,6 @@ import com.telegram.spektogram.application.ApplicationSpektogram;
 import com.telegram.spektogram.application.Constants;
 import com.telegram.spektogram.contacts.AllContactsFragment;
 import com.telegram.spektogram.contacts.Contact;
-import com.telegram.spektogram.contacts.ContactFetcher;
 import com.telegram.spektogram.contacts.ContactsAdapter;
 import com.telegram.spektogram.enums.ContactType;
 import com.telegram.spektogram.preferences.PreferenceUtils;
@@ -46,7 +45,6 @@ import org.drinkless.td.libcore.telegram.TdApi;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ContactsActivity extends ActionBarActivity implements Client.ResultHandler, AdapterView.OnItemClickListener, ViewTreeObserver.OnGlobalLayoutListener {
@@ -71,7 +69,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
                         TdApi.User user = (TdApi.User) object;
                         userMap.remove(user.phoneNumber);
                         userMap.put(user.phoneNumber, user);
-                        loadContacts();
+//                        loadContacts();
                     }
                 }
             });
@@ -90,7 +88,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
                         TdApi.User user = (TdApi.User) object;
                         userMap.remove(user.phoneNumber);
                         userMap.put(user.phoneNumber, user);
-                        loadContacts();
+//                        loadContacts();
                     }
                 }
             });
@@ -133,9 +131,9 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
 //
         if (PreferenceUtils.isOfflineMode(getBaseContext())) {
             if (onlyTelegram) {
-                loadTelegramContacts();
+
             } else {
-                loadContacts();
+
             }
         } else {
             Log.v(Constants.LOG_TAG,"launch contact request...");
@@ -200,34 +198,34 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         tv.setText(ss1);
     }
 
-    private void loadContacts() {
-        final ContactFetcher contactFetcher = new ContactFetcher(ContactsActivity.this, userMap);
-
-        List<Contact> actions = new ArrayList<Contact>(3);
-        final Contact object = new Contact("-1", getString(R.string.create_new_group), ContactType.Action);
-        actions.add(object);
-
-        listContacts = contactFetcher.fetchAll(actions);
-        adapterContacts = new ContactsAdapter(ContactsActivity.this, listContacts);
-        lvContacts.setAdapter(adapterContacts);
-
-    }
-
-    private void loadTelegramContacts() {
-        boolean createNewGroup = getIntent().getBooleanExtra(EXTRA_NEW_GROUP, false);
-
-        List<Contact> actions = new ArrayList<Contact>(3);
-
-        if (createNewGroup) {
-            actions.clear();
-        }
-
-        final ContactFetcher contactFetcher = new ContactFetcher(this, userMap);
-        ArrayList<Contact> listContacts = contactFetcher.fetchTelegramContacts(null);
-        ContactsAdapter adapterContacts = new ContactsAdapter(this, listContacts);
-        lvContacts.setAdapter(adapterContacts);
-
-    }
+//    private void loadContacts() {
+//        final ContactFetcher contactFetcher = new ContactFetcher(ContactsActivity.this, userMap);
+//
+//        List<Contact> actions = new ArrayList<Contact>(3);
+//        final Contact object = new Contact("-1", getString(R.string.create_new_group), ContactType.Action);
+//        actions.add(object);
+//
+//        listContacts = contactFetcher.fetchAll(actions);
+//        adapterContacts = new ContactsAdapter(ContactsActivity.this, listContacts, list);
+//        lvContacts.setAdapter(adapterContacts);
+//
+//    }
+//
+//    private void loadTelegramContacts() {
+//        boolean createNewGroup = getIntent().getBooleanExtra(EXTRA_NEW_GROUP, false);
+//
+//        List<Contact> actions = new ArrayList<Contact>(3);
+//
+//        if (createNewGroup) {
+//            actions.clear();
+//        }
+//
+//        final ContactFetcher contactFetcher = new ContactFetcher(this, userMap);
+//        ArrayList<Contact> listContacts = contactFetcher.fetchTelegramContacts(null);
+//        ContactsAdapter adapterContacts = new ContactsAdapter(this, listContacts, list);
+//        lvContacts.setAdapter(adapterContacts);
+//
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

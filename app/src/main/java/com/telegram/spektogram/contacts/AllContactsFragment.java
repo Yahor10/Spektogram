@@ -40,6 +40,7 @@ public class AllContactsFragment extends Fragment {
         final View inflate = inflater.inflate(R.layout.fragment_contacts, null);
         list  = (ListView) inflate.findViewById(R.id.lvContacts);
 //        this.listView.setEmptyView(findViewById(R.id.emptyElement));
+        list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         loadContacts();
         return inflate;
     }
@@ -54,7 +55,7 @@ public class AllContactsFragment extends Fragment {
         actions.add(object);
 
         ArrayList<Contact> listContacts = contactFetcher.fetchAll(actions);
-        adapterContacts = new ContactsAdapter(activity, listContacts);
+        adapterContacts = new ContactsAdapter(activity, listContacts,list);
         list.setAdapter(adapterContacts);
 
     }
