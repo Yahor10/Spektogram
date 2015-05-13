@@ -17,37 +17,35 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-
+import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import com.telegram.spektogram.R;
-import com.telegram.spektogram.adapters.MessagesAdapter;
 import com.telegram.spektogram.application.ApplicationSpektogram;
-import com.telegram.spektogram.preferences.PreferenceUtils;
 import com.telegram.spektogram.views.PopupMenu;
 
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 
-public class MessagesActivity extends ActionBarActivity implements View.OnClickListener, PopupMenu.OnItemSelectedListener {
+public class MessagesActivity extends ActionBarActivity implements LocationListener, View.OnClickListener, PopupMenu.OnItemSelectedListener {
 
     private static final int SEND_PHOTO = 111;
+
     private static final int SEND_VIDEO = 113;
+
     private static final int SEND_GEO_LOCATION = 114;
+
     private static final int SEND_FILE = 115;
 
-    public static final String KEY_EXTRA_CHAT = "key_chat";
+    public static final String KEY_EXTRA_CHAT_ID = "key_chat";
 
-    ArrayList<TdApi.Message> messages;
-    ArrayList<Integer> id_users = new ArrayList<Integer>();
+    private static Bitmap attach_Image;
 
-    MessagesAdapter adapter;
-    ListView list;
-
+    private ImageView ivPhoto;
 
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
@@ -86,51 +84,15 @@ public class MessagesActivity extends ActionBarActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        startActivity(SignInActivity.buildStartIntent(this));
-        messages = new ArrayList<TdApi.Message>();
-        list = (ListView) findViewById(R.id.list_message);
-        adapter = new MessagesAdapter(getLayoutInflater(), getBaseContext());
-        adapter.setId_owner_user(PreferenceUtils.getMyUserId(this));
 
-        list.setAdapter(adapter);
+        long id = getIntent().getLongExtra(KEY_EXTRA_CHAT_ID, -1);
+        ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChat(), new Client.ResultHandler() {
 
-        final TdApi.Chat chat = ApplicationSpektogram.chat;
+            @Override
+            public void onResult(TdApi.TLObject object) {
 
-        if (chat != null) {
-
-
-            if (chat.type instanceof TdApi.PrivateChatInfo) {
-                id_users.add(((TdApi.PrivateChatInfo) chat.type).user.id);
-//                id_users.add(PreferenceUtils.getMyUserId(getApplicationContext()));
-                getMessagesByIdUsers(id_users, chat.id);
-
-            } else if (chat.type instanceof TdApi.GroupChatInfo) {
-                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetGroupChatFull(((TdApi.GroupChatInfo) chat.type).groupChat.id), new Client.ResultHandler() {
-
-                    @Override
-                    public void onResult(TdApi.TLObject object) {
-
-                        TdApi.GroupChatFull chatFull = (TdApi.GroupChatFull) object;
-
-                        for (TdApi.ChatParticipant participant : chatFull.participants) {
-                            id_users.add(participant.user.id);
-                        }
-                        getMessagesByIdUsers(id_users, chat.id);
-
-
-                    }
-                });
             }
-
-
-            ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChatHistory(chat.id, chat.topMessage.fromId, 0, 10), new Client.ResultHandler() {
-
-                @Override
-                public void onResult(TdApi.TLObject object) {
-
-                    object.toString();
-                }
-            });
-        }
+        });
 
         getSupportActionBar().setTitle("");
         messageText = (EditText) findViewById(R.id.message);
@@ -142,32 +104,6 @@ public class MessagesActivity extends ActionBarActivity implements View.OnClickL
 
         send.setOnClickListener(this);
         attach.setOnClickListener(this);
-    }
-
-
-    public void getMessagesByIdUsers(ArrayList<Integer> users, long chat_id) {
-
-//        for (int id : id_users)
-        ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChatHistory(chat_id, users.get(0), 0, 50), new Client.ResultHandler() {
-
-            @Override
-            public void onResult(TdApi.TLObject object) {
-                TdApi.Messages mes = (TdApi.Messages) object;
-
-                if (mes != null && mes.messages != null) {
-                    messages.addAll(Arrays.asList(mes.messages));
-
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.setMessages(messages);
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-            }
-        });
     }
 
 
@@ -226,35 +162,139 @@ public class MessagesActivity extends ActionBarActivity implements View.OnClickL
 
         switch (item.getItemId()) {
             case SEND_PHOTO:
-                startCameraActivity();
+                startCameraActivityPhoto();
+                break;
+            case SEND_VIDEO:
+                startCameraActivityVideo();
+                break;
+            case SEND_FILE:
+
+                break;
+            case SEND_GEO_LOCATION:
+                getGeoLocation();
                 break;
         }
     }
 
-    private void startCameraActivity() {
-        File root = new File(Environment.getExternalStorageDirectory()
-                + File.separator + "Your Floder Name" + File.separator);
-        root.mkdirs();
-        File sdImageMainDirectory = new File(root, "myPicName.jpg");
-        Uri outputFileUri = Uri.fromFile(sdImageMainDirectory);
+    String TAG = "debug: ";
+    Uri attachImageUri;
+    Uri attachVideoUri;
 
+    private void startCameraActivityPhoto() {
+        File root = new File(Environment.getExternalStorageDirectory()
+
+                + File.separator + "Spektogram" + File.separator);
+        root.mkdirs();
+
+
+        File sdImageMainDirectory = new File(root, "myPicName.jpg");
+
+
+        Log.d(TAG, "fileName = " + sdImageMainDirectory);
+
+        Uri outputFileUri = Uri.fromFile(sdImageMainDirectory);
+        attachImageUri = outputFileUri;
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         startActivityForResult(cameraIntent, SEND_PHOTO);
+    }
+
+    private void startCameraActivityVideo() {
+        File root = new File(Environment.getExternalStorageDirectory()
+                + File.separator + "Spektogram" + File.separator);
+        root.mkdirs();
+
+        File sdImageMainDirectory = new File(root, "myVideoName.mp4");
+
+        Log.d(TAG, "fileName = " + sdImageMainDirectory);
+
+        Uri outputFileUri = Uri.fromFile(sdImageMainDirectory);
+        attachVideoUri = outputFileUri;
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        startActivityForResult(cameraIntent, SEND_VIDEO);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 101 && resultCode == -1) {
-            try {
-                Uri outputFileUri = data.getData();
-//                selectedImagePath = getPath(outputFileUri);
-            } catch (Exception ex) {
-                Log.v("OnCameraCallBack", ex.getMessage());
+        if (requestCode == SEND_PHOTO) {
+            if (resultCode == RESULT_OK) {
+                if (data == null) {
+                    Log.d(TAG, "Intent is null");
+                } else {
+                    Log.d(TAG, "Photo uri: " + data.getData());
+                    Bundle bndl = data.getExtras();
+                    if (bndl != null) {
+                        Object obj = data.getExtras().get("data");
+                        if (obj instanceof Bitmap) {
+                            Bitmap bitmap = (Bitmap) obj;
+                            Log.d(TAG, "bitmap " + bitmap.getWidth() + " x "
+                                    + bitmap.getHeight());
+                            ivPhoto.setImageBitmap(bitmap);
+                        }
+                    }
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                Log.d(TAG, "Canceled");
+            }
+        }
 
+        if (requestCode == SEND_VIDEO) {
+            if (resultCode == RESULT_OK) {
+                if (data == null) {
+                    Log.d(TAG, "Intent is null");
+                } else {
+                    Log.d(TAG, "Video uri: " + data.getData());
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                Log.d(TAG, "Canceled");
             }
         }
     }
+
+    //user location
+    double latitude=0;
+    double longitude=0;
+
+    private void getGeoLocation() {
+
+
+        LocationManager locManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+        locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,0, this);
+        Location location = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+
+        Log.d(TAG, Double.toString(latitude));
+        Log.d(TAG, Double.toString(longitude));
+
+    }
+
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+//        if (provider.equals(LocationManager.GPS_PROVIDER)) {
+//            //tvStatusGPS.setText("Status: " + String.valueOf(status));
+//        } else if (provider.equals(LocationManager.NETWORK_PROVIDER)) {
+//            //tvStatusNet.setText("Status: " + String.valueOf(status));
+//        }
+    }
+
 }
