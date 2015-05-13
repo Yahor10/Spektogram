@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -18,39 +19,38 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 
-import com.lamerman.FileDialog;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.telegram.spektogram.R;
-import com.telegram.spektogram.adapters.MessagesAdapter;
 import com.telegram.spektogram.application.ApplicationSpektogram;
-import com.telegram.spektogram.preferences.PreferenceUtils;
 import com.telegram.spektogram.views.PopupMenu;
 
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 
-public class MessagesActivity extends ActionBarActivity implements View.OnClickListener, PopupMenu.OnItemSelectedListener {
+public class MessagesActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, View.OnClickListener, PopupMenu.OnItemSelectedListener {
 
     private static final int SEND_PHOTO = 111;
     private static final int SEND_VIDEO = 113;
     private static final int SEND_GEO_LOCATION = 114;
     private static final int SEND_FILE = 115;
 
-    public static final String KEY_EXTRA_CHAT = "key_chat";
+    public static final String KEY_EXTRA_CHAT_ID = "key_chat";
 
-    ArrayList<TdApi.Message> messages;
-    ArrayList<Integer> id_users = new ArrayList<Integer>();
-
-    MessagesAdapter adapter;
-    ListView list;
+    private static Bitmap attach_Image;
 
     private ImageView ivPhoto;
+
+    private GoogleApiClient mGoogleApiClient;
+
+    private Location mLastLocation;
+
 
 
     private TextWatcher textWatcher = new TextWatcher() {
@@ -90,51 +90,15 @@ public class MessagesActivity extends ActionBarActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        startActivity(SignInActivity.buildStartIntent(this));
-        messages = new ArrayList<TdApi.Message>();
-        list = (ListView) findViewById(R.id.list_message);
-        adapter = new MessagesAdapter(getLayoutInflater(), getBaseContext());
-        adapter.setId_owner_user(PreferenceUtils.getMyUserId(this));
 
-        list.setAdapter(adapter);
+        long id = getIntent().getLongExtra(KEY_EXTRA_CHAT_ID, -1);
+        ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChat(), new Client.ResultHandler() {
 
-        final TdApi.Chat chat = ApplicationSpektogram.chat;
+            @Override
+            public void onResult(TdApi.TLObject object) {
 
-        if (chat != null) {
-
-
-            if (chat.type instanceof TdApi.PrivateChatInfo) {
-                id_users.add(((TdApi.PrivateChatInfo) chat.type).user.id);
-//                id_users.add(PreferenceUtils.getMyUserId(getApplicationContext()));
-                getMessagesByIdUsers(id_users, chat.id);
-
-            } else if (chat.type instanceof TdApi.GroupChatInfo) {
-                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetGroupChatFull(((TdApi.GroupChatInfo) chat.type).groupChat.id), new Client.ResultHandler() {
-
-                    @Override
-                    public void onResult(TdApi.TLObject object) {
-
-                        TdApi.GroupChatFull chatFull = (TdApi.GroupChatFull) object;
-
-                        for (TdApi.ChatParticipant participant : chatFull.participants) {
-                            id_users.add(participant.user.id);
-                        }
-                        getMessagesByIdUsers(id_users, chat.id);
-
-
-                    }
-                });
             }
-
-
-            ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChatHistory(chat.id, chat.topMessage.fromId, 0, 10), new Client.ResultHandler() {
-
-                @Override
-                public void onResult(TdApi.TLObject object) {
-
-                    object.toString();
-                }
-            });
-        }
+        });
 
         getSupportActionBar().setTitle("");
         messageText = (EditText) findViewById(R.id.message);
@@ -146,33 +110,62 @@ public class MessagesActivity extends ActionBarActivity implements View.OnClickL
 
         send.setOnClickListener(this);
         attach.setOnClickListener(this);
+
+        buildGoogleApiClient();
+
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
     }
 
 
-    public void getMessagesByIdUsers(ArrayList<Integer> users, long chat_id) {
-
-//        for (int id : id_users)
-        ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChatHistory(chat_id, users.get(0), 0, 50), new Client.ResultHandler() {
-
-            @Override
-            public void onResult(TdApi.TLObject object) {
-                TdApi.Messages mes = (TdApi.Messages) object;
-
-                if (mes != null && mes.messages != null) {
-                    messages.addAll(Arrays.asList(mes.messages));
-
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.setMessages(messages);
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-            }
-        });
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Connect the client.
+        mGoogleApiClient.connect();
     }
+
+    @Override
+    protected void onStop() {
+        // Disconnecting the client invalidates it.
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLastLocation != null) {
+            latitude = mLastLocation.getLatitude();
+            longitude = mLastLocation.getLongitude();
+//            Log.d(TAG, Double.toString(latitude));
+//            Log.d(TAG, Double.toString(longitude));
+        }
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.d(TAG, "GoogleApiClient connection has been suspend");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.d(TAG, "GoogleApiClient connection has failed");
+    }
+
+//    @Override
+//    public void onLocationChanged(Location location) {
+//        Log.d(TAG, "Location received: " + location.toString());
+//    }
+
 
 
     @Override
@@ -230,29 +223,38 @@ public class MessagesActivity extends ActionBarActivity implements View.OnClickL
 
         switch (item.getItemId()) {
             case SEND_PHOTO:
-                startCameraActivity();
+                startCameraActivityPhoto();
                 break;
             case SEND_VIDEO:
+                startCameraActivityVideo();
                 break;
             case SEND_FILE:
-                startFileActivity();
+
+                break;
+            case SEND_GEO_LOCATION:
+                getGeoLocation();
                 break;
         }
     }
-
-
 
     String TAG = "debug: ";
     Uri attachImageUri;
     Uri attachVideoUri;
 
-    private void startCameraActivity() {
+    private void startCameraActivityPhoto() {
         File root = new File(Environment.getExternalStorageDirectory()
-                + File.separator + "Your Floder Name" + File.separator);
-        root.mkdirs();
-        File sdImageMainDirectory = new File(root, "myPicName.jpg");
-        Uri outputFileUri = Uri.fromFile(sdImageMainDirectory);
 
+                + File.separator + "Spektogram" + File.separator);
+        root.mkdirs();
+
+
+        File sdImageMainDirectory = new File(root, "myPicName.jpg");
+
+
+        Log.d(TAG, "fileName = " + sdImageMainDirectory);
+
+        Uri outputFileUri = Uri.fromFile(sdImageMainDirectory);
+        attachImageUri = outputFileUri;
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         startActivityForResult(cameraIntent, SEND_PHOTO);
@@ -272,19 +274,6 @@ public class MessagesActivity extends ActionBarActivity implements View.OnClickL
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         startActivityForResult(cameraIntent, SEND_VIDEO);
-    }
-
-    private void startFileActivity() {
-        Intent intent = new Intent(getBaseContext(), FileDialog.class);
-        intent.putExtra(FileDialog.START_PATH, "/sdcard");
-
-        //can user select directories or not
-        intent.putExtra(FileDialog.CAN_SELECT_DIR, true);
-
-        //alternatively you can set file filter
-        //intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "png" });
-
-        startActivityForResult(intent, SEND_FILE);
     }
 
     @Override
@@ -325,4 +314,28 @@ public class MessagesActivity extends ActionBarActivity implements View.OnClickL
             }
         }
     }
+
+    //user location
+    double latitude=0;
+    double longitude=0;
+
+    private void getGeoLocation() {
+
+        if (!mGoogleApiClient.isConnected()){
+            mGoogleApiClient.connect();
+        }
+
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLastLocation != null) {
+            latitude = mLastLocation.getLatitude();
+            longitude = mLastLocation.getLongitude();
+        }
+
+        Log.d(TAG, Double.toString(latitude));
+        Log.d(TAG, Double.toString(longitude));
+
+    }
+
+
+
 }
