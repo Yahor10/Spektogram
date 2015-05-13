@@ -29,6 +29,9 @@ public class MessagesAdapter extends BaseAdapter {
     ArrayList<TdApi.Message> messages;
     int id_owner_user;
 
+    private static final int TYPE_ITEM_TO_ME = 0;
+    private static final int TYPE_ITEM_FROM_ME = 1;
+
     public MessagesAdapter(LayoutInflater inflater, Context context) {
         this.inflater = inflater;
         this.context = context;
@@ -76,6 +79,23 @@ public class MessagesAdapter extends BaseAdapter {
         this.id_owner_user = id_owner_user;
     }
 
+
+    @Override
+    public int getViewTypeCount() {
+        return 2;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (messages.get(position).fromId != id_owner_user) {
+            return TYPE_ITEM_TO_ME;
+        } else {
+            return TYPE_ITEM_FROM_ME;
+        }
+
+    }
+
+
     @Override
     public int getCount() {
         if (messages == null) {
@@ -111,18 +131,22 @@ public class MessagesAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
-        ViewHolder holder;
+        ViewHolder holder = null;
+
+        int type = getItemViewType(i);
 
         if (view == null) {
 
-            holder = new ViewHolder();
-            if (messages.get(i).fromId == id_owner_user) {
-                view = inflater.inflate(R.layout.list_item_message_type_text_from_me, null);
-            } else {
-                view = inflater.inflate(R.layout.list_item_message_type_text_to_me, null);
+            switch (type) {
+                case TYPE_ITEM_FROM_ME:
+                    view = inflater.inflate(R.layout.list_item_message_type_text_from_me, null);
+                    break;
+                case TYPE_ITEM_TO_ME:
+                    view = inflater.inflate(R.layout.list_item_message_type_text_to_me, null);
+                    break;
             }
 
-
+            holder = new ViewHolder();
             holder.user_photo = (ImageView) view
                     .findViewById(R.id.img_user_photo);
             holder.txt_message = (TextView) view.findViewById(R.id.txt_message);

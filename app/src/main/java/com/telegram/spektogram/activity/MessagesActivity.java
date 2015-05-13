@@ -147,27 +147,27 @@ public class MessagesActivity extends ActionBarActivity implements View.OnClickL
 
     public void getMessagesByIdUsers(ArrayList<Integer> users, long chat_id) {
 
-        for (int id : id_users)
-            ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChatHistory(chat_id, id, 0, 50), new Client.ResultHandler() {
+//        for (int id : id_users)
+        ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChatHistory(chat_id, users.get(0), 0, 50), new Client.ResultHandler() {
 
-                @Override
-                public void onResult(TdApi.TLObject object) {
-                    TdApi.Messages mes = (TdApi.Messages) object;
+            @Override
+            public void onResult(TdApi.TLObject object) {
+                TdApi.Messages mes = (TdApi.Messages) object;
 
-                    if (mes != null && mes.messages != null) {
-                        messages.addAll(Arrays.asList(mes.messages));
+                if (mes != null && mes.messages != null) {
+                    messages.addAll(Arrays.asList(mes.messages));
 
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                adapter.setMessages(messages);
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.setMessages(messages);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
                 }
-            });
+            }
+        });
     }
 
 

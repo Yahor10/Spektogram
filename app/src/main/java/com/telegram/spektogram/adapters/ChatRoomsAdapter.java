@@ -33,6 +33,12 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
         this.inflater = inflater;
         this.context = context;
         this.chats = chats;
+        Collections.sort(this.chats, new Comparator<TdApi.Chat>() {
+            @TargetApi(Build.VERSION_CODES.KITKAT)
+            public int compare(TdApi.Chat s1, TdApi.Chat s2) {
+                return Integer.compare(s2.topMessage.date, s1.topMessage.date);
+            }
+        });
 
     }
 
@@ -46,7 +52,7 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
         Collections.sort(this.chats, new Comparator<TdApi.Chat>() {
             @TargetApi(Build.VERSION_CODES.KITKAT)
             public int compare(TdApi.Chat s1, TdApi.Chat s2) {
-                return Integer.compare(s1.topMessage.date, s2.topMessage.date);
+                return Integer.compare(s2.topMessage.date, s1.topMessage.date);
             }
         });
     }
@@ -57,7 +63,7 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
         Collections.sort(this.chats, new Comparator<TdApi.Chat>() {
             @TargetApi(Build.VERSION_CODES.KITKAT)
             public int compare(TdApi.Chat s1, TdApi.Chat s2) {
-                return Integer.compare(s1.topMessage.date, s2.topMessage.date);
+                return Integer.compare(s2.topMessage.date, s1.topMessage.date);
             }
         });
     }
@@ -149,6 +155,8 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
 
             if (chat.type instanceof TdApi.GroupChatInfo) {
                 chat_name.setText(((TdApi.GroupChatInfo) chat.type).groupChat.title);
+            }else if (chat.type instanceof TdApi.PrivateChatInfo){
+                chat_name.setText(((TdApi.PrivateChatInfo) chat.type).user.firstName);
             }
 
             if (chat.topMessage.message instanceof TdApi.MessageText) {
