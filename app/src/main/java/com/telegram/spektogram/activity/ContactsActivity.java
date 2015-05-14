@@ -40,20 +40,17 @@ import com.telegram.spektogram.contacts.AllContactsFragment;
 import com.telegram.spektogram.contacts.Contact;
 import com.telegram.spektogram.contacts.ContactsAdapter;
 import com.telegram.spektogram.contacts.TelegramContactsFragment;
-import com.telegram.spektogram.enums.ContactType;
 import com.telegram.spektogram.preferences.PreferenceUtils;
 
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ContactsActivity extends ActionBarActivity implements Client.ResultHandler, AdapterView.OnItemClickListener, ViewTreeObserver.OnGlobalLayoutListener {
-    ArrayList<Contact> listContacts;
-    ListView lvContacts;
+    
     private Map<String, TdApi.User> userMap = null;
     public static String EXTRA_TELEGRAM = "EXTRA_TELEGRAM";
     public static String EXTRA_NEW_GROUP = "EXTRA_NEW_GROUP";
@@ -106,12 +103,15 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         final String nameGroup = editText.getText().toString();
-                        SparseBooleanArray checked = lvContacts.getCheckedItemPositions();
-                        int ids[] = new int[checked.size()];
+                        final TelegramContactsFragment item = (TelegramContactsFragment) fragmentPagerAdapter.getItem(1);
+                        final ListView list = item.getList();
+                        final SparseBooleanArray checked = list.getCheckedItemPositions();
+
                         if (checked != null) {
+                            int ids[] = new int[checked.size()];
                             for (int i = 0; i < checked.size(); i++) {
                                 final int keyAt = checked.keyAt(i);
-                                ContactsAdapter adapter = (ContactsAdapter) getLvContacts().getAdapter();
+                                ContactsAdapter adapter = (ContactsAdapter) list.getAdapter();
                                 final Contact contact = adapter.getItem(keyAt);
                                 final TdApi.User user = contact.getUser();
                                 ids[i] = user.id;
@@ -328,17 +328,13 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        ContactsAdapter adapter = (ContactsAdapter) getLvContacts().getAdapter();
-
-        final Contact item = adapter.getItem(position);
-        if (item.getType() == ContactType.Action && item.name.equals(getString(R.string.create_new_group))) {
-            startActivity(ContactsActivity.buildStartIntent(this, true, true,false));
-        }
-        adapter.notifyDataSetChanged();
-    }
-
-    public ListView getLvContacts() {
-        return lvContacts;
+//        ContactsAdapter adapter = (ContactsAdapter) getLvContacts().getAdapter();
+//
+//        final Contact item = adapter.getItem(position);
+//        if (item.getType() == ContactType.Action && item.name.equals(getString(R.string.create_new_group))) {
+//            startActivity(ContactsActivity.buildStartIntent(this, true, true,false));
+//        }
+//        adapter.notifyDataSetChanged();
     }
 
     @Override
