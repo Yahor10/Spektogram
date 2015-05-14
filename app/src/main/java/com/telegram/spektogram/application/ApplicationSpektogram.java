@@ -114,8 +114,6 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
 
         }else if(object instanceof TdApi.UpdateChatTitle){
 
-        }else if(object instanceof TdApi.UpdateFile){
-            updateFile((TdApi.UpdateFile)object);
         }else if(object instanceof TdApi.UpdateDeleteMessages){
 
         }else if(object instanceof TdApi.UpdateUserPhoneNumber){
@@ -273,7 +271,7 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
         }
     }
 
-    public void sendChatMessageFunction(int chatId, TdApi.InputMessageContent inputMessageContent, Client.ResultHandler handler) {
+    public void sendChatMessageFunction(long chatId, TdApi.InputMessageContent inputMessageContent, Client.ResultHandler handler) {
         if (!PreferenceUtils.isOfflineMode(this)) {
 //            client = getClient();
             final TdApi.SendMessage function = new TdApi.SendMessage(chatId, inputMessageContent);
