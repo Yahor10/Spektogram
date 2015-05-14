@@ -92,6 +92,48 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         }
     };
 
+    protected void showInputDialog() {
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View promptView = layoutInflater.inflate(R.layout.alert_dialog_group_name, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setView(promptView);
+        final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        nameGroup = editText.getText().toString();
+                        SparseBooleanArray checked = lvContacts.getCheckedItemPositions();
+                        int ids[] = new int[checked.size()];
+                        if (checked != null) {
+                            for (int i = 0; i < checked.size(); i++) {
+                                final int keyAt = checked.keyAt(i);
+                                ContactsAdapter adapter = (ContactsAdapter) getLvContacts().getAdapter();
+                                final Contact contact = adapter.getItem(keyAt);
+                                final TdApi.User user = contact.getUser();
+                                ids[i] = user.id;
+                            }
+                            ApplicationSpektogram.getApplication(ContactsActivity.this).getClient().send(new TdApi.CreateGroupChat(ids, nameGroup),
+                                    new Client.ResultHandler() {
+                                        @Override
+                                        public void onResult(TdApi.TLObject object) {
+                                            Log.v(Constants.LOG_TAG, "CreateGroupChat" + object);
+                                        }
+                                    });
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+
+
     private final BroadcastReceiver updateUserNameReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, Intent intent) {
@@ -235,24 +277,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
 
         switch (id) {
             case R.id.action_accept:
-                SparseBooleanArray checked = lvContacts.getCheckedItemPositions();
-                if (checked != null) {
-                    int ids[] = new int[checked.size()];
-                    for (int i = 0; i < checked.size(); i++) {
-                        final int keyAt = checked.keyAt(i);
-                        ContactsAdapter adapter = (ContactsAdapter) getLvContacts().getAdapter();
-                        final Contact contact = adapter.getItem(keyAt);
-                        final TdApi.User user = contact.getUser();
-                        ids[i] = user.id;
-                    }
-
-                    ApplicationSpektogram.getApplication(this).getClient().send(new TdApi.CreateGroupChat(ids, "test group chat"), new Client.ResultHandler() {
-                        @Override
-                        public void onResult(TdApi.TLObject object) {
-                            Log.v(Constants.LOG_TAG, "CreateGroupChat" + object);
-                        }
-                    });
-                }
+                showInputDialog();
                 break;
         }
 
