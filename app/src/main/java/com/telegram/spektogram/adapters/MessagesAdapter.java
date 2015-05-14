@@ -2,6 +2,8 @@ package com.telegram.spektogram.adapters;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -11,7 +13,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.application.ApplicationSpektogram;
 
@@ -210,26 +211,30 @@ public class MessagesAdapter extends BaseAdapter {
                     int id_file = 0;
 
                     if (((TdApi.MessagePhoto) message.message).photo.photos[0].photo instanceof TdApi.FileLocal) {
-                        id_file = ((TdApi.FileLocal) ((TdApi.MessagePhoto) message.message).photo.photos[0].photo).id;
-
                         String url = ((TdApi.FileLocal) ((TdApi.MessagePhoto) message.message).photo.photos[0].photo).path;
-                        Picasso.with(context).load(url).into(img_photo_message);
+
+
+                        final Bitmap bitmapFromMemCache = ApplicationSpektogram.getApplication(context).getBitmapFromMemCache(url);
+                        if (bitmapFromMemCache != null) {
+                            img_photo_message.setImageBitmap(bitmapFromMemCache);
+                        } else {
+                            final Bitmap bitmap = BitmapFactory.decodeFile(url);
+                            final ApplicationSpektogram application = ApplicationSpektogram.getApplication(context);
+                            application.addBitmapToMemoryCache(url, bitmap);
+                            img_photo_message.setImageBitmap(bitmap);
+                        }
+
+
                     } else if (((TdApi.MessagePhoto) message.message).photo.photos[0].photo instanceof TdApi.FileEmpty) {
                         id_file = ((TdApi.FileEmpty) ((TdApi.MessagePhoto) message.message).photo.photos[0].photo).id;
+                        ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.DownloadFile(id_file), new Client.ResultHandler() {
+                            @Override
+                            public void onResult(TdApi.TLObject object) {
+
+                            }
+                        });
 
                     }
-
-
-                    ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.DownloadFile(id_file), new Client.ResultHandler() {
-
-                        @Override
-                        public void onResult(TdApi.TLObject object) {
-
-                            object.toString();
-
-
-                        }
-                    });
 
 
                 } else {
@@ -247,4 +252,8 @@ public class MessagesAdapter extends BaseAdapter {
             }
         }
     }
+
+
+
+
 }
