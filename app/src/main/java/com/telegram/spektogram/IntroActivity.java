@@ -55,7 +55,7 @@ public class IntroActivity extends Activity {
             }else{
                 i = ChatRoomActivity.buildStartIntent(baseContext);
             }
-//            startActivity(MainActivity.buildStartIntent(baseContext));
+
             startActivity(i);
             // close this activity
 

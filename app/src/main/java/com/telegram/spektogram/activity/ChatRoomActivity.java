@@ -144,7 +144,7 @@ public class ChatRoomActivity extends ActionBarActivity
 
 //                startActivityForResult(intent, 1);
 
-                startActivity(ContactsActivity.buildStartIntent(getApplicationContext(),true,false,true));
+//                startActivity(ContactsActivity.buildStartIntent(getApplicationContext(),true,false,true));
 
             }
         });

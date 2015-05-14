@@ -4,6 +4,8 @@ package com.telegram.spektogram.application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.support.v4.util.LruCache;
 import android.util.Log;
 
 import com.telegram.spektogram.R;
@@ -21,21 +23,50 @@ import java.io.File;
  */
 public class ApplicationSpektogram extends android.app.Application implements Client.ResultHandler {
 
+    private LruCache<String, Bitmap> mMemoryCache;
+
     private Client client;
 
     final static public String BROADCAST_UPDATE_USER_NUMBER = "BROADCAST_UPDATE_USER_NUMBER";
     final static public String BROADCAST_UPDATE_USER_PHOTO = "BROADCAST_UPDATE_USER_PHOTO";
     final static public String BROADCAST_UPDATE_USER_NAME = "BROADCAST_UPDATE_USER_NAME";
     final static public String BROADCAST_UPDATE_USER_STATUS = "BROADCAST_UPDATE_USER_STATUS";
+    final static public String BROADCAST_UPDATE_FILE_PROGGRESS = "BROADCAST_UPDATE_FILE_PROGGRESS";
+    final static public String BROADCAST_UPDATE_FILE_DOWNLOADED = "BROADCAST_UPDATE_FILE_DOWNLOADED";
+
+    final static public String BROADCAST_UPDATE_USER_TYPING = "BROADCAST_UPDATE_USER_TYPING";
 
 
     public static TdApi.Chat chat; // kostil'
 
     final static public  String EXTRA_UPDATE_USER_ID = "EXTRA_UPDATE_USER_ID";
+    final static public  String EXTRA_UPDATE_FILE_ID = "EXTRA_UPDATE_FILE_ID";
+    final static public  String EXTRA_UPDATE_FILE_SIZE= "EXTRA_UPDATE_FILE_SIZE";
+
     @Override
     public void onCreate() {
         super.onCreate();
+        createLruCache();
+
+
         startTelegramApi();
+    }
+
+    private void createLruCache() {
+        // int in its constructor.
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+
+        // Use 1/8th of the available memory for this memory cache.
+        final int cacheSize = maxMemory / 8;
+
+        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                // The cache size will be measured in kilobytes rather than
+                // number of items.
+                return bitmap.getByteCount() / 1024;
+            }
+        };
     }
 
     private void startTelegramApi() {
@@ -73,9 +104,12 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
     public void onResult(TdApi.TLObject object) {
         Log.i(Constants.LOG_TAG, "ApplicationSpektogram onResult update:" + object);
 
-        if(object instanceof TdApi.UpdateNewMessage){
+        if(object instanceof TdApi.UpdateNewMessage) {
             TdApi.UpdateNewMessage newMessage = (TdApi.UpdateNewMessage) object;
             updateNewMessage(newMessage);
+
+        }else if(object instanceof TdApi.UpdateUserAction){
+
         }else if(object instanceof TdApi.UpdateUserStatus){
 
         }else if(object instanceof TdApi.UpdateChatTitle){
@@ -96,6 +130,18 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
         }else if(object instanceof TdApi.UpdateNewAuthorization){
             TdApi.UpdateNewAuthorization newAuthorization = (TdApi.UpdateNewAuthorization) object;
             updateNewAuth(newAuthorization);
+        }else if(object instanceof TdApi.UpdateFile){
+            TdApi.UpdateFile file = (TdApi.UpdateFile) object;
+            Log.v(Constants.LOG_TAG,"UpdateFile");
+            sendBroadcast(new Intent(BROADCAST_UPDATE_FILE_DOWNLOADED));
+        }else if(object instanceof TdApi.UpdateFileProgress){
+            Log.v(Constants.LOG_TAG,"UpdateFileProgress");
+            TdApi.UpdateFileProgress progress = (TdApi.UpdateFileProgress) object;
+            int id = progress.fileId;
+            int percent = progress.ready / progress.size;
+        }else if(object instanceof TdApi.UpdateUserPhoto){
+            TdApi.UpdateUserPhoto photo = (TdApi.UpdateUserPhoto) object;
+            sendBroadcast(new Intent(BROADCAST_UPDATE_USER_PHOTO));
         }
     }
 
@@ -206,6 +252,16 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
             client = TG.getClientInstance();
         }
         return client;
+    }
+
+    public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+        if (getBitmapFromMemCache(key) == null) {
+            mMemoryCache.put(key, bitmap);
+        }
+    }
+
+    public Bitmap getBitmapFromMemCache(String key) {
+        return mMemoryCache.get(key);
     }
 
     public void sendFunction(TdApi.TLFunction func, Client.ResultHandler handler) {
