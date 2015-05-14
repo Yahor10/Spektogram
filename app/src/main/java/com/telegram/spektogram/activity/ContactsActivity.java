@@ -1,8 +1,10 @@
 package com.telegram.spektogram.activity;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -20,12 +22,14 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -101,7 +105,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        nameGroup = editText.getText().toString();
+                        final String nameGroup = editText.getText().toString();
                         SparseBooleanArray checked = lvContacts.getCheckedItemPositions();
                         int ids[] = new int[checked.size()];
                         if (checked != null) {
