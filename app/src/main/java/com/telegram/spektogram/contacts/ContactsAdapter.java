@@ -3,7 +3,7 @@ package com.telegram.spektogram.contacts;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.util.Log;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +16,9 @@ import android.widget.TextView;
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.activity.ContactsActivity;
 import com.telegram.spektogram.application.ApplicationSpektogram;
-import com.telegram.spektogram.application.Constants;
 import com.telegram.spektogram.enums.ContactType;
 
+import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.text.SimpleDateFormat;
@@ -33,6 +33,12 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
     private final boolean mNewGroup;
     private final boolean mNewMessage;
     private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
+
+    final Client.ResultHandler emptyHandler = new Client.ResultHandler() {
+        @Override
+        public void onResult(TdApi.TLObject object) {
+        }
+    };
 
     public ContactsAdapter(Context context, ArrayList<Contact> contacts, ListView list) {
         super(context, 0, contacts);
@@ -61,7 +67,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item
-        Contact contact = getItem(position);
+        final Contact contact = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         View view = convertView;
 
@@ -127,21 +133,34 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
                     viewContactTelegramHolder.checkBox.setVisibility(View.GONE);
                 }
 
+                int Id = contact.getUser().id;
+                final Context context = getContext();
+                ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.GetUser(Id), new Client.ResultHandler() {
+                    @Override
+                    public void onResult(TdApi.TLObject object) {
+                        if (object instanceof TdApi.User) {
+                            contact.setUser((TdApi.User) object);
+                        }
+                    }
+                });
+
                 final TdApi.User user = contact.getUser();
-                Log.v(Constants.LOG_TAG,"cache user" +user);
                 final TdApi.File photoSmall = user.photoSmall;
+
                 if(photoSmall instanceof TdApi.FileLocal) {
                     TdApi.FileLocal local = (TdApi.FileLocal) photoSmall;
-                    Log.v(Constants.LOG_TAG,"cache local" +local);
-                    final Bitmap bitmapFromMemCache = ApplicationSpektogram.getApplication(getContext()).getBitmapFromMemCache(local.path);
-                    Log.v(Constants.LOG_TAG,"cache item" + local.path);
+                    final Bitmap bitmapFromMemCache = ApplicationSpektogram.getApplication(context).getBitmapFromMemCache(local.path);
                     if(bitmapFromMemCache != null){
                         viewContactTelegramHolder.imageView.setImageBitmap(bitmapFromMemCache);
                     }else{
-                        viewContactTelegramHolder.imageView.setImageResource(R.drawable.user_photo);
+                        final Bitmap bitmap = BitmapFactory.decodeFile(local.path);
+                        final ApplicationSpektogram application = ApplicationSpektogram.getApplication(context);
+                        application.addBitmapToMemoryCache(local.path,bitmap);
+                        viewContactTelegramHolder.imageView.setImageBitmap(bitmap);
                     }
                 }else if(photoSmall instanceof TdApi.FileEmpty){
                     viewContactTelegramHolder.imageView.setImageResource(R.drawable.user_photo);
+                    ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.DownloadFile(((TdApi.FileEmpty) photoSmall).id), emptyHandler);
                 }
 
                 final TdApi.UserStatus status = user.status;

@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -36,6 +35,7 @@ import com.telegram.spektogram.application.Constants;
 import com.telegram.spektogram.contacts.AllContactsFragment;
 import com.telegram.spektogram.contacts.Contact;
 import com.telegram.spektogram.contacts.ContactsAdapter;
+import com.telegram.spektogram.contacts.TelegramContactsFragment;
 import com.telegram.spektogram.enums.ContactType;
 import com.telegram.spektogram.preferences.PreferenceUtils;
 
@@ -51,17 +51,33 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
     ArrayList<Contact> listContacts;
     ListView lvContacts;
     private Map<String, TdApi.User> userMap = null;
-    private ContactsAdapter adapterContacts;
     public static String EXTRA_TELEGRAM = "EXTRA_TELEGRAM";
     public static String EXTRA_NEW_GROUP = "EXTRA_NEW_GROUP";
     public static String EXTRA_NEW_MESSAGE = "EXTRA_NEW_MESSAGE";
 
+   private final BroadcastReceiver fileDownloadReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, Intent intent) {
+            if(fragmentPagerAdapter != null){
+                Log.v(Constants.LOG_TAG,"fileDownloadReceiver ...");
+                reloadContacts(context);
+            }
+        }
+    };
+
+    private void reloadContacts(Context context) {
+        final AllContactsFragment item1 = (AllContactsFragment) fragmentPagerAdapter.getItem(0);
+        item1.loadContacts(context);
+
+        final TelegramContactsFragment item2= (TelegramContactsFragment) fragmentPagerAdapter.getItem(1);
+        item2.loadTelegramContacts(context);
+    }
 
     private final BroadcastReceiver updateStatusReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, Intent intent) {
             final int id = intent.getIntExtra(ApplicationSpektogram.EXTRA_UPDATE_USER_ID, -1);
-            final TdApi.GetUserFull func = new TdApi.GetUserFull(id);
+            final TdApi.GetUser func = new TdApi.GetUser(id);
             ApplicationSpektogram.getApplication(context).sendFunction(func, new Client.ResultHandler() {
                 @Override
                 public void onResult(TdApi.TLObject object) {
@@ -69,7 +85,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
                         TdApi.User user = (TdApi.User) object;
                         userMap.remove(user.phoneNumber);
                         userMap.put(user.phoneNumber, user);
-//                        loadContacts();
+                        reloadContacts(context);
                     }
                 }
             });
@@ -78,9 +94,9 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
 
     private final BroadcastReceiver updateUserNameReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, Intent intent) {
             final int id = intent.getIntExtra(ApplicationSpektogram.EXTRA_UPDATE_USER_ID, -1);
-            final TdApi.GetUserFull func = new TdApi.GetUserFull(id);
+            final TdApi.GetUser func = new TdApi.GetUser(id);
             ApplicationSpektogram.getApplication(context).sendFunction(func, new Client.ResultHandler() {
                 @Override
                 public void onResult(TdApi.TLObject object) {
@@ -88,7 +104,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
                         TdApi.User user = (TdApi.User) object;
                         userMap.remove(user.phoneNumber);
                         userMap.put(user.phoneNumber, user);
-//                        loadContacts();
+                        reloadContacts(context);
                     }
                 }
             });
@@ -96,6 +112,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
     };
     private ViewPager mPager;
     private FragmentManager fm;
+    private MyFragmentPagerAdapter fragmentPagerAdapter;
 
     public static Intent buildStartIntent(Context context, boolean onlyTelegram) {
         final Intent intent = new Intent(context, ContactsActivity.class);
@@ -122,18 +139,15 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         /** Getting a reference to FragmentManager */
         fm = getSupportFragmentManager();
 
-
-//        lvContacts = (ListView) findViewById(R.id.lvContacts);
-//        lvContacts.setOnItemClickListener(this);
-//        lvContacts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-//
         boolean onlyTelegram = getIntent().getBooleanExtra(EXTRA_TELEGRAM, false);
 //
+        /** Setting the FragmentPagerAdapter object to the viewPager object */
         if (PreferenceUtils.isOfflineMode(getBaseContext())) {
+            mPager.setAdapter(fragmentPagerAdapter);
             if (onlyTelegram) {
-
+                mPager.setCurrentItem(1);
             } else {
-
+                mPager.setCurrentItem(0);
             }
         } else {
             Log.v(Constants.LOG_TAG,"launch contact request...");
@@ -146,6 +160,8 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         super.onStart();
         registerReceiver(updateStatusReceiver, new IntentFilter(ApplicationSpektogram.BROADCAST_UPDATE_USER_STATUS));
         registerReceiver(updateUserNameReceiver, new IntentFilter(ApplicationSpektogram.BROADCAST_UPDATE_USER_NAME));
+        registerReceiver(fileDownloadReceiver, new IntentFilter(ApplicationSpektogram.BROADCAST_UPDATE_FILE_DOWNLOADED));
+        registerReceiver(fileDownloadReceiver, new IntentFilter(ApplicationSpektogram.BROADCAST_UPDATE_USER_PHOTO));
     }
 
     @Override
@@ -154,6 +170,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         try {
             unregisterReceiver(updateStatusReceiver);
             unregisterReceiver(updateUserNameReceiver);
+            unregisterReceiver(fileDownloadReceiver);
         } catch (Exception e) {
         }
     }
@@ -197,34 +214,6 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         }
         tv.setText(ss1);
     }
-
-//    private void loadContacts() {
-//        final ContactFetcher contactFetcher = new ContactFetcher(ContactsActivity.this, userMap);
-//
-//        List<Contact> actions = new ArrayList<Contact>(3);
-//        final Contact object = new Contact("-1", getString(R.string.create_new_group), ContactType.Action);
-//        actions.add(object);
-//
-//        listContacts = contactFetcher.fetchAll(actions);
-//        adapterContacts = new ContactsAdapter(ContactsActivity.this, listContacts, list);
-//        lvContacts.setAdapter(adapterContacts);
-//
-//    }
-//
-//    private void loadTelegramContacts() {
-//        boolean createNewGroup = getIntent().getBooleanExtra(EXTRA_NEW_GROUP, false);
-//
-//        List<Contact> actions = new ArrayList<Contact>(3);
-//
-//        if (createNewGroup) {
-//            actions.clear();
-//        }
-//
-//        final ContactFetcher contactFetcher = new ContactFetcher(this, userMap);
-//        ArrayList<Contact> listContacts = contactFetcher.fetchTelegramContacts(null);
-//        ContactsAdapter adapterContacts = new ContactsAdapter(this, listContacts, list);
-//        lvContacts.setAdapter(adapterContacts);
-//
 //    }
 
     @Override
@@ -247,8 +236,8 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         switch (id) {
             case R.id.action_accept:
                 SparseBooleanArray checked = lvContacts.getCheckedItemPositions();
-                int ids[] = new int[checked.size()];
                 if (checked != null) {
+                    int ids[] = new int[checked.size()];
                     for (int i = 0; i < checked.size(); i++) {
                         final int keyAt = checked.keyAt(i);
                         ContactsAdapter adapter = (ContactsAdapter) getLvContacts().getAdapter();
@@ -284,40 +273,20 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
             }
 
             final Collection<TdApi.User> values = userMap.values();
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-            for (TdApi.User user : values) {
-                final TdApi.File fileSmall = user.photoSmall;
-                if(fileSmall instanceof TdApi.FileEmpty) {
-                    final TdApi.FileEmpty photoSmall = (TdApi.FileEmpty) fileSmall;
-                    if(photoSmall.id != 0) {
-                        ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.DownloadFile(photoSmall.id), ContactsActivity.this);
-                    }
-                }else if(fileSmall instanceof TdApi.FileLocal){
-                    TdApi.FileLocal file = (TdApi.FileLocal) fileSmall;
-                    ApplicationSpektogram.getApplication(getBaseContext()).addBitmapToMemoryCache(file.path, BitmapFactory.decodeFile(file.path));
-                }
-            }
-            }
-        });
-
             Log.v(Constants.LOG_TAG, "hash map" + userMap);
+
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    fragmentPagerAdapter = new MyFragmentPagerAdapter(fm);
+                    mPager.setAdapter(fragmentPagerAdapter);
                     if (!isDestroyed()) {
-
-                        MyFragmentPagerAdapter fragmentPagerAdapter = new MyFragmentPagerAdapter(fm);
-                        /** Setting the FragmentPagerAdapter object to the viewPager object */
-                        mPager.setAdapter(fragmentPagerAdapter);
-//                    boolean onlyTelegram = getIntent().getBooleanExtra(EXTRA_TELEGRAM, false);
-//                    if (onlyTelegram) {
-//                        loadTelegramContacts();
-//                    } else {
-//                        loadContacts();
-//                    }
+                        boolean onlyTelegram = getIntent().getBooleanExtra(EXTRA_TELEGRAM, false);
+                        if (onlyTelegram) {
+                            mPager.setCurrentItem(1);
+                        } else {
+                            mPager.setCurrentItem(0);
+                    }
                     }
 
                 }
@@ -348,9 +317,11 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
 
     }
 
-    public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
+    public final class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
         final int PAGE_COUNT = 2;
+        private AllContactsFragment fragment1;
+        private TelegramContactsFragment fragment2;
 
         /** Constructor of the class */
         public MyFragmentPagerAdapter(FragmentManager fm) {
@@ -365,12 +336,16 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
 
                 /** tab1 is selected */
                 case 0:
-                    AllContactsFragment fragment1 = new AllContactsFragment(userMap);
+                    if(fragment1 == null) {
+                        fragment1 = new AllContactsFragment(userMap);
+                    }
                     return fragment1;
 
                 /** tab2 is selected */
                 case 1:
-                    AllContactsFragment fragment2 = new AllContactsFragment(userMap);
+                    if(fragment2 == null) {
+                        fragment2 = new TelegramContactsFragment(userMap);
+                    }
                     return fragment2;
             }
             return null;
@@ -382,7 +357,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
                 case 0:
                     return "All contacts";
                 case 1:
-                    return "Tab Two";
+                    return "Only Telegram";
             }
 
             return null;

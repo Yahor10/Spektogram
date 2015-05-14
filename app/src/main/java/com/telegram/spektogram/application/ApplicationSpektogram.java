@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 
@@ -34,6 +33,8 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
     final static public String BROADCAST_UPDATE_USER_STATUS = "BROADCAST_UPDATE_USER_STATUS";
     final static public String BROADCAST_UPDATE_FILE_PROGGRESS = "BROADCAST_UPDATE_FILE_PROGGRESS";
     final static public String BROADCAST_UPDATE_FILE_DOWNLOADED = "BROADCAST_UPDATE_FILE_DOWNLOADED";
+
+    final static public String BROADCAST_UPDATE_USER_TYPING = "BROADCAST_UPDATE_USER_TYPING";
 
 
     public static TdApi.Chat chat; // kostil'
@@ -103,9 +104,12 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
     public void onResult(TdApi.TLObject object) {
         Log.i(Constants.LOG_TAG, "ApplicationSpektogram onResult update:" + object);
 
-        if(object instanceof TdApi.UpdateNewMessage){
+        if(object instanceof TdApi.UpdateNewMessage) {
             TdApi.UpdateNewMessage newMessage = (TdApi.UpdateNewMessage) object;
             updateNewMessage(newMessage);
+
+        }else if(object instanceof TdApi.UpdateUserAction){
+
         }else if(object instanceof TdApi.UpdateUserStatus){
 
         }else if(object instanceof TdApi.UpdateChatTitle){
@@ -127,9 +131,7 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
         }else if(object instanceof TdApi.UpdateFile){
             TdApi.UpdateFile file = (TdApi.UpdateFile) object;
             Log.v(Constants.LOG_TAG,"UpdateFile");
-            final String path = file.path;
-            final Bitmap bitmap = BitmapFactory.decodeFile(path);
-            addBitmapToMemoryCache(path,bitmap);
+            sendBroadcast(new Intent(BROADCAST_UPDATE_FILE_DOWNLOADED));
         }else if(object instanceof TdApi.UpdateFileProgress){
             Log.v(Constants.LOG_TAG,"UpdateFileProgress");
             TdApi.UpdateFileProgress progress = (TdApi.UpdateFileProgress) object;
@@ -137,6 +139,7 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
             int percent = progress.ready / progress.size;
         }else if(object instanceof TdApi.UpdateUserPhoto){
             TdApi.UpdateUserPhoto photo = (TdApi.UpdateUserPhoto) object;
+            sendBroadcast(new Intent(BROADCAST_UPDATE_USER_PHOTO));
         }
     }
 

@@ -57,5 +57,6 @@
     <string name="change_chat_background">Change chat background</string>
     <string name="title_activity_select_background">SelectBackgroundActivity</string>
 
+    <string name="clear_chat_history">Clear chat history</string>
 
 </resources>

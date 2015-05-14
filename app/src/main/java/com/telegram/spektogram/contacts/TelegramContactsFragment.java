@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.telegram.spektogram.R;
-import com.telegram.spektogram.enums.ContactType;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 
@@ -21,13 +20,14 @@ import java.util.Map;
 /**
  * Created by ychabatarou on 13.05.2015.
  */
-public class AllContactsFragment extends Fragment {
+public class TelegramContactsFragment extends Fragment {
 
     private ListView list;
     private ContactsAdapter adapterContacts;
     private Map<String, TdApi.User> userMap;
 
-    public AllContactsFragment(Map<String, TdApi.User> userMap) {
+
+    public TelegramContactsFragment(Map<String, TdApi.User> userMap) {
         this.userMap = userMap;
     }
 
@@ -40,36 +40,32 @@ public class AllContactsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflate = inflater.inflate(R.layout.fragment_contacts, null);
         list  = (ListView) inflate.findViewById(R.id.lvContacts);
-        this.list.setEmptyView(inflater.inflate(R.layout.view_empty,null));
+//        this.listView.setEmptyView(findViewById(R.id.emptyElement));
         list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        loadContacts();
+        loadTelegramContacts();
         return inflate;
     }
 
 
-    private void loadContacts() {
+//
+    private void loadTelegramContacts() {
         final FragmentActivity activity = getActivity();
         final ContactFetcher contactFetcher = new ContactFetcher(activity, userMap);
 
         List<Contact> actions = new ArrayList<Contact>(3);
-        final Contact object = new Contact("-1", getString(R.string.create_new_group), ContactType.Action);
-        actions.add(object);
 
-        ArrayList<Contact> listContacts = contactFetcher.fetchAll(actions);
+        ArrayList<Contact> listContacts = contactFetcher.fetchTelegramContacts(actions);
         adapterContacts = new ContactsAdapter(activity, listContacts,list);
         list.setAdapter(adapterContacts);
 
     }
 
-    public void loadContacts(Context context) {
-
+    public void loadTelegramContacts(Context context) {
         final ContactFetcher contactFetcher = new ContactFetcher(context, userMap);
 
         List<Contact> actions = new ArrayList<Contact>(3);
-        final Contact object = new Contact("-1", getString(R.string.create_new_group), ContactType.Action);
-        actions.add(object);
 
-        ArrayList<Contact> listContacts = contactFetcher.fetchAll(actions);
+        ArrayList<Contact> listContacts = contactFetcher.fetchTelegramContacts(actions);
         adapterContacts = new ContactsAdapter(context, listContacts,list);
         list.setAdapter(adapterContacts);
 

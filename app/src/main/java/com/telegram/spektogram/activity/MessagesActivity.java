@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.lamerman.FileDialog;
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.application.ApplicationSpektogram;
 import com.telegram.spektogram.views.PopupMenu;
@@ -171,7 +172,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_char_rooms, menu);
+        getMenuInflater().inflate(R.menu.menu_chat, menu);
         return true;
     }
 
@@ -229,7 +230,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                 startCameraActivityVideo();
                 break;
             case SEND_FILE:
-
+                startFileActivity();
                 break;
             case SEND_GEO_LOCATION:
                 getGeoLocation();
@@ -274,6 +275,20 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         startActivityForResult(cameraIntent, SEND_VIDEO);
+    }
+
+
+    private void startFileActivity() {
+        Intent intent = new Intent(getBaseContext(), FileDialog.class);
+        intent.putExtra(FileDialog.START_PATH, "/sdcard");
+
+        //can user select directories or not
+        intent.putExtra(FileDialog.CAN_SELECT_DIR, true);
+
+        //alternatively you can set file filter
+        //intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "png" });
+
+        startActivityForResult(intent, SEND_FILE);
     }
 
     @Override
