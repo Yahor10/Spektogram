@@ -160,7 +160,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
 
     public void getMessagesByIdUsers(ArrayList<Integer> users, long chat_id) {
 
-        for (int id : id_users)
+        for (int id : users)
             ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChatHistory(chat_id, id, 0, 50), new Client.ResultHandler() {
 
                 @Override
@@ -255,13 +255,27 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         return super.onOptionsItemSelected(item);
     }
 
+    public void addSendingMessageToListView(TdApi.InputMessageText inputMessageText) {
+        TdApi.Message message = new TdApi.Message();
+        message.fromId = PreferenceUtils.getMyUserId(getApplicationContext());
+        message.date = (int) System.currentTimeMillis();
+        message.chatId = chat.id;
+        message.message = new TdApi.MessageText();
+        ((TdApi.MessageText) message.message).text = inputMessageText.text;
+
+        adapter.addMessage(message);
+        adapter.notifyDataSetChanged();
+
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.send:
                 final TdApi.InputMessageText inputMessageText = new TdApi.InputMessageText(messageText.getText().toString());
 
-                ApplicationSpektogram.getApplication(this).sendChatMessageFunction(chat.id, inputMessageText, null);
+                addSendingMessageToListView(inputMessageText);
+//                ApplicationSpektogram.getApplication(this).sendChatMessageFunction(chat.id, inputMessageText, null);
                 break;
             case R.id.attach:
                 PopupMenu menu = new PopupMenu(this);

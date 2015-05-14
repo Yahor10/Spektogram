@@ -64,6 +64,19 @@ public class MessagesAdapter extends BaseAdapter {
         });
     }
 
+    public void addMessage(TdApi.Message message) {
+        if (message != null) {
+            this.messages.add(message);
+//            Collections.sort(this.messages, new Comparator<TdApi.Message>() {
+//                @TargetApi(Build.VERSION_CODES.KITKAT)
+//                public int compare(TdApi.Message s1, TdApi.Message s2) {
+//                    return Integer.compare(s1.date, s2.date);
+//                }
+//            });
+        }
+    }
+
+
     public void addMessages(ArrayList<TdApi.Messages> messageses) {
         this.messages.addAll(messages);
         Collections.sort(this.messages, new Comparator<TdApi.Message>() {
@@ -196,13 +209,13 @@ public class MessagesAdapter extends BaseAdapter {
                     txt_message.setVisibility(View.GONE);
                     int id_file = 0;
 
-                    if(((TdApi.MessagePhoto) message.message).photo.photos[0].photo instanceof TdApi.FileLocal){
-                        id_file = ((TdApi.FileLocal)((TdApi.MessagePhoto) message.message).photo.photos[0].photo).id;
+                    if (((TdApi.MessagePhoto) message.message).photo.photos[0].photo instanceof TdApi.FileLocal) {
+                        id_file = ((TdApi.FileLocal) ((TdApi.MessagePhoto) message.message).photo.photos[0].photo).id;
 
-                        String url =((TdApi.FileLocal)((TdApi.MessagePhoto) message.message).photo.photos[0].photo).path;
+                        String url = ((TdApi.FileLocal) ((TdApi.MessagePhoto) message.message).photo.photos[0].photo).path;
                         Picasso.with(context).load(url).into(img_photo_message);
-                    } else if(((TdApi.MessagePhoto) message.message).photo.photos[0].photo instanceof TdApi.FileEmpty){
-                        id_file = ((TdApi.FileEmpty)((TdApi.MessagePhoto) message.message).photo.photos[0].photo).id;
+                    } else if (((TdApi.MessagePhoto) message.message).photo.photos[0].photo instanceof TdApi.FileEmpty) {
+                        id_file = ((TdApi.FileEmpty) ((TdApi.MessagePhoto) message.message).photo.photos[0].photo).id;
 
                     }
 
@@ -229,7 +242,7 @@ public class MessagesAdapter extends BaseAdapter {
                 Date date = new Date();
                 date.setTime(message.date);
 
-                time_message.setText(df.format("hh:mm ", date));
+                time_message.setText(df.format("hh:mm", date));
 
             }
         }

@@ -56,12 +56,46 @@ public class ChatRoom extends Fragment implements Client.ResultHandler {
         return view;
     }
 
+// kostil'
+    int id_users = 1;
+
+
+    public void getMessagesByIdUsers(ArrayList<TdApi.Chat> chats) {
+
+        for (TdApi.Chat chat : chats){
+
+            if (chat.type instanceof TdApi.PrivateChatInfo) {
+                id_users = ((TdApi.PrivateChatInfo) chat.type).user.id;
+
+                ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.GetChatHistory(chat.id, id_users, 0, 50), new Client.ResultHandler() {
+
+                    @Override
+                    public void onResult(TdApi.TLObject object) {
+
+                    }
+                });
+
+            } else if (chat.type instanceof TdApi.GroupChatInfo) {
+                ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.GetChatHistory(chat.id, id_users, 0, 50), new Client.ResultHandler() {
+
+                    @Override
+                    public void onResult(TdApi.TLObject object) {
+
+                    }
+                });
+            }
+
+        }
+
+    }
+
     @Override
     public void onResult(TdApi.TLObject object) {
         TdApi.Chats chats = (TdApi.Chats) object;
 
         final TdApi.Chat[] arr = chats.chats;
         final ArrayList<TdApi.Chat> chatArrayList = new ArrayList<TdApi.Chat>(Arrays.asList(arr));
+
 
         final Activity activity = getActivity();
         activity.runOnUiThread(new Runnable() {
@@ -71,5 +105,6 @@ public class ChatRoom extends Fragment implements Client.ResultHandler {
                 chatslistView.setAdapter(adapter);
             }
         });
+        getMessagesByIdUsers(chatArrayList);
     }
 }

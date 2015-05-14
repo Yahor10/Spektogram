@@ -2,6 +2,8 @@ package com.telegram.spektogram.adapters;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.application.ApplicationSpektogram;
 
@@ -152,6 +153,7 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
 
 
             if (chat.type instanceof TdApi.GroupChatInfo) {
+                user_photo.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.user_photo));
                 chat_name.setText(((TdApi.GroupChatInfo) chat.type).groupChat.title);
                 background.setBackground(context.getResources().getDrawable(R.drawable.gradient_list_item_chat_room_blue));
             } else if (chat.type instanceof TdApi.PrivateChatInfo) {
@@ -160,13 +162,25 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
                 chat_name.setText(((TdApi.PrivateChatInfo) chat.type).user.firstName);
 
 
-                if (((TdApi.PrivateChatInfo) chat.type).user.photoBig instanceof TdApi.FileLocal) {
+                if (((TdApi.PrivateChatInfo) chat.type).user.photoSmall instanceof TdApi.FileLocal) {
 
-                    String url = ((TdApi.FileLocal) ((TdApi.PrivateChatInfo) chat.type).user.photoBig).path;
-                    Picasso.with(context).load(url).into(user_photo);
+                    String url = ((TdApi.FileLocal) ((TdApi.PrivateChatInfo) chat.type).user.photoSmall).path;
+
+                    final Bitmap bitmapFromMemCache = ApplicationSpektogram.getApplication(context).getBitmapFromMemCache(url);
+                    if (bitmapFromMemCache != null) {
+                        user_photo.setImageBitmap(bitmapFromMemCache);
+                    } else {
+                        final Bitmap bitmap = BitmapFactory.decodeFile(url);
+                        final ApplicationSpektogram application = ApplicationSpektogram.getApplication(context);
+                        application.addBitmapToMemoryCache(url, bitmap);
+                        user_photo.setImageBitmap(bitmap);
+                    }
+
                 } else if (((TdApi.PrivateChatInfo) chat.type).user.photoSmall instanceof TdApi.FileEmpty) {
+
+                    user_photo.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.user_photo));
                     int id_file = 0;
-                    id_file = ((TdApi.FileEmpty) ((TdApi.PrivateChatInfo) chat.type).user.photoBig).id;
+                    id_file = ((TdApi.FileEmpty) ((TdApi.PrivateChatInfo) chat.type).user.photoSmall).id;
 
                     MyClientHandlerUser myClientHandlerUser = new MyClientHandlerUser();
                     myClientHandlerUser.user = ((TdApi.PrivateChatInfo) chat.type).user;
@@ -198,7 +212,7 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
 
     public class MyClientHandlerUser implements Client.ResultHandler {
         public TdApi.User user = null;
-        View userPhoto = null;
+        ImageView userPhoto = null;
 
         @Override
         public void onResult(TdApi.TLObject object) {
@@ -211,12 +225,16 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
 
 
     public class MyClientHandlerView implements Client.ResultHandler {
-        View userPhoto = null;
+        ImageView userPhoto = null;
 
         @Override
         public void onResult(TdApi.TLObject object) {
             if (userPhoto != null) {
-                object.toString();
+                String url = ((TdApi.FileLocal) ((TdApi.User) object).photoSmall).path;
+                final Bitmap bitmap = BitmapFactory.decodeFile(url);
+                final ApplicationSpektogram application = ApplicationSpektogram.getApplication(context);
+                application.addBitmapToMemoryCache(url, bitmap);
+                userPhoto.setImageBitmap(bitmap);
             }
         }
     }
