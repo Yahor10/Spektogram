@@ -28,7 +28,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -49,7 +48,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ContactsActivity extends ActionBarActivity implements Client.ResultHandler, AdapterView.OnItemClickListener, ViewTreeObserver.OnGlobalLayoutListener {
+public class ContactsActivity extends ActionBarActivity implements Client.ResultHandler, ViewTreeObserver.OnGlobalLayoutListener {
     
     private Map<String, TdApi.User> userMap = null;
     public static String EXTRA_TELEGRAM = "EXTRA_TELEGRAM";
@@ -325,17 +324,6 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
 
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-//        ContactsAdapter adapter = (ContactsAdapter) getLvContacts().getAdapter();
-//
-//        final Contact item = adapter.getItem(position);
-//        if (item.getType() == ContactType.Action && item.name.equals(getString(R.string.create_new_group))) {
-//            startActivity(ContactsActivity.buildStartIntent(this, true, true,false));
-//        }
-//        adapter.notifyDataSetChanged();
-    }
 
     @Override
     public void onGlobalLayout() {

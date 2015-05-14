@@ -7,9 +7,12 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.telegram.spektogram.R;
+import com.telegram.spektogram.activity.ContactsActivity;
+import com.telegram.spektogram.enums.ContactType;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 
@@ -20,7 +23,7 @@ import java.util.Map;
 /**
  * Created by ychabatarou on 13.05.2015.
  */
-public class TelegramContactsFragment extends Fragment {
+public class TelegramContactsFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private ListView list;
     private ContactsAdapter adapterContacts;
@@ -40,8 +43,9 @@ public class TelegramContactsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflate = inflater.inflate(R.layout.fragment_contacts, null);
         list  = (ListView) inflate.findViewById(R.id.lvContacts);
-//        this.listView.setEmptyView(findViewById(R.id.emptyElement));
+        list.setEmptyView(inflater.inflate(R.layout.view_empty,null));
         list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        list.setOnItemClickListener(this);
         loadTelegramContacts();
         return inflate;
     }
@@ -74,4 +78,17 @@ public class TelegramContactsFragment extends Fragment {
     public ListView getList() {
         return list;
     }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        ContactsAdapter adapter = (ContactsAdapter) getList().getAdapter();
+
+        final Contact item = adapter.getItem(position);
+        if (item.getType() == ContactType.Action && item.name.equals(getString(R.string.create_new_group))) {
+            startActivity(ContactsActivity.buildStartIntent(getActivity(), true, true, false));
+        }
+        adapter.notifyDataSetChanged();
+    }
+
 }
