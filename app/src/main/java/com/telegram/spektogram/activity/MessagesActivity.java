@@ -91,6 +91,15 @@ public class MessagesActivity extends ActionBarActivity implements View.OnClickL
         adapter = new MessagesAdapter(getLayoutInflater(), getBaseContext());
         adapter.setId_owner_user(PreferenceUtils.getMyUserId(this));
 
+
+
+
+
+
+
+
+
+
         list.setAdapter(adapter);
 
         final TdApi.Chat chat = ApplicationSpektogram.chat;

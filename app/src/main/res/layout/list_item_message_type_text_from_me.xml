@@ -10,9 +10,9 @@
         android:id="@+id/img_user_photo"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:scaleType="centerCrop"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
         android:src="@drawable/user_photo" />
 
     <ImageView
@@ -33,8 +33,8 @@
             android:id="@+id/txt_message_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="23:13 PM"
             android:layout_gravity="top|right"
+            android:text="23:13 PM"
             android:textColor="@android:color/white" />
 
         <TextView
@@ -42,13 +42,22 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top|right"
-            android:layout_marginTop="20dp"
-            android:textSize="17sp"
             android:layout_marginLeft="40dp"
+            android:layout_marginTop="20dp"
             android:gravity="right"
             android:paddingRight="5dp"
             android:text="@string/message"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/img_message_photo"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="top|right"
+            android:layout_marginTop="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/user_photo" />
 
     </FrameLayout>
 

@@ -80,6 +80,8 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
 
         }else if(object instanceof TdApi.UpdateChatTitle){
 
+        }else if(object instanceof TdApi.UpdateFile){
+            updateFile((TdApi.UpdateFile)object);
         }else if(object instanceof TdApi.UpdateDeleteMessages){
 
         }else if(object instanceof TdApi.UpdateUserPhoneNumber){
@@ -111,6 +113,11 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
         });
 
         sendBroadcast(new Intent(BROADCAST_UPDATE_USER_NUMBER));
+    }
+
+
+    private void updateFile(final TdApi.UpdateFile file) {
+        file.toString();
     }
 
     private void updateUserName(final TdApi.UpdateUserName name) {

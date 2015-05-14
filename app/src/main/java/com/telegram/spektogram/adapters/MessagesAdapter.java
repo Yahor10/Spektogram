@@ -11,8 +11,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.telegram.spektogram.R;
+import com.telegram.spektogram.application.ApplicationSpektogram;
 
+import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.ArrayList;
@@ -151,6 +154,7 @@ public class MessagesAdapter extends BaseAdapter {
                     .findViewById(R.id.img_user_photo);
             holder.txt_message = (TextView) view.findViewById(R.id.txt_message);
             holder.time_message = (TextView) view.findViewById(R.id.txt_message_time);
+            holder.img_photo_message = (ImageView) view.findViewById(R.id.img_message_photo);
 
             view.setTag(holder);
 
@@ -172,6 +176,7 @@ public class MessagesAdapter extends BaseAdapter {
 
         TextView txt_message;
         TextView time_message;
+        ImageView img_photo_message;
 
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         public void setData(TdApi.Message message) {
@@ -181,7 +186,43 @@ public class MessagesAdapter extends BaseAdapter {
             if (message != null) {
                 if (message.message instanceof TdApi.MessageText) {
                     txt_message.setText(((TdApi.MessageText) message.message).text);
+
+                    img_photo_message.setVisibility(View.GONE);
+                    txt_message.setVisibility(View.VISIBLE);
+
+                } else if (message.message instanceof TdApi.MessagePhoto) {
+
+                    img_photo_message.setVisibility(View.VISIBLE);
+                    txt_message.setVisibility(View.GONE);
+                    int id_file = 0;
+
+                    if(((TdApi.MessagePhoto) message.message).photo.photos[0].photo instanceof TdApi.FileLocal){
+                        id_file = ((TdApi.FileLocal)((TdApi.MessagePhoto) message.message).photo.photos[0].photo).id;
+
+                        String url =((TdApi.FileLocal)((TdApi.MessagePhoto) message.message).photo.photos[0].photo).path;
+                        Picasso.with(context).load(url).into(img_photo_message);
+                    } else if(((TdApi.MessagePhoto) message.message).photo.photos[0].photo instanceof TdApi.FileEmpty){
+                        id_file = ((TdApi.FileEmpty)((TdApi.MessagePhoto) message.message).photo.photos[0].photo).id;
+
+                    }
+
+
+                    ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.DownloadFile(id_file), new Client.ResultHandler() {
+
+                        @Override
+                        public void onResult(TdApi.TLObject object) {
+
+                            object.toString();
+
+
+                        }
+                    });
+
+
                 } else {
+                    img_photo_message.setVisibility(View.GONE);
+                    txt_message.setVisibility(View.VISIBLE);
+
                     txt_message.setText("Не текстовое сообщение");
                 }
                 DateFormat df = new android.text.format.DateFormat();

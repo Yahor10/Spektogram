@@ -10,8 +10,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.telegram.spektogram.R;
+import com.telegram.spektogram.application.ApplicationSpektogram;
 
+import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.ArrayList;
@@ -147,16 +150,33 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
 
             this.chat = chat;
 
-            if (Math.abs(chat.id % 2) == 0) {
-                background.setBackground(context.getResources().getDrawable(R.drawable.gradient_list_item_chat_room_blue));
-            } else {
-                background.setBackground(context.getResources().getDrawable(R.drawable.gradient_list_item_chat_room_red));
-            }
 
             if (chat.type instanceof TdApi.GroupChatInfo) {
                 chat_name.setText(((TdApi.GroupChatInfo) chat.type).groupChat.title);
-            }else if (chat.type instanceof TdApi.PrivateChatInfo){
+                background.setBackground(context.getResources().getDrawable(R.drawable.gradient_list_item_chat_room_blue));
+            } else if (chat.type instanceof TdApi.PrivateChatInfo) {
+
+                background.setBackground(context.getResources().getDrawable(R.drawable.gradient_list_item_chat_room_red));
                 chat_name.setText(((TdApi.PrivateChatInfo) chat.type).user.firstName);
+
+
+                if (((TdApi.PrivateChatInfo) chat.type).user.photoBig instanceof TdApi.FileLocal) {
+
+                    String url = ((TdApi.FileLocal) ((TdApi.PrivateChatInfo) chat.type).user.photoBig).path;
+                    Picasso.with(context).load(url).into(user_photo);
+                } else if (((TdApi.PrivateChatInfo) chat.type).user.photoSmall instanceof TdApi.FileEmpty) {
+                    int id_file = 0;
+                    id_file = ((TdApi.FileEmpty) ((TdApi.PrivateChatInfo) chat.type).user.photoBig).id;
+
+                    MyClientHandlerUser myClientHandlerUser = new MyClientHandlerUser();
+                    myClientHandlerUser.user = ((TdApi.PrivateChatInfo) chat.type).user;
+                    myClientHandlerUser.userPhoto = user_photo;
+
+
+                    ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.DownloadFile(id_file), myClientHandlerUser);
+                }
+
+
             }
 
             if (chat.topMessage.message instanceof TdApi.MessageText) {
@@ -172,6 +192,32 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
 
             not_saw_messages.setVisibility(View.GONE);
 
+
+        }
+    }
+
+    public class MyClientHandlerUser implements Client.ResultHandler {
+        public TdApi.User user = null;
+        View userPhoto = null;
+
+        @Override
+        public void onResult(TdApi.TLObject object) {
+            MyClientHandlerView myClientHandlerView = new MyClientHandlerView();
+            myClientHandlerView.userPhoto = userPhoto;
+
+            ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.GetUser(user.id), myClientHandlerView);
+        }
+    }
+
+
+    public class MyClientHandlerView implements Client.ResultHandler {
+        View userPhoto = null;
+
+        @Override
+        public void onResult(TdApi.TLObject object) {
+            if (userPhoto != null) {
+                object.toString();
+            }
         }
     }
 }

@@ -48,7 +48,7 @@ public class ChatRoom extends Fragment implements Client.ResultHandler {
             }
         });
 
-        ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.GetChats(0, 20), this);
+        ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.GetChats(0, 30), this);
 
 
 
