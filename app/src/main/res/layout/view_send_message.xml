@@ -22,7 +22,9 @@
         android:layout_margin="5dp"
         android:gravity="start|left"
         android:focusable="false"
-        android:layout_weight="1" />
+        android:layout_weight="1" >
+        <requestFocus/>
+        </EditText>
 
     <ImageView
         android:layout_width="wrap_content"

@@ -205,6 +205,8 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
 //        actionBar.setTitle("Maria One Two");
         actionBar.setDisplayShowCustomEnabled(true);
 
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
 
         final ColorDrawable drawable = new ColorDrawable(getResources().getColor(R.color.transparent_half));
         getSupportActionBar().setBackgroundDrawable(drawable);
@@ -273,6 +275,10 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+
+        if(id == android.R.id.home){
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
