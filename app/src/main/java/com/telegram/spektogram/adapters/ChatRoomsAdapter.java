@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Random;
 
 
 /**
@@ -150,15 +152,18 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
         public void setData(TdApi.Chat chat) {
 
             this.chat = chat;
+            Random random = new Random();
+
+
+            background.setBackground(getRandomBackground(context));
 
 
             if (chat.type instanceof TdApi.GroupChatInfo) {
                 user_photo.setImageResource(R.drawable.user_photo);
                 chat_name.setText(((TdApi.GroupChatInfo) chat.type).groupChat.title);
-                background.setBackground(context.getResources().getDrawable(R.drawable.gradient_list_item_chat_room_blue));
             } else if (chat.type instanceof TdApi.PrivateChatInfo) {
 
-                background.setBackground(context.getResources().getDrawable(R.drawable.gradient_list_item_chat_room_red));
+
                 chat_name.setText(((TdApi.PrivateChatInfo) chat.type).user.firstName);
 
 
@@ -208,6 +213,34 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
 
 
         }
+    }
+
+    public Drawable getRandomBackground( Context context){
+
+        Random random = new Random();
+
+        int r = random.nextInt(8);
+
+        switch (r){
+            case 1:
+                return context.getResources().getDrawable(R.drawable.gradient_blue_blue);
+            case 2:
+                return context.getResources().getDrawable(R.drawable.gradient_blue_to_blue);
+            case 3:
+                return context.getResources().getDrawable(R.drawable.gradient_blue_violet);
+            case 4:
+                return context.getResources().getDrawable(R.drawable.gradient_red_red);
+            case 5:
+                return context.getResources().getDrawable(R.drawable.gradient_red_yellow);
+            case 6:
+                return context.getResources().getDrawable(R.drawable.gradient_yellow_green);
+            case 7:
+                return context.getResources().getDrawable(R.drawable.gradient_yellow_to_red);
+
+        }
+
+        return context.getResources().getDrawable(R.drawable.gradient_list_item_chat_room_red);
+
     }
 
     public class MyClientHandlerUser implements Client.ResultHandler {

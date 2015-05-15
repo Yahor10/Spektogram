@@ -18,7 +18,7 @@
         android:id="@+id/frame_chat_about"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/gradient_list_item_chat_room_red"
+        android:background="@drawable/gradient_blue_to_blue"
         android:paddingLeft="10dp">
 
         <RelativeLayout
