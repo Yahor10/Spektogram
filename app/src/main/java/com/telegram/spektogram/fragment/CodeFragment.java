@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.activity.ChatRoomActivity;
 import com.telegram.spektogram.application.ApplicationSpektogram;
+import com.telegram.spektogram.application.Constants;
 import com.telegram.spektogram.callback.NextPageCallback;
 import com.telegram.spektogram.preferences.PreferenceUtils;
 
@@ -119,7 +120,7 @@ public class CodeFragment extends Fragment {
                         SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) pduObject);
 
                         String message = currentMessage.getDisplayMessageBody();
-
+                        Log.v(Constants.LOG_TAG,"message sms" + message);
                         if (message.contains("Telegram")) {
                             message = message.substring(message.length() - 5, message.length());
                             checkCode(message);

@@ -226,7 +226,7 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
     }
 
     private void updateNewAuth(TdApi.UpdateNewAuthorization newAuthorization){
-        NotificationUtils.buildSimpleNotification(ApplicationSpektogram.this, getString(R.string.app_name), "loggin from" + newAuthorization.device);
+        NotificationUtils.buildSimpleNotification(ApplicationSpektogram.this, getString(R.string.app_name), "Detected loggin from " + newAuthorization.device);
     }
 
     public static ApplicationSpektogram getApplication(Context context) {

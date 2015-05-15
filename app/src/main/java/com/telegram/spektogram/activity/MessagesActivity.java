@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -20,6 +22,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -28,6 +31,7 @@ import com.lamerman.FileDialog;
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.adapters.MessagesAdapter;
 import com.telegram.spektogram.application.ApplicationSpektogram;
+import com.telegram.spektogram.application.Constants;
 import com.telegram.spektogram.preferences.PreferenceUtils;
 import com.telegram.spektogram.views.PopupMenu;
 
@@ -151,7 +155,9 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
             send.setOnClickListener(MessagesActivity.this);
             attach.setOnClickListener(MessagesActivity.this);
 
+            restoreActionBar();
             buildGoogleApiClient();
+
 
         }
 
@@ -190,6 +196,23 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+    }
+
+    private void restoreActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+
+        actionBar.setDisplayShowTitleEnabled(false);
+//        actionBar.setTitle("Maria One Two");
+        actionBar.setDisplayShowCustomEnabled(true);
+
+
+        final ColorDrawable drawable = new ColorDrawable(getResources().getColor(R.color.transparent_half));
+        getSupportActionBar().setBackgroundDrawable(drawable);
+        actionBar.setCustomView(R.layout.ab_single_chat);
+        final View customView = actionBar.getCustomView();
+        TextView chatName = (TextView) customView.findViewById(R.id.chatName);
+        TextView chatStatus = (TextView) customView.findViewById(R.id.chatStatus);
+        chatName.setText("ONE TWO");
     }
 
 
@@ -362,7 +385,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         intent.putExtra(FileDialog.START_PATH, "/sdcard");
 
         //can user select directories or not
-        intent.putExtra(FileDialog.CAN_SELECT_DIR, true);
+        intent.putExtra(FileDialog.CAN_SELECT_DIR, false);
 
         //alternatively you can set file filter
         //intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "png" });
@@ -406,6 +429,11 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
             } else if (resultCode == RESULT_CANCELED) {
                 Log.d(TAG, "Canceled");
             }
+        }
+
+        if(requestCode == SEND_FILE){
+            String filePath = data.getStringExtra(FileDialog.RESULT_PATH);
+            Log.v(Constants.LOG_TAG,"file " + filePath);
         }
     }
 

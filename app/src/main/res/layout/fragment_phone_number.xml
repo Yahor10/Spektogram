@@ -51,8 +51,12 @@
                 android:textColor="@android:color/white"
                 android:textColorHint="@android:color/white"
                 android:singleLine="true"
+
                 android:inputType="phone"
-                android:hint="@string/phone_number" />
+                android:hint="@string/phone_number" >
+                <requestFocus/>
+                </EditText>
+
 
         </LinearLayout>
 

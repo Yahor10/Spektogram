@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#80000000"
+
     android:gravity="center">
 
     <ImageView
@@ -19,6 +21,7 @@
         android:singleLine="true"
         android:layout_margin="5dp"
         android:gravity="start|left"
+        android:focusable="false"
         android:layout_weight="1" />
 
     <ImageView

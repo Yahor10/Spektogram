@@ -5,6 +5,8 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,12 +14,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.lamerman.FileDialog;
 import com.telegram.spektogram.R;
@@ -190,8 +196,21 @@ public class ChatRoomActivity extends ActionBarActivity
         actionBar.setTitle("");
         actionBar.setDisplayShowCustomEnabled(true);
 
+        final ColorDrawable drawable = new ColorDrawable(Color.TRANSPARENT);
+        getSupportActionBar().setBackgroundDrawable(drawable);
         actionBar.setCustomView(R.layout.ab_main);
 
+        String s = getString(R.string.app_name);
+
+        final TextView tv = (TextView) findViewById(R.id.title);
+        final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
+        SpannableString ss1;
+        ss1 = new SpannableString(s);
+
+        ss1.setSpan(bss, 0, 6, 0); // set size
+        ss1.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 6, 0);// set color
+
+        tv.setText(ss1);
     }
 
 

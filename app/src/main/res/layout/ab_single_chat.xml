@@ -22,13 +22,13 @@
         android:layout_marginLeft="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold"
-        android:layout_above="@+id/textView"
+        android:layout_above="@+id/chatStatus"
         android:layout_toRightOf="@+id/chatIcon"
         android:layout_toEndOf="@+id/chatIcon" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:id="@+id/chatStatus"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
         android:text="Last seen:"
@@ -37,17 +37,6 @@
         android:layout_alignLeft="@+id/chatName"
         android:layout_alignStart="@+id/chatName" />
 
-    <TextView
-        android:id="@+id/chatStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView"
-        android:layout_alignBottom="@+id/textView"
-        android:paddingLeft="5dp"
-        android:layout_toRightOf="@+id/textView"
-        android:layout_alignParentRight="true"
-        android:text="bob@fake.com"
-        android:textColor="@android:color/white"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+
 
 </RelativeLayout>

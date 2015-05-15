@@ -15,4 +15,6 @@
     <color name="lighter_gray">#efefef</color>
     <color name="invisible">#FFFFFFFF</color>
     <color name="gray">#aa000000</color>
+
+    <color name="transparent_half">#80000000</color>
 </resources>
