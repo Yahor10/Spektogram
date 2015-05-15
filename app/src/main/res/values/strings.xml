@@ -61,4 +61,7 @@
     <string name="clear_chat_history">Clear chat history</string>
     <string name="your_phone">Your phone</string>
 
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="server_error">Server not available</string>
+
 </resources>
