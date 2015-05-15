@@ -74,7 +74,7 @@ public class PhoneNumberFragment extends Fragment {
         final boolean phoneNumberValid = instance.isPhoneNumberValid(phoneNumber);
 
         if(!phoneNumberValid ){
-            activity.showToast("Not valid");
+            activity.showToast(getString(R.string.not_valid_phone));
             return;
         }
 

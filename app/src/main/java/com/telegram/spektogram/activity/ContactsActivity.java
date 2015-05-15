@@ -281,6 +281,10 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         switch (id) {
             case R.id.action_accept:
                 showInputDialog();
+
+                break;
+            case android.R.id.home:
+                finish();
                 break;
         }
 

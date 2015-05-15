@@ -140,4 +140,11 @@ public class PreferenceUtils {
         pEditor.commit();
     }
 
+    public static boolean isVibrate(Context context) {
+           SharedPreferences defaultSharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        return defaultSharedPreferences.getBoolean(
+                PreferenceKeys.VIBRATE, false);
+    }
+
 }

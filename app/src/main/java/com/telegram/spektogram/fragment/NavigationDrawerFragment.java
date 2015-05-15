@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -13,6 +15,9 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -315,6 +320,21 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        String s = getString(R.string.app_name);
+
+        final ColorDrawable drawable = new ColorDrawable(Color.TRANSPARENT);
+        getActionBar().setBackgroundDrawable(drawable);
+        actionBar.setCustomView(R.layout.ab_main);
+
+        final TextView tv = (TextView)actionBar.getCustomView(). findViewById(R.id.title);
+        final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
+        SpannableString ss1;
+        ss1 = new SpannableString(s);
+
+        ss1.setSpan(bss, 0, 6, 0); // set size
+        ss1.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 6, 0);// set color
+
+        tv.setText(ss1);
 
     }
 

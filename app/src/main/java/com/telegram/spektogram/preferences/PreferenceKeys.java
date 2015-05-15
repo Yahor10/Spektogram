@@ -24,5 +24,7 @@ public class PreferenceKeys {
 
     public final static String IS_CHAT_ACTIVITY_BACKGROUND= "chat_background";
 
+    public final static String VIBRATE= "vibrate_preference_key";
+
 
 }

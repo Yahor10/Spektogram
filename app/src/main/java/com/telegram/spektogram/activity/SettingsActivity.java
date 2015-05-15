@@ -10,6 +10,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -18,6 +19,11 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.preferences.PreferenceKeys;
@@ -49,6 +55,12 @@ public class SettingsActivity extends PreferenceActivity {
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+
+    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -88,10 +100,7 @@ public class SettingsActivity extends PreferenceActivity {
         // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
         // their values. When their values change, their summaries are updated
         // to reflect the new value, per the Android Design guidelines.
-        bindPreferenceSummaryToValue(findPreference("example_text"));
-        bindPreferenceSummaryToValue(findPreference("example_list"));
-        bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-        bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+        bindPreferenceSummaryToValue(findPreference("display_name"));
     }
 
     /**
@@ -214,27 +223,6 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     /**
-     * This fragment shows general preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class GeneralPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_general);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("example_text"));
-            bindPreferenceSummaryToValue(findPreference("example_list"));
-
-        }
-    }
-
-    /**
      * This fragment shows notification preferences only. It is used when the
      * activity is showing a two-pane settings UI.
      */
@@ -280,7 +268,7 @@ public class SettingsActivity extends PreferenceActivity {
                     PreferenceKeys.CHANGE_NUMBER);
 
             final Activity activity = getActivity();
-            change.setTitle(getString(R.string.phone_number) +" " + PreferenceUtils.getPhoneNumber(activity));
+            change.setTitle(getString(R.string.phone_number) + " " + PreferenceUtils.getPhoneNumber(activity));
 
             pref.setSummary(PreferenceUtils.getUserFistName(activity));
             pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -297,5 +285,45 @@ public class SettingsActivity extends PreferenceActivity {
             // guidelines.
 
         }
+    }
+
+    /**
+     * This fragment shows general preferences only. It is used when the
+     * activity is showing a two-pane settings UI.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class GeneralPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_general);
+
+            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
+            // to their values. When their values change, their summaries are
+            // updated to reflect the new value, per the Android Design
+            // guidelines.
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            LinearLayout v = (LinearLayout) super.onCreateView(inflater, container, savedInstanceState);
+
+            Button SendLogbtn = new Button(getActivity().getApplicationContext());
+            SendLogbtn.setText("send log file");
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            params.setMargins(100, 0, 0, 500);
+            SendLogbtn.setLayoutParams(params);
+
+            v.addView(SendLogbtn);
+
+            return v;
+        }
+
+
+
+
     }
 }
