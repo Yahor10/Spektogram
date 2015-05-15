@@ -27,6 +27,8 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
 
     private Client client;
 
+    public  static Context appContext;
+
     final static public String BROADCAST_UPDATE_USER_NUMBER = "BROADCAST_UPDATE_USER_NUMBER";
     final static public String BROADCAST_UPDATE_USER_PHOTO = "BROADCAST_UPDATE_USER_PHOTO";
     final static public String BROADCAST_UPDATE_USER_NAME = "BROADCAST_UPDATE_USER_NAME";
@@ -46,10 +48,10 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
     @Override
     public void onCreate() {
         super.onCreate();
+        appContext = this;
         createLruCache();
-
-
         startTelegramApi();
+
     }
 
     private void createLruCache() {

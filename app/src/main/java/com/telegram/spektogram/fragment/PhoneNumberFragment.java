@@ -10,10 +10,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.telegram.spektogram.R;
+import com.telegram.spektogram.activity.SignInActivity;
 import com.telegram.spektogram.application.ApplicationSpektogram;
 import com.telegram.spektogram.callback.NextPageCallback;
+import com.telegram.spektogram.phoneFormat.PhoneFormat;
 
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
@@ -58,11 +61,33 @@ public class PhoneNumberFragment extends Fragment {
     }
 
     private void setPhoneNumber () {
-        String phoneNumber = countryCodeField.getText().toString() + phoneNumberField.getText().toString();
+        final SignInActivity activity = (SignInActivity) getActivity();
+        final boolean networkConnected = activity.isNetworkConnected();
+        if(!networkConnected){
+            Toast.makeText(activity,R.string.no_internet_connection,Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        final String phoneNumber = countryCodeField.getText().toString() + phoneNumberField.getText().toString();
+
+        final PhoneFormat instance = PhoneFormat.getInstance();
+        final boolean phoneNumberValid = instance.isPhoneNumberValid(phoneNumber);
+
+        if(!phoneNumberValid ){
+            activity.showToast(getString(R.string.not_valid_phone));
+            return;
+        }
+
         application.sendFunction(new TdApi.AuthSetPhoneNumber(phoneNumber), new Client.ResultHandler() {
             @Override
             public void onResult(TdApi.TLObject object) {
                 Log.d("TAG", object.toString());
+
+                if(object instanceof TdApi.Error){
+                    activity.showToast(getString(R.string.server_error));
+                    return;
+                }
+
                 if (object instanceof TdApi.AuthStateWaitSetCode) {
                     Handler mainHandler = new Handler(getActivity().getMainLooper());
                     mainHandler.post(new Runnable() {

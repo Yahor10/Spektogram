@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.activity.ChatRoomActivity;
+import com.telegram.spektogram.activity.SignInActivity;
 import com.telegram.spektogram.application.ApplicationSpektogram;
 import com.telegram.spektogram.application.Constants;
 import com.telegram.spektogram.callback.NextPageCallback;
@@ -49,10 +50,21 @@ public class CodeFragment extends Fragment {
     }
 
     private void checkCode(String code) {
+        final SignInActivity activity = (SignInActivity) getActivity();
+        final boolean networkConnected = activity.isNetworkConnected();
+        if(!networkConnected){
+            Toast.makeText(activity,R.string.no_internet_connection,Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         final TdApi.AuthSetCode function = new TdApi.AuthSetCode(code);
         application.sendFunction(function, new Client.ResultHandler() {
             @Override
             public void onResult(TdApi.TLObject object) {
+                if(object instanceof TdApi.Error){
+                    Toast.makeText(activity,R.string.server_error,Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Log.e("TAG", object.toString());
                 checkState();
             }

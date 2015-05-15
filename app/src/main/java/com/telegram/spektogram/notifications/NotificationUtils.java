@@ -13,7 +13,7 @@ import android.util.Log;
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.activity.ChatRoomActivity;
 import com.telegram.spektogram.application.Constants;
-
+import com.telegram.spektogram.preferences.PreferenceUtils;
 
 
 public  class NotificationUtils {
@@ -34,6 +34,11 @@ public  class NotificationUtils {
                         .setLargeIcon(bitmapDrawable.getBitmap())
                         .setContentTitle(title)
                         .setContentText(text).setContentIntent(pi);
+
+        if(PreferenceUtils.isVibrate(context)) {
+            mBuilder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
+        }
+
         final Notification build = mBuilder.build();
 
         NotificationManager mNotifyMgr =
