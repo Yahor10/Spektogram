@@ -144,7 +144,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         if (chat_for_load != null) {
 
 //            if (!flag_new_message){
-                messages = new ArrayList<TdApi.Message>();
+            messages = new ArrayList<TdApi.Message>();
 //            }else{
 //                if(messages==null){
 //                    messages = new ArrayList<TdApi.Message>();
@@ -183,31 +183,31 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
             count_load_message = 100;
         }
 
-            ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChatHistory(chat_id, users.get(0), 0, count_load_message), new Client.ResultHandler() {
+        ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChatHistory(chat_id, users.get(0), 0, count_load_message), new Client.ResultHandler() {
 
-                @Override
-                public void onResult(TdApi.TLObject object) {
-                    TdApi.Messages mes = (TdApi.Messages) object;
+            @Override
+            public void onResult(TdApi.TLObject object) {
+                TdApi.Messages mes = (TdApi.Messages) object;
 
-                    if (mes != null && mes.messages != null) {
-                        messages.addAll(Arrays.asList(mes.messages));
+                if (mes != null && mes.messages != null) {
+                    messages.addAll(Arrays.asList(mes.messages));
 
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(flag_new_message){
-                                    adapter.addMessages(messages);
-                                }else{
-                                    adapter.setMessages(messages);
-                                }
-
-                                adapter.notifyDataSetChanged();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (flag_new_message) {
+                                adapter.addMessages(messages);
+                            } else {
+                                adapter.setMessages(messages);
                             }
-                        });
-                    }
+
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
                 }
-            });
+            }
+        });
     }
 
 
@@ -245,7 +245,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
             long chat_id = intent.getLongExtra(KEY_EXTRA_CHAT_ID, 0);
 
             if (chat_id == chat.id) {
-                loadMessages(chat,true);
+                loadMessages(chat, true);
             } else {
 
             }
@@ -329,27 +329,31 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         return super.onOptionsItemSelected(item);
     }
 
-    public void addSendingMessageToListView(TdApi.InputMessageText inputMessageText) {
-        TdApi.Message message = new TdApi.Message();
-        message.fromId = PreferenceUtils.getMyUserId(getApplicationContext());
-        message.date = (int) System.currentTimeMillis();
-        message.chatId = chat.id;
-        message.message = new TdApi.MessageText();
-        ((TdApi.MessageText) message.message).text = inputMessageText.text;
-
-        adapter.addMessage(message);
-        adapter.notifyDataSetChanged();
-
-    }
+//    public void addSendingMessageToListView(TdApi.InputMessageText inputMessageText) {
+//        TdApi.Message message = new TdApi.Message();
+//        message.fromId = PreferenceUtils.getMyUserId(getApplicationContext());
+//        message.date = (int) System.currentTimeMillis();
+//        message.chatId = chat.id;
+//        message.message = new TdApi.MessageText();
+//        ((TdApi.MessageText) message.message).text = inputMessageText.text;
+//
+//        adapter.addMessage(message);
+//        adapter.notifyDataSetChanged();
+//
+//    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.send:
                 final TdApi.InputMessageText inputMessageText = new TdApi.InputMessageText(messageText.getText().toString());
-
-                addSendingMessageToListView(inputMessageText);
-//                ApplicationSpektogram.getApplication(this).sendChatMessageFunction(chat.id, inputMessageText, null);
+                messageText.setText("");
+                ApplicationSpektogram.getApplication(this).sendChatMessageFunction(chat.id, inputMessageText, new Client.ResultHandler() {
+                    @Override
+                    public void onResult(TdApi.TLObject object) {
+//                        loadMessages(chat, true);
+                    }
+                });
                 break;
             case R.id.attach:
                 PopupMenu menu = new PopupMenu(this);
