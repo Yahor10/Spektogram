@@ -252,6 +252,14 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         }
     };
 
+    private final BroadcastReceiver updateFileDownloadReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, Intent intent) {
+            long file_id = intent.getLongExtra(ApplicationSpektogram.KEY_UPDATE_FILE_ID, 0);
+            loadMessages(chat, false);
+        }
+    };
+
 
     @Override
     protected void onStart() {
@@ -261,6 +269,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
             mGoogleApiClient.connect();
 
         registerReceiver(updateNewMessageReceiver, new IntentFilter(ApplicationSpektogram.BROADCAST_UPDATE_NEW_MESSAGE));
+        registerReceiver(updateFileDownloadReceiver, new IntentFilter(ApplicationSpektogram.BROADCAST_UPDATE_FILE_DOWNLOADED));
     }
 
     @Override
@@ -271,6 +280,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
 
         try {
             unregisterReceiver(updateNewMessageReceiver);
+            unregisterReceiver(updateFileDownloadReceiver);
 
         } catch (Exception e) {
         }

@@ -38,6 +38,8 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
     final static public String BROADCAST_UPDATE_FILE_DOWNLOADED = "BROADCAST_UPDATE_FILE_DOWNLOADED";
     final static public String BROADCAST_UPDATE_NEW_MESSAGE = "BROADCAST_UPDATE_NEW_MESSAGE";
 
+    final static public String KEY_UPDATE_FILE_ID = "KEY_UPDATE_FILE_ID";
+
     final static public String BROADCAST_UPDATE_USER_TYPING = "BROADCAST_UPDATE_USER_TYPING";
 
 
@@ -122,7 +124,7 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
             intent.putExtra(MessagesActivity.KEY_EXTRA_CHAT_ID, updateMessageDate.chatId);
             sendBroadcast(intent);
 
-        }else if (object instanceof TdApi.UpdateUserAction) {
+        } else if (object instanceof TdApi.UpdateUserAction) {
 
         } else if (object instanceof TdApi.UpdateUserStatus) {
 
@@ -144,6 +146,8 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
             updateNewAuth(newAuthorization);
         } else if (object instanceof TdApi.UpdateFile) {
             TdApi.UpdateFile file = (TdApi.UpdateFile) object;
+            Intent intent = new Intent(BROADCAST_UPDATE_FILE_DOWNLOADED);
+            intent.putExtra(KEY_UPDATE_FILE_ID, file.fileId);
             Log.v(Constants.LOG_TAG, "UpdateFile");
             sendBroadcast(new Intent(BROADCAST_UPDATE_FILE_DOWNLOADED));
         } else if (object instanceof TdApi.UpdateFileProgress) {

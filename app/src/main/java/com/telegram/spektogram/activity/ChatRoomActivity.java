@@ -2,8 +2,10 @@ package com.telegram.spektogram.activity;
 
 import android.app.Activity;
 import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -71,61 +73,6 @@ public class ChatRoomActivity extends ActionBarActivity
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChats(0,20), new Client.ResultHandler() {
-//                    @Override
-//                    public void onResult(TdApi.TLObject object) {
-//                        TdApi.Chats chats= (TdApi.Chats) object;
-//                        final TdApi.Chat[] arr = chats.chats;
-//                        for(TdApi.Chat chat : arr){
-//                            Log.v(Constants.LOG_TAG, "result Chat:" + chat.toString());
-//                            mId =  chat.id;
-//                        }
-//
-//                    }
-//                });
-////
-////
-//                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetMe(), new Client.ResultHandler() {
-//                    @Override
-//                    public void onResult(TdApi.TLObject object) {
-//                        Log.v(null, "TLObject onResult GetMe:" + object.toString());
-//                        TdApi.User user = (TdApi.User) object;
-//                        PreferenceUtils.setUserFirstName(ChatRoomActivity.this, user.firstName);
-//                        PreferenceUtils.setUserLastName(ChatRoomActivity.this, user.lastName);
-//                        Log.v(null, "TLObject onResult GetMe:" + object.toString());
-//                    }
-//                });
-//
-//                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChat(-13183666), new Client.ResultHandler() {
-//                    @Override
-//                    public void onResult(TdApi.TLObject object) {
-//                        Log.v(Constants.LOG_TAG, "TLObject onResult GetChat:" + object.toString());
-//                    }
-//                });
-
-
-//                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetGroupChat(-13183666), new Client.ResultHandler() {
-//                    @Override
-//                    public void onResult(TdApi.TLObject object) {
-//                        Log.v(Constants.LOG_TAG, "TLObject onResult GetGroupChat:" + object.toString());
-//                    }
-//                });
-//
-//                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetGroupChatFull(-13183666), new Client.ResultHandler() {
-//                    @Override
-//                    public void onResult(TdApi.TLObject object) {
-//                        Log.v(Constants.LOG_TAG, "TLObject onResult GetGroupChatFull:" + object.toString());
-//                    }
-//                });
-//
-//                ApplicationSpektogram.getApplication(getBaseContext()).sendChatMessageFunction(777000, new TdApi.InputMessageText("hello t1"), new Client.ResultHandler() {
-//                    @Override
-//                    public void onResult(TdApi.TLObject object) {
-//                        Log.v(Constants.LOG_TAG, "TLObject onResult sendChatMessageFunction:" + object.toString());
-//
-//                    }
-//                });
 
 
                 PopupMenu menu = new PopupMenu(ChatRoomActivity.this);
@@ -326,6 +273,33 @@ public class ChatRoomActivity extends ActionBarActivity
             ((ChatRoomActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
+    }
+
+    private final BroadcastReceiver updatePhotoUpdate = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, Intent intent) {
+
+        }
+    };
+
+
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        registerReceiver(updatePhotoUpdate, new IntentFilter(ApplicationSpektogram.BROADCAST_UPDATE_FILE_DOWNLOADED));
+    }
+
+    @Override
+    protected void onStop() {
+
+        try {
+            unregisterReceiver(updatePhotoUpdate);
+
+        } catch (Exception e) {
+        }
+        super.onStop();
     }
 
 }
