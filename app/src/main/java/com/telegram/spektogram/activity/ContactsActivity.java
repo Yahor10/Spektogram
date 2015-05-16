@@ -63,7 +63,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
                 reloadContacts(context);
             }
         }
-    };
+   };
 
     private void reloadContacts(Context context) {
         final AllContactsFragment item1 = (AllContactsFragment) fragmentPagerAdapter.getItem(0);

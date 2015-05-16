@@ -1,7 +1,9 @@
 package com.telegram.spektogram.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
@@ -107,7 +109,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         setContentView(R.layout.activity_main);
 //        startActivity(SignInActivity.buildStartIntent(this));
 
-        messages = new ArrayList<TdApi.Message>();
+
         list = (ListView) findViewById(R.id.list_message);
         adapter = new MessagesAdapter(getLayoutInflater(), getBaseContext());
         adapter.setId_owner_user(PreferenceUtils.getMyUserId(this));
@@ -117,57 +119,71 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
 
         chat = ApplicationSpektogram.chat;
 
-        if (chat != null) {
+        loadMessages(chat, false);
 
 
-            if (chat.type instanceof TdApi.PrivateChatInfo) {
-                id_users.add(((TdApi.PrivateChatInfo) chat.type).user.id);
-//                id_users.add(PreferenceUtils.getMyUserId(getApplicationContext()));
-                getMessagesByIdUsers(id_users, chat.id);
+        getSupportActionBar().setTitle("");
+        messageText = (EditText) findViewById(R.id.message);
+        messageText.addTextChangedListener(textWatcher);
 
-            } else if (chat.type instanceof TdApi.GroupChatInfo) {
-                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetGroupChatFull(((TdApi.GroupChatInfo) chat.type).groupChat.id), new Client.ResultHandler() {
+        send = (ImageView) findViewById(R.id.send);
+        attach = (ImageView) findViewById(R.id.attach);
+        send.setVisibility(View.GONE);
+
+        send.setOnClickListener(MessagesActivity.this);
+        attach.setOnClickListener(MessagesActivity.this);
+
+        restoreActionBar();
+        buildGoogleApiClient();
+
+
+    }
+
+
+    public void loadMessages(final TdApi.Chat chat_for_load, final boolean flag_new_message) {
+        if (chat_for_load != null) {
+
+//            if (!flag_new_message){
+                messages = new ArrayList<TdApi.Message>();
+//            }else{
+//                if(messages==null){
+//                    messages = new ArrayList<TdApi.Message>();
+//                }
+//            }
+
+
+            id_users = new ArrayList<Integer>();
+
+            if (chat_for_load.type instanceof TdApi.PrivateChatInfo) {
+                id_users.add(((TdApi.PrivateChatInfo) chat_for_load.type).user.id);
+                getMessagesByIdUsers(id_users, chat_for_load.id, flag_new_message);
+
+            } else if (chat_for_load.type instanceof TdApi.GroupChatInfo) {
+                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetGroupChatFull(((TdApi.GroupChatInfo) chat_for_load.type).groupChat.id), new Client.ResultHandler() {
 
                     @Override
                     public void onResult(TdApi.TLObject object) {
 
                         TdApi.GroupChatFull chatFull = (TdApi.GroupChatFull) object;
-
-
-//                        for (TdApi.ChatParticipant participant : chatFull.participants) {
                         id_users.add(chatFull.participants[0].user.id);
-//                        }
-                        getMessagesByIdUsers(id_users, chat.id);
+                        getMessagesByIdUsers(id_users, chat.id, flag_new_message);
 
 
                     }
                 });
             }
-
-            getSupportActionBar().setTitle("");
-            messageText = (EditText) findViewById(R.id.message);
-            messageText.addTextChangedListener(textWatcher);
-
-            send = (ImageView) findViewById(R.id.send);
-            attach = (ImageView) findViewById(R.id.attach);
-            send.setVisibility(View.GONE);
-
-            send.setOnClickListener(MessagesActivity.this);
-            attach.setOnClickListener(MessagesActivity.this);
-
-            restoreActionBar();
-            buildGoogleApiClient();
-
-
         }
-
     }
 
 
-    public void getMessagesByIdUsers(ArrayList<Integer> users, long chat_id) {
+    public void getMessagesByIdUsers(ArrayList<Integer> users, long chat_id, final boolean flag_new_message) {
 
-        for (int id : users)
-            ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChatHistory(chat_id, id, 0, 50), new Client.ResultHandler() {
+        int count_load_message = 1;
+        if (!flag_new_message) {
+            count_load_message = 100;
+        }
+
+            ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChatHistory(chat_id, users.get(0), 0, count_load_message), new Client.ResultHandler() {
 
                 @Override
                 public void onResult(TdApi.TLObject object) {
@@ -180,7 +196,12 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                adapter.setMessages(messages);
+                                if(flag_new_message){
+                                    adapter.addMessages(messages);
+                                }else{
+                                    adapter.setMessages(messages);
+                                }
+
                                 adapter.notifyDataSetChanged();
                             }
                         });
@@ -218,12 +239,28 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
     }
 
 
+    private final BroadcastReceiver updateNewMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, Intent intent) {
+            long chat_id = intent.getLongExtra(KEY_EXTRA_CHAT_ID, 0);
+
+            if (chat_id == chat.id) {
+                loadMessages(chat,true);
+            } else {
+
+            }
+        }
+    };
+
+
     @Override
     protected void onStart() {
         super.onStart();
         // Connect the client.
         if (mGoogleApiClient != null)
             mGoogleApiClient.connect();
+
+        registerReceiver(updateNewMessageReceiver, new IntentFilter(ApplicationSpektogram.BROADCAST_UPDATE_NEW_MESSAGE));
     }
 
     @Override
@@ -231,6 +268,14 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         // Disconnecting the client invalidates it.
         if (mGoogleApiClient != null)
             mGoogleApiClient.disconnect();
+
+        try {
+            unregisterReceiver(updateNewMessageReceiver);
+
+        } catch (Exception e) {
+        }
+
+
         super.onStop();
     }
 
@@ -277,7 +322,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
             return true;
         }
 
-        if(id == android.R.id.home){
+        if (id == android.R.id.home) {
             finish();
         }
 
@@ -437,9 +482,9 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
             }
         }
 
-        if(requestCode == SEND_FILE){
+        if (requestCode == SEND_FILE) {
             String filePath = data.getStringExtra(FileDialog.RESULT_PATH);
-            Log.v(Constants.LOG_TAG,"file " + filePath);
+            Log.v(Constants.LOG_TAG, "file " + filePath);
         }
     }
 

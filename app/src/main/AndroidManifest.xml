@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.telegram.spektogram" >
+    package="com.telegram.spektogram">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -26,23 +25,22 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MessagesActivity"
-            android:label="@string/app_name" >
-        </activity>
+            android:label="@string/app_name"
+            android:launchMode="singleTask"></activity>
         <activity
             android:name=".activity.SignInActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            android:label="@string/app_name" />
-        <activity android:name=".activity.ChatRoomActivity" >
-        </activity>
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity android:name=".activity.ChatRoomActivity"></activity>
         <activity
             android:name=".activity.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".IntroActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,26 +49,22 @@
         </activity>
         <activity
             android:name=".activity.ContactsActivity"
-            android:icon="@drawable/ic_drawer" >
-        </activity>
-        <activity android:name="com.lamerman.FileDialog" >
-        </activity>
+            android:icon="@drawable/ic_drawer"></activity>
+        <activity android:name="com.lamerman.FileDialog"></activity>
 
         <receiver
             android:name=".receivers.NetworkChangeReceiver"
-            android:label="NetworkChangeReceiver" >
+            android:label="NetworkChangeReceiver">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" >
-                    <action android:name="android.net.wifi.WIFI_STATE_CHANGED" >
-                    </action>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE">
+                    <action android:name="android.net.wifi.WIFI_STATE_CHANGED"></action>
                 </action>
             </intent-filter>
         </receiver>
 
         <activity
             android:name=".activity.SelectBackgroundActivity"
-            android:label="@string/title_activity_select_background" >
-        </activity>
+            android:label="@string/title_activity_select_background"></activity>
     </application>
 
 </manifest>

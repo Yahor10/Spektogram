@@ -1,42 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#80000000"
+    android:gravity="center"
 
-    android:gravity="center">
+    android:orientation="horizontal">
 
     <ImageView
+        android:id="@+id/smiles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_smiles"
         android:layout_margin="5dp"
-        android:id="@+id/smiles" />
+        android:src="@drawable/ic_smiles" />
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/message"
-        android:hint="@string/message"
-        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:focusable="true"
         android:gravity="start|left"
-        android:focusable="false"
-        android:layout_weight="1" >
-        <requestFocus/>
-        </EditText>
+        android:hint="@string/message"
+        android:singleLine="true">
+
+        <requestFocus />
+    </EditText>
 
     <ImageView
+        android:id="@+id/attach"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_attach"
         android:layout_margin="5dp"
-        android:id="@+id/attach" />
+        android:src="@drawable/ic_attach" />
 
     <ImageView
+        android:id="@+id/send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_send"
         android:layout_margin="5dp"
-        android:id="@+id/send" />
+        android:src="@drawable/ic_send" />
 </LinearLayout>

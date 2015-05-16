@@ -7,21 +7,21 @@
 
     <ListView
         android:id="@+id/list_message"
-        android:paddingTop="?attr/actionBarSize"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:stackFromBottom="true"
-        android:divider="@null"
         android:layout_above="@+id/view_send_message"
-        />
+        android:divider="@null"
+        android:paddingTop="?attr/actionBarSize"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll" />
 
     <include
         android:id="@+id/view_send_message"
         layout="@layout/view_send_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#D8000000"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="#D8000000" />
 
 </RelativeLayout>

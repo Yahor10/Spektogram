@@ -78,7 +78,7 @@ public class MessagesAdapter extends BaseAdapter {
     }
 
 
-    public void addMessages(ArrayList<TdApi.Messages> messageses) {
+    public void addMessages(ArrayList<TdApi.Message> messages) {
         this.messages.addAll(messages);
         Collections.sort(this.messages, new Comparator<TdApi.Message>() {
             @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -252,8 +252,6 @@ public class MessagesAdapter extends BaseAdapter {
             }
         }
     }
-
-
 
 
 }

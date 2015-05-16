@@ -14,7 +14,6 @@ import com.telegram.spektogram.R;
 import com.telegram.spektogram.activity.MessagesActivity;
 import com.telegram.spektogram.adapters.ChatRoomsAdapter;
 import com.telegram.spektogram.application.ApplicationSpektogram;
-import com.telegram.spektogram.preferences.PreferenceUtils;
 
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
@@ -42,6 +41,8 @@ public class ChatRoom extends Fragment implements Client.ResultHandler {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 Intent intent = new Intent(getActivity(), MessagesActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 TdApi.Chat chat = ((ChatRoomsAdapter.ViewHolder) view.getTag()).chat;
                 ApplicationSpektogram.chat = chat;
                 getActivity().startActivity(intent);
@@ -51,18 +52,16 @@ public class ChatRoom extends Fragment implements Client.ResultHandler {
         ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.GetChats(0, 30), this);
 
 
-
-
         return view;
     }
 
-// kostil'
+    // kostil'
     int id_users = 1;
 
 
     public void getMessagesByIdUsers(ArrayList<TdApi.Chat> chats) {
 
-        for (TdApi.Chat chat : chats){
+        for (TdApi.Chat chat : chats) {
 
             if (chat.type instanceof TdApi.PrivateChatInfo) {
                 id_users = ((TdApi.PrivateChatInfo) chat.type).user.id;

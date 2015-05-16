@@ -9,6 +9,7 @@ import android.support.v4.util.LruCache;
 import android.util.Log;
 
 import com.telegram.spektogram.R;
+import com.telegram.spektogram.activity.MessagesActivity;
 import com.telegram.spektogram.notifications.NotificationUtils;
 import com.telegram.spektogram.preferences.PreferenceUtils;
 
@@ -27,7 +28,7 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
 
     private Client client;
 
-    public  static Context appContext;
+    public static Context appContext;
 
     final static public String BROADCAST_UPDATE_USER_NUMBER = "BROADCAST_UPDATE_USER_NUMBER";
     final static public String BROADCAST_UPDATE_USER_PHOTO = "BROADCAST_UPDATE_USER_PHOTO";
@@ -35,15 +36,16 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
     final static public String BROADCAST_UPDATE_USER_STATUS = "BROADCAST_UPDATE_USER_STATUS";
     final static public String BROADCAST_UPDATE_FILE_PROGGRESS = "BROADCAST_UPDATE_FILE_PROGGRESS";
     final static public String BROADCAST_UPDATE_FILE_DOWNLOADED = "BROADCAST_UPDATE_FILE_DOWNLOADED";
+    final static public String BROADCAST_UPDATE_NEW_MESSAGE = "BROADCAST_UPDATE_NEW_MESSAGE";
 
     final static public String BROADCAST_UPDATE_USER_TYPING = "BROADCAST_UPDATE_USER_TYPING";
 
 
     public static TdApi.Chat chat; // kostil'
 
-    final static public  String EXTRA_UPDATE_USER_ID = "EXTRA_UPDATE_USER_ID";
-    final static public  String EXTRA_UPDATE_FILE_ID = "EXTRA_UPDATE_FILE_ID";
-    final static public  String EXTRA_UPDATE_FILE_SIZE= "EXTRA_UPDATE_FILE_SIZE";
+    final static public String EXTRA_UPDATE_USER_ID = "EXTRA_UPDATE_USER_ID";
+    final static public String EXTRA_UPDATE_FILE_ID = "EXTRA_UPDATE_FILE_ID";
+    final static public String EXTRA_UPDATE_FILE_SIZE = "EXTRA_UPDATE_FILE_SIZE";
 
     @Override
     public void onCreate() {
@@ -106,40 +108,44 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
     public void onResult(TdApi.TLObject object) {
         Log.i(Constants.LOG_TAG, "ApplicationSpektogram onResult update:" + object);
 
-        if(object instanceof TdApi.UpdateNewMessage) {
+        if (object instanceof TdApi.UpdateNewMessage) {
             TdApi.UpdateNewMessage newMessage = (TdApi.UpdateNewMessage) object;
-            updateNewMessage(newMessage);
+//            updateNewMessage(newMessage);
 
-        }else if(object instanceof TdApi.UpdateUserAction){
+            Intent intent = new Intent(BROADCAST_UPDATE_NEW_MESSAGE);
+            intent.putExtra(MessagesActivity.KEY_EXTRA_CHAT_ID, newMessage.message.chatId);
+            sendBroadcast(intent);
 
-        }else if(object instanceof TdApi.UpdateUserStatus){
+        } else if (object instanceof TdApi.UpdateUserAction) {
 
-        }else if(object instanceof TdApi.UpdateChatTitle){
+        } else if (object instanceof TdApi.UpdateUserStatus) {
 
-        }else if(object instanceof TdApi.UpdateDeleteMessages){
+        } else if (object instanceof TdApi.UpdateChatTitle) {
 
-        }else if(object instanceof TdApi.UpdateUserPhoneNumber){
+        } else if (object instanceof TdApi.UpdateDeleteMessages) {
+
+        } else if (object instanceof TdApi.UpdateUserPhoneNumber) {
             TdApi.UpdateUserPhoneNumber number = (TdApi.UpdateUserPhoneNumber) object;
             updateUserNumber(number);
-        }else if(object instanceof TdApi.UpdateUserName){
+        } else if (object instanceof TdApi.UpdateUserName) {
             TdApi.UpdateUserName userName = (TdApi.UpdateUserName) object;
             updateUserName(userName);
-        }else if(object instanceof TdApi.UpdateUserStatus){
+        } else if (object instanceof TdApi.UpdateUserStatus) {
             TdApi.UpdateUserStatus status = (TdApi.UpdateUserStatus) object;
             updateUserStatus(status);
-        }else if(object instanceof TdApi.UpdateNewAuthorization){
+        } else if (object instanceof TdApi.UpdateNewAuthorization) {
             TdApi.UpdateNewAuthorization newAuthorization = (TdApi.UpdateNewAuthorization) object;
             updateNewAuth(newAuthorization);
-        }else if(object instanceof TdApi.UpdateFile){
+        } else if (object instanceof TdApi.UpdateFile) {
             TdApi.UpdateFile file = (TdApi.UpdateFile) object;
-            Log.v(Constants.LOG_TAG,"UpdateFile");
+            Log.v(Constants.LOG_TAG, "UpdateFile");
             sendBroadcast(new Intent(BROADCAST_UPDATE_FILE_DOWNLOADED));
-        }else if(object instanceof TdApi.UpdateFileProgress){
-            Log.v(Constants.LOG_TAG,"UpdateFileProgress");
+        } else if (object instanceof TdApi.UpdateFileProgress) {
+            Log.v(Constants.LOG_TAG, "UpdateFileProgress");
             TdApi.UpdateFileProgress progress = (TdApi.UpdateFileProgress) object;
             int id = progress.fileId;
             int percent = progress.ready / progress.size;
-        }else if(object instanceof TdApi.UpdateUserPhoto){
+        } else if (object instanceof TdApi.UpdateUserPhoto) {
             TdApi.UpdateUserPhoto photo = (TdApi.UpdateUserPhoto) object;
             sendBroadcast(new Intent(BROADCAST_UPDATE_USER_PHOTO));
         }
@@ -206,11 +212,11 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
         final int fromId = message.fromId;
         final TdApi.MessageContent content = message.message;
 
-        if(content instanceof TdApi.MessageText){
+        if (content instanceof TdApi.MessageText) {
             updateNewMessageText(fromId, (TdApi.MessageText) content);
-        }else if(content instanceof TdApi.MessagePhoto){
+        } else if (content instanceof TdApi.MessagePhoto) {
 
-        }else if(content instanceof TdApi.MessageDocument){
+        } else if (content instanceof TdApi.MessageDocument) {
 
         }
     }
@@ -227,7 +233,7 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
         });
     }
 
-    private void updateNewAuth(TdApi.UpdateNewAuthorization newAuthorization){
+    private void updateNewAuth(TdApi.UpdateNewAuthorization newAuthorization) {
         NotificationUtils.buildSimpleNotification(ApplicationSpektogram.this, getString(R.string.app_name), "Detected loggin from " + newAuthorization.device);
     }
 
