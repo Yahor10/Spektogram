@@ -149,7 +149,7 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
             Intent intent = new Intent(BROADCAST_UPDATE_FILE_DOWNLOADED);
             intent.putExtra(KEY_UPDATE_FILE_ID, file.fileId);
             Log.v(Constants.LOG_TAG, "UpdateFile");
-            sendBroadcast(new Intent(BROADCAST_UPDATE_FILE_DOWNLOADED));
+            sendBroadcast(intent);
         } else if (object instanceof TdApi.UpdateFileProgress) {
             Log.v(Constants.LOG_TAG, "UpdateFileProgress");
             TdApi.UpdateFileProgress progress = (TdApi.UpdateFileProgress) object;

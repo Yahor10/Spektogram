@@ -2,7 +2,10 @@ package com.telegram.spektogram.pages;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +52,7 @@ public class ChatRoom extends Fragment implements Client.ResultHandler {
             }
         });
 
-        ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.GetChats(0, 30), this);
+        ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.GetChats(0, 50), this);
 
 
         return view;
@@ -105,5 +108,30 @@ public class ChatRoom extends Fragment implements Client.ResultHandler {
             }
         });
         getMessagesByIdUsers(chatArrayList);
+    }
+
+    private final BroadcastReceiver updateFileDownloadReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, Intent intent) {
+            ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.GetChats(0, 50), ChatRoom.this);
+
+        }
+    };
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().registerReceiver(updateFileDownloadReceiver, new IntentFilter(ApplicationSpektogram.BROADCAST_UPDATE_FILE_DOWNLOADED));
+    }
+
+    @Override
+    public void onStop() {
+
+        try {
+            getActivity().unregisterReceiver(updateFileDownloadReceiver);
+        } catch (Exception e) {
+        }
+        super.onStop();
     }
 }

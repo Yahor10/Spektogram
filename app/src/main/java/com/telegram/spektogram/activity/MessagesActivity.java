@@ -71,6 +71,9 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
     TdApi.Chat chat = null;
 
 
+    public int MaxIdMessage = 0;
+
+
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -168,7 +171,6 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                         id_users.add(chatFull.participants[0].user.id);
                         getMessagesByIdUsers(id_users, chat.id, flag_new_message);
 
-
                     }
                 });
             }
@@ -205,6 +207,12 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                             adapter.notifyDataSetChanged();
                         }
                     });
+
+                    for (TdApi.Message m : mes.messages) {
+                        if (m.id > MaxIdMessage) {
+                            MaxIdMessage = m.id;
+                        }
+                    }
                 }
             }
         });
@@ -255,8 +263,51 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
     private final BroadcastReceiver updateFileDownloadReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, Intent intent) {
-            long file_id = intent.getLongExtra(ApplicationSpektogram.KEY_UPDATE_FILE_ID, 0);
             loadMessages(chat, false);
+            int file_id = intent.getIntExtra(ApplicationSpektogram.KEY_UPDATE_FILE_ID, 0);
+            TdApi.Message message = adapter.findMessageWithFileId(file_id);
+            if (message != null) {
+                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.GetChatHistory(chat.id, message.fromId, MaxIdMessage - message.id, 1), new Client.ResultHandler() {
+
+                    @Override
+                    public void onResult(TdApi.TLObject object) {
+                        TdApi.Messages mes = (TdApi.Messages) object;
+
+                        if (mes != null && mes.messages != null) {
+                            final TdApi.Message m = mes.messages[0];
+
+
+
+
+
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+//                                    View v = list.findViewWithTag(m.id);
+//                                    if (v != null) {
+//                                        MessagesAdapter.ViewHolder holder = (MessagesAdapter.ViewHolder) v.getTag(R.id.TAG_HOLDER_VIEW);
+//                                        if (holder != null) {
+//                                            holder.setData(m);
+//                                        }
+//                                    }
+                                    adapter.replaceMessage(m);
+                                    int index = list.getFirstVisiblePosition();
+                                    View up = list.getChildAt(0);
+                                    int top = (up == null) ? 0 : up.getTop();
+                                    adapter.notifyDataSetChanged();
+                                    list.setSelectionFromTop(index, top);
+                                }
+                            });
+
+                        }
+
+
+                    }
+                });
+            }
+
         }
     };
 

@@ -88,6 +88,37 @@ public class MessagesAdapter extends BaseAdapter {
         });
     }
 
+    public TdApi.Message findMessageWithFileId(int file_id) {
+
+        for (TdApi.Message mess : messages) {
+            if (mess.message instanceof TdApi.MessagePhoto) {
+                for (TdApi.PhotoSize p : ((TdApi.MessagePhoto) mess.message).photo.photos) {
+                    if (p.photo instanceof TdApi.FileEmpty) {
+                        if (((TdApi.FileEmpty) p.photo).id == file_id) {
+                            return mess;
+                        }
+                    } else if (p.photo instanceof TdApi.FileLocal) {
+                        if (((TdApi.FileLocal) p.photo).id == file_id) {
+                            return mess;
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+        return null;
+    }
+
+    public void replaceMessage(TdApi.Message newMessage){
+        for (int i = 0; i< messages.size();i++){
+            if(messages.get(i).id == newMessage.id){
+                messages.set(i,newMessage);
+            }
+        }
+    }
+
     public int getId_owner_user() {
         return id_owner_user;
     }
@@ -170,10 +201,11 @@ public class MessagesAdapter extends BaseAdapter {
             holder.time_message = (TextView) view.findViewById(R.id.txt_message_time);
             holder.img_photo_message = (ImageView) view.findViewById(R.id.img_message_photo);
 
-            view.setTag(holder);
+            view.setTag(R.id.TAG_HOLDER_VIEW, holder);
+            view.setTag(((TdApi.Message) getItem(i)).id);
 
         } else {
-            holder = (ViewHolder) view.getTag();
+            holder = (ViewHolder) view.getTag(R.id.TAG_HOLDER_VIEW);
         }
 
         holder.setData((TdApi.Message) getItem(i));
@@ -226,6 +258,7 @@ public class MessagesAdapter extends BaseAdapter {
 
 
                     } else if (((TdApi.MessagePhoto) message.message).photo.photos[0].photo instanceof TdApi.FileEmpty) {
+                        img_photo_message.setImageResource(R.drawable.user_photo);
                         id_file = ((TdApi.FileEmpty) ((TdApi.MessagePhoto) message.message).photo.photos[0].photo).id;
                         ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.DownloadFile(id_file), new Client.ResultHandler() {
                             @Override

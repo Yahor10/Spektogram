@@ -65,4 +65,7 @@
     <string name="server_error">Server not available</string>
     <string name="not_valid_phone">Not valid phone number</string>
 
+
+    <item type="id" name="TAG_MESSAGE_ID_VIEW"/>
+    <item type="id" name="TAG_HOLDER_VIEW"/>
 </resources>

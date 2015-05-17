@@ -2,10 +2,8 @@ package com.telegram.spektogram.activity;
 
 import android.app.Activity;
 import android.app.SearchManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -275,31 +273,5 @@ public class ChatRoomActivity extends ActionBarActivity
         }
     }
 
-    private final BroadcastReceiver updatePhotoUpdate = new BroadcastReceiver() {
-        @Override
-        public void onReceive(final Context context, Intent intent) {
-
-        }
-    };
-
-
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        registerReceiver(updatePhotoUpdate, new IntentFilter(ApplicationSpektogram.BROADCAST_UPDATE_FILE_DOWNLOADED));
-    }
-
-    @Override
-    protected void onStop() {
-
-        try {
-            unregisterReceiver(updatePhotoUpdate);
-
-        } catch (Exception e) {
-        }
-        super.onStop();
-    }
 
 }
