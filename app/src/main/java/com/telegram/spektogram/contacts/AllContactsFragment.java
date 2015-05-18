@@ -66,4 +66,8 @@ public class AllContactsFragment extends Fragment {
         list.setAdapter(adapterContacts);
 
     }
+
+    public ListView getList() {
+        return list;
+    }
 }

@@ -101,10 +101,20 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         final String nameGroup = editText.getText().toString();
-                        final TelegramContactsFragment item = (TelegramContactsFragment) fragmentPagerAdapter.getItem(1);
-                        final ListView list = item.getList();
-                        final SparseBooleanArray checked = list.getCheckedItemPositions();
+                        final int currentItem = mPager.getCurrentItem();
+                        ListView list = null;
+                        switch (currentItem){
+                            case 0:
+                                AllContactsFragment fragment = (AllContactsFragment) fragmentPagerAdapter.getItem(currentItem);
+                                list = fragment.getList();
+                                break;
+                            case 1:
+                                TelegramContactsFragment fragment2 = (TelegramContactsFragment) fragmentPagerAdapter.getItem(currentItem);
+                                list = fragment2.getList();
+                                break;
+                        }
 
+                        final SparseBooleanArray checked = list.getCheckedItemPositions();
                         if (checked != null) {
                             int ids[] = new int[checked.size()];
                             for (int i = 0; i < checked.size(); i++) {
@@ -295,8 +305,24 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
 
         switch (id) {
             case R.id.action_accept:
-                showInputDialog();
+                final int currentItem = mPager.getCurrentItem();
+                ListView list = null;
+                switch (currentItem){
+                    case 0:
+                        AllContactsFragment fragment = (AllContactsFragment) fragmentPagerAdapter.getItem(currentItem);
+                        list = fragment.getList();
+                        break;
+                    case 1:
+                        TelegramContactsFragment fragment2 = (TelegramContactsFragment) fragmentPagerAdapter.getItem(currentItem);
+                        list = fragment2.getList();
+                        break;
+                }
+                final int size = list.getCheckedItemPositions().size();
+                if(size == 0 ){
+                    return super.onOptionsItemSelected(item);
+                }
 
+                showInputDialog();
                 break;
             case android.R.id.home:
                 finish();

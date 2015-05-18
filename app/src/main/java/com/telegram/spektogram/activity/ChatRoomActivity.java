@@ -1,19 +1,16 @@
 package com.telegram.spektogram.activity;
 
 import android.app.Activity;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.SearchView;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
@@ -141,8 +138,7 @@ public class ChatRoomActivity extends ActionBarActivity
         actionBar.setTitle("");
         actionBar.setDisplayShowCustomEnabled(true);
 
-        final ColorDrawable drawable = new ColorDrawable(Color.TRANSPARENT);
-        getSupportActionBar().setBackgroundDrawable(drawable);
+        getSupportActionBar().setBackgroundDrawable(getDrawable(R.drawable.top_shape));
         actionBar.setCustomView(R.layout.ab_main);
 
         String s = getString(R.string.app_name);
@@ -168,26 +164,26 @@ public class ChatRoomActivity extends ActionBarActivity
             getMenuInflater().inflate(R.menu.chat, menu);
             restoreActionBar();
 
-            SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
-            final MenuItem item = menu.findItem(R.id.search);
-            SearchView searchView = (SearchView) item.getActionView();
-
-            searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
-
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-                @Override
-                public boolean onQueryTextSubmit(String s) {
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String s) {
-                    getSupportActionBar().getCustomView().setVisibility(View.GONE);
-                    return false;
-                }
-            });
+//            SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//
+//            final MenuItem item = menu.findItem(R.id.search);
+//            SearchView searchView = (SearchView) item.getActionView();
+//
+//            searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+//
+//            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//
+//                @Override
+//                public boolean onQueryTextSubmit(String s) {
+//                    return false;
+//                }
+//
+//                @Override
+//                public boolean onQueryTextChange(String s) {
+//                    getSupportActionBar().getCustomView().setVisibility(View.GONE);
+//                    return false;
+//                }
+//            });
 
 //            MenuItemCompat.setShowAsAction(item, MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW
 //                    | MenuItem.SHOW_AS_ACTION_ALWAYS);
