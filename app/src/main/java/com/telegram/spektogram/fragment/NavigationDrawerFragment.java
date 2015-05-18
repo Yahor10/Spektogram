@@ -1,9 +1,14 @@
 package com.telegram.spektogram.fragment;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -26,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,6 +39,7 @@ import com.telegram.spektogram.R;
 import com.telegram.spektogram.activity.ContactsActivity;
 import com.telegram.spektogram.activity.SettingsActivity;
 import com.telegram.spektogram.application.ApplicationSpektogram;
+import com.telegram.spektogram.application.Constants;
 import com.telegram.spektogram.views.CustomDrawerAdapter;
 import com.telegram.spektogram.views.DrawerItem;
 
@@ -79,10 +86,17 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
     private boolean mUserLearnedDrawer;
     private TextView name;
     private TextView phone;
+    private ImageView image;
 
 
     private final List<DrawerItem> dataList = new ArrayList<>();
     CustomDrawerAdapter adapter;
+    private Client.ResultHandler emptyHandler = new Client.ResultHandler() {
+        @Override
+        public void onResult(TdApi.TLObject object) {
+
+        }
+    };
 
     public NavigationDrawerFragment() {
     }
@@ -101,6 +115,7 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
             mFromSavedInstanceState = true;
         }
 
+        getActivity().registerReceiver(fileDownloadReceiver, new IntentFilter(ApplicationSpektogram.BROADCAST_UPDATE_FILE_DOWNLOADED));
         // Select either the default item (0) or the last selected item.
         selectItem(mCurrentSelectedPosition);
     }
@@ -110,33 +125,49 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
         super.onActivityCreated(savedInstanceState);
         // Indicate that this fragment would like to influence the set of actions in the action bar.
         setHasOptionsMenu(true);
+        updateGetMeData();
+    }
 
-
+    private void updateGetMeData() {
         final ApplicationSpektogram application = ApplicationSpektogram.getApplication(getActivity());
         final TdApi.GetMe function = new TdApi.GetMe();
-
-
         application.sendFunction(function, new Client.ResultHandler() {
             @Override
             public void onResult(TdApi.TLObject object) {
                 Log.e("TAG", object.toString());
                 if (object instanceof TdApi.User) {
-                    if (getActivity() != null) {
+                    final FragmentActivity activity = getActivity();
+                    if (activity != null) {
                         final TdApi.User user = (TdApi.User) object;
-                        getActivity().runOnUiThread(new Runnable() {
+                        Log.v(Constants.LOG_TAG, "get me " + user);
+                        final TdApi.File photoSmall = user.photoSmall;
+                        if (photoSmall instanceof TdApi.FileEmpty) {
+                            TdApi.FileEmpty empty = (TdApi.FileEmpty) photoSmall;
+                            if (empty.id != 0) {
+                                ApplicationSpektogram.getApplication(activity).sendFunction(new TdApi.DownloadFile(((TdApi.FileEmpty) photoSmall).id), emptyHandler);
+                            }
+                        } else {
+                            final TdApi.FileLocal local = (TdApi.FileLocal) photoSmall;
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    final Bitmap bitmap = BitmapFactory.decodeFile(local.path);
+                                    image.setImageBitmap(bitmap);
+                                }
+                            });
+                        }
+                        activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 name.setText(new StringBuilder().append(user.firstName).append(" ").append(user.lastName).toString());
                                 phone.setText(new StringBuilder().append("+").append(user.phoneNumber).toString());
+
                             }
                         });
                     }
-                } else {
                 }
             }
         });
-
-
     }
 
     @Override
@@ -146,6 +177,7 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
                 R.layout.fragment_navigation_drawer, container, false);
         name = (TextView) inflate.findViewById(R.id.userName);
         phone = (TextView) inflate.findViewById(R.id.userPhone);
+        image  =(ImageView) inflate.findViewById(R.id.image);
 
         mDrawerListView = (ListView) inflate.findViewById(R.id.list);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -273,10 +305,23 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(fileDownloadReceiver);
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mCallbacks = null;
     }
+
+    private final BroadcastReceiver fileDownloadReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, Intent intent) {
+            updateGetMeData();
+        }
+    };
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

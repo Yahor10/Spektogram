@@ -17,4 +17,5 @@
     <color name="gray">#aa000000</color>
 
     <color name="transparent_half">#80000000</color>
+    <color name="transparent_black">#33000000</color>
 </resources>

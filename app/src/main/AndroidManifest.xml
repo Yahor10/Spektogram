@@ -62,9 +62,6 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".activity.SelectBackgroundActivity"
-            android:label="@string/title_activity_select_background"></activity>
     </application>
 
 </manifest>

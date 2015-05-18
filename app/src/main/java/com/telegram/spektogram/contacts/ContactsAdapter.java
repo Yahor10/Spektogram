@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.activity.ContactsActivity;
 import com.telegram.spektogram.application.ApplicationSpektogram;
+import com.telegram.spektogram.application.Constants;
 import com.telegram.spektogram.enums.ContactType;
 
 import org.drinkless.td.libcore.telegram.Client;
@@ -37,6 +39,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
     final Client.ResultHandler emptyHandler = new Client.ResultHandler() {
         @Override
         public void onResult(TdApi.TLObject object) {
+            Log.v(Constants.LOG_TAG,"empty handler " + object);
         }
     };
 
@@ -159,6 +162,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
                         viewContactTelegramHolder.imageView.setImageBitmap(bitmap);
                     }
                 }else if(photoSmall instanceof TdApi.FileEmpty){
+                    Log.v(Constants.LOG_TAG,"send download request");
                     viewContactTelegramHolder.imageView.setImageResource(R.drawable.user_photo);
                     ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.DownloadFile(((TdApi.FileEmpty) photoSmall).id), emptyHandler);
                 }

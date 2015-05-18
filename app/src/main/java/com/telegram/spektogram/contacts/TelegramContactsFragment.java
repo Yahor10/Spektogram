@@ -85,9 +85,7 @@ public class TelegramContactsFragment extends Fragment implements AdapterView.On
         ContactsAdapter adapter = (ContactsAdapter) getList().getAdapter();
 
         final Contact item = adapter.getItem(position);
-        if (item.getType() == ContactType.Action && item.name.equals(getString(R.string.create_new_group))) {
-            startActivity(ContactsActivity.buildStartIntent(getActivity(), true, true, false));
-        }
+
         adapter.notifyDataSetChanged();
     }
 

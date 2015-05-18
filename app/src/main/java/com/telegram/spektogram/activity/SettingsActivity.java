@@ -242,8 +242,6 @@ public class SettingsActivity extends PreferenceActivity {
             findPreference("change_chat_background").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    final Activity activity = getActivity();
-                    startActivity(SelectBackgroundActivity.buildStartIntent(activity));
                     return false;
                 }
             });

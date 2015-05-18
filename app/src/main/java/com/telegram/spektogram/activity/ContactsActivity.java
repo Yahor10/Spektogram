@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -194,9 +193,6 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
             } else {
                 mPager.setCurrentItem(0);
             }
-        } else {
-            Log.v(Constants.LOG_TAG,"launch contact request...");
-            ApplicationSpektogram.getApplication(this).sendFunction(new TdApi.GetContacts(), this);
         }
     }
 
@@ -207,6 +203,11 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         registerReceiver(updateUserNameReceiver, new IntentFilter(ApplicationSpektogram.BROADCAST_UPDATE_USER_NAME));
         registerReceiver(fileDownloadReceiver, new IntentFilter(ApplicationSpektogram.BROADCAST_UPDATE_FILE_DOWNLOADED));
         registerReceiver(fileDownloadReceiver, new IntentFilter(ApplicationSpektogram.BROADCAST_UPDATE_USER_PHOTO));
+
+        if(!PreferenceUtils.isOfflineMode(this)) {
+            Log.v(Constants.LOG_TAG, "launch contact request...");
+            ApplicationSpektogram.getApplication(this).sendFunction(new TdApi.GetContacts(), this);
+        }
     }
 
     @Override
@@ -230,7 +231,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        getSupportActionBar().setBackgroundDrawable(getDrawable(R.drawable.top_shape));
         actionBar.setCustomView(R.layout.ab_main);
 
 
@@ -270,6 +271,20 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        final MenuItem accept = menu.findItem(R.id.action_accept);
+        final MenuItem group = menu.findItem(R.id.action_add_group);
+        final Intent intent = getIntent();
+
+        boolean NewGroup = intent.getBooleanExtra(ContactsActivity.EXTRA_NEW_GROUP, false);
+        accept.setVisible(NewGroup ? true : false);
+        group.setVisible(NewGroup ? false : true);
+
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -285,6 +300,9 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
                 break;
             case android.R.id.home:
                 finish();
+                break;
+            case R.id.action_add_group:
+                startActivity(ContactsActivity.buildStartIntent(this, true, true, false));
                 break;
         }
 
@@ -372,9 +390,9 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "All contacts";
+                    return "All contacts".toUpperCase();
                 case 1:
-                    return "Only Telegram";
+                    return "Only Telegram".toUpperCase();
             }
 
             return null;
