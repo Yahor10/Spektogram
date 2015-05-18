@@ -6,6 +6,8 @@
         <item name="android:windowActionBar">true</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="actionBarStyle">@style/ActionBar.Solid.MyAppTheme</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back</item>
+        <item name="android:windowActionModeOverlay">true</item>
         <!--<item name="colorControlActivated">@color/accent</item>-->
         <!--<item name="colorControlHighlight">@color/accent</item>-->
     </style>
@@ -15,6 +17,8 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textAllCaps">false</item>
+        <item name="android:background">@drawable/top_shape</item>
+
     </style>
 
     <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="Theme.AppCompat.Light.DarkActionBar">

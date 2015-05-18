@@ -147,4 +147,21 @@ public class PreferenceUtils {
                 PreferenceKeys.VIBRATE, false);
     }
 
+    public static boolean isChatBackground(Context context) {
+        SharedPreferences defaultSharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        return defaultSharedPreferences.getBoolean(
+                PreferenceKeys.IS_CHAT_ACTIVITY_BACKGROUND, false);
+    }
+
+    public static void setChatBackground(Context context,
+                                   boolean background) {
+        SharedPreferences.Editor pEditor = PreferenceManager.getDefaultSharedPreferences(context)
+                .edit();
+        pEditor.putBoolean(PreferenceKeys.IS_CHAT_ACTIVITY_BACKGROUND,
+                background);
+        pEditor.commit();
+    }
+
+
 }

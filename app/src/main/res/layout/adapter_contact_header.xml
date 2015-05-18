@@ -6,7 +6,7 @@
     android:layout_alignParentTop="true"
     android:layout_height="40dp"
     android:layout_below="@+id/tvName"
-    android:background="@android:color/darker_gray"
+    android:background="@color/transparent_black_50"
     >
 
     <TextView

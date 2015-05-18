@@ -18,9 +18,13 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -46,7 +50,7 @@ import java.util.Arrays;
 
 
 public class MessagesActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, View.OnClickListener, PopupMenu.OnItemSelectedListener {
+        GoogleApiClient.OnConnectionFailedListener, View.OnClickListener,AdapterView.OnItemLongClickListener, PopupMenu.OnItemSelectedListener {
 
     private static final int SEND_PHOTO = 111;
     private static final int SEND_VIDEO = 113;
@@ -120,6 +124,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
 
         list.setAdapter(adapter);
 
+
         chat = ApplicationSpektogram.chat;
 
         loadMessages(chat, false);
@@ -139,6 +144,9 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         restoreActionBar();
         buildGoogleApiClient();
 
+
+        list.setOnItemLongClickListener(this);
+//        list.setMultiChoiceModeListener();
 
     }
 
@@ -388,6 +396,26 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
             finish();
         }
 
+        if (id == R.id.clear_history) {
+            ApplicationSpektogram.getApplication(this).sendFunction(new TdApi.DeleteChatHistory(-1), new Client.ResultHandler() {
+                @Override
+                public void onResult(TdApi.TLObject object) {
+
+                }
+            });
+        }
+
+        if (id == R.id.delete_messages) {
+            int[] arr = null;
+            final TdApi.DeleteMessages func = new TdApi.DeleteMessages(-1, arr);
+            ApplicationSpektogram.getApplication(this).sendFunction(func, new Client.ResultHandler() {
+                @Override
+                public void onResult(TdApi.TLObject object) {
+
+                }
+            });
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -575,5 +603,56 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
 
     }
 
+
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+        startActionMode(multi);
+        return false;
+    }
+
+    private AbsListView.MultiChoiceModeListener multi = new AbsListView.MultiChoiceModeListener() {
+
+        @Override
+        public void onItemCheckedStateChanged(ActionMode mode, int position,
+                                              long id, boolean checked) {
+            // Here you can do something when items are selected/de-selected,
+            // such as update the title in the CAB
+            Log.v(Constants.LOG_TAG,"checked");
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            // Respond to clicks on the actions in the CAB
+            switch (item.getItemId()) {
+
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate the menu for the CAB
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.chat_long_click, menu);
+
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            // Here you can make any necessary updates to the activity when
+            // the CAB is removed. By default, selected items are deselected/unchecked.
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            // Here you can perform updates to the CAB due to
+            // an invalidate() request
+            return false;
+        }
+    };
 
 }

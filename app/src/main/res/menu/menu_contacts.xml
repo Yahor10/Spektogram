@@ -6,4 +6,8 @@
         android:icon="@drawable/ic_attach_check"
         android:orderInCategory="1" app:showAsAction="always" />
 
+    <item android:id="@+id/action_add_group" android:title="@string/action_accept"
+        android:icon="@drawable/ic_add_contact"
+        android:orderInCategory="1" app:showAsAction="always" />
+
 </menu>

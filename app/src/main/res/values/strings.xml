@@ -64,6 +64,7 @@
     <string name="no_internet_connection">No internet connection</string>
     <string name="server_error">Server not available</string>
     <string name="not_valid_phone">Not valid phone number</string>
+    <string name="enter_group_name">Enter group name</string>
 
 
     <item type="id" name="TAG_MESSAGE_ID_VIEW"/>

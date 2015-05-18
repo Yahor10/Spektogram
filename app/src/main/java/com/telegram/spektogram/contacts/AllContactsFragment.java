@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.telegram.spektogram.R;
-import com.telegram.spektogram.enums.ContactType;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 
@@ -50,10 +49,7 @@ public class AllContactsFragment extends Fragment {
     private void loadContacts() {
         final FragmentActivity activity = getActivity();
         final ContactFetcher contactFetcher = new ContactFetcher(activity, userMap);
-
         List<Contact> actions = new ArrayList<Contact>(3);
-        final Contact object = new Contact("-1", getString(R.string.create_new_group), ContactType.Action);
-        actions.add(object);
 
         ArrayList<Contact> listContacts = contactFetcher.fetchAll(actions);
         adapterContacts = new ContactsAdapter(activity, listContacts,list);
@@ -62,16 +58,16 @@ public class AllContactsFragment extends Fragment {
     }
 
     public void loadContacts(Context context) {
-
         final ContactFetcher contactFetcher = new ContactFetcher(context, userMap);
-
         List<Contact> actions = new ArrayList<Contact>(3);
-        final Contact object = new Contact("-1", getString(R.string.create_new_group), ContactType.Action);
-        actions.add(object);
 
         ArrayList<Contact> listContacts = contactFetcher.fetchAll(actions);
         adapterContacts = new ContactsAdapter(context, listContacts,list);
         list.setAdapter(adapterContacts);
 
+    }
+
+    public ListView getList() {
+        return list;
     }
 }

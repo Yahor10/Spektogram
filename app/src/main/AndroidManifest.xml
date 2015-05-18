@@ -49,7 +49,8 @@
         </activity>
         <activity
             android:name=".activity.ContactsActivity"
-            android:icon="@drawable/ic_drawer"></activity>
+            android:logo="@drawable/ic_arrow_back">
+            </activity>
         <activity android:name="com.lamerman.FileDialog"></activity>
 
         <receiver
@@ -62,9 +63,6 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".activity.SelectBackgroundActivity"
-            android:label="@string/title_activity_select_background"></activity>
     </application>
 
 </manifest>

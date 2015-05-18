@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Введите имя группы"
+        android:text="@string/enter_group_name"
         android:id="@+id/textView" />
 
     <EditText

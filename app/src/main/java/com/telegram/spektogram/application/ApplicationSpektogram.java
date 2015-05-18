@@ -22,7 +22,8 @@ import java.io.File;
 /**
  * Created by ychabatarou on 27.04.2015.
  */
-public class ApplicationSpektogram extends android.app.Application implements Client.ResultHandler {
+public class
+        ApplicationSpektogram extends android.app.Application implements Client.ResultHandler {
 
     private LruCache<String, Bitmap> mMemoryCache;
 
