@@ -28,9 +28,10 @@ import java.util.Arrays;
 /**
  * Created by alex-pers on 4/29/15.
  */
-public class ChatRoom extends Fragment implements Client.ResultHandler {
+public class ChatRoom extends Fragment implements Client.ResultHandler, DialogExitListener {
     ListView chatslistView;
     ChatRoomsAdapter adapter;
+    TdApi.Chat longClickChat = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,7 +53,20 @@ public class ChatRoom extends Fragment implements Client.ResultHandler {
             }
         });
 
-        ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.GetChats(0, 50), this);
+        chatslistView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                TdApi.Chat chat = ((ChatRoomsAdapter.ViewHolder) view.getTag()).chat;
+
+                DeleteDialog deleteDialog = new DeleteDialog();
+                deleteDialog.setListener(ChatRoom.this);
+                deleteDialog.setMessage("Удалить чат");
+                deleteDialog.show(getActivity().getFragmentManager(), "tag");
+                return true;
+            }
+        });
+
+        ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.GetChats(0, 100), this);
 
 
         return view;
@@ -133,5 +147,15 @@ public class ChatRoom extends Fragment implements Client.ResultHandler {
         } catch (Exception e) {
         }
         super.onStop();
+    }
+
+    @Override
+    public void exitTest() {
+        if (longClickChat != null) {
+//            ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.Dele, ChatRoom.this);
+
+        }
+
+
     }
 }

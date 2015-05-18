@@ -20,8 +20,7 @@
         android:layout_height="20dp"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/img_user_photo"
-        android:rotation="180"
-        android:src="@drawable/triangle_message_to_me" />
+        android:src="@drawable/ic_right_chat" />
 
     <FrameLayout
         android:layout_width="fill_parent"

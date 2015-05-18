@@ -29,6 +29,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -38,6 +39,8 @@ import com.telegram.spektogram.R;
 import com.telegram.spektogram.adapters.MessagesAdapter;
 import com.telegram.spektogram.application.ApplicationSpektogram;
 import com.telegram.spektogram.application.Constants;
+import com.telegram.spektogram.pages.DeleteDialog;
+import com.telegram.spektogram.pages.DialogExitListener;
 import com.telegram.spektogram.preferences.PreferenceUtils;
 import com.telegram.spektogram.views.PopupMenu;
 
@@ -50,7 +53,7 @@ import java.util.Arrays;
 
 
 public class MessagesActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, View.OnClickListener,AdapterView.OnItemLongClickListener, PopupMenu.OnItemSelectedListener {
+        GoogleApiClient.OnConnectionFailedListener, View.OnClickListener, AdapterView.OnItemLongClickListener, PopupMenu.OnItemSelectedListener {
 
     private static final int SEND_PHOTO = 111;
     private static final int SEND_VIDEO = 113;
@@ -74,6 +77,8 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
     ArrayList<Integer> id_users = new ArrayList<Integer>();
     TdApi.Chat chat = null;
 
+
+    TdApi.Message longClickMessage = null;
 
     public int MaxIdMessage = 0;
 
@@ -123,6 +128,25 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
 
 
         list.setAdapter(adapter);
+
+//        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//
+//
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                DeleteDialog deleteDialog = new DeleteDialog();
+//                deleteDialog.setMessage(" Удалить сообщение");
+//                MessagesAdapter.ViewHolder holder = (MessagesAdapter.ViewHolder) view.getTag(R.id.TAG_HOLDER_VIEW);
+//                longClickMessage = holder.message;
+//                deleteDialog.setListener(new DialogExitListener() {
+//                    @Override
+//                    public void exitTest() {
+//                        Toast.makeText(MessagesActivity.this, "Message delete id = " + longClickMessage.id, Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//                return true;
+//            }
+//        });
 
 
         chat = ApplicationSpektogram.chat;
@@ -604,7 +628,6 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
     }
 
 
-
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -619,7 +642,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                                               long id, boolean checked) {
             // Here you can do something when items are selected/de-selected,
             // such as update the title in the CAB
-            Log.v(Constants.LOG_TAG,"checked");
+            Log.v(Constants.LOG_TAG, "checked");
         }
 
         @Override

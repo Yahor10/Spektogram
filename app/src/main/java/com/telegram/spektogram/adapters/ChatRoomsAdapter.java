@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +32,7 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
     LayoutInflater inflater;
     Context context;
     ArrayList<TdApi.Chat> chats;
+    ArrayList<Integer> colors = new ArrayList<Integer>();
 
     public ChatRoomsAdapter(LayoutInflater inflater, Context context, ArrayList<TdApi.Chat> chats) {
         super(context, 0, chats);
@@ -107,6 +107,7 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
     }
 
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder holder;
@@ -133,6 +134,35 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
 
         holder.setData((TdApi.Chat) getItem(i));
 
+        int color_id = getRandomBackground(context);
+
+
+        holder.background.setBackground(context.getResources().getDrawable(color_id));
+
+        if(i>0) {
+            boolean flag_color_verify = true;
+            int previous_color = colors.get(i-1);
+            int next_color = 0;
+            if(colors.size()>=(i+1)){
+                next_color = colors.get(i+1);
+            }
+
+            while (flag_color_verify) {
+                if(previous_color == color_id || next_color == color_id){
+                    color_id = getRandomBackground(context);
+                    holder.background.setBackground(context.getResources().getDrawable(color_id));
+                }else{
+                    flag_color_verify = false;
+                }
+            }
+
+        }
+
+
+        colors.add(i,color_id);
+
+//
+
         return view;
     }
 
@@ -153,9 +183,6 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
 
             this.chat = chat;
             Random random = new Random();
-
-
-            background.setBackground(getRandomBackground(context));
 
 
             if (chat.type instanceof TdApi.GroupChatInfo) {
@@ -215,31 +242,31 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
         }
     }
 
-    public Drawable getRandomBackground( Context context){
+    public int getRandomBackground(Context context) {
 
         Random random = new Random();
 
         int r = random.nextInt(8);
 
-        switch (r){
+        switch (r) {
             case 1:
-                return context.getResources().getDrawable(R.drawable.gradient_blue_blue);
+                return R.drawable.gradient_blue_blue;
             case 2:
-                return context.getResources().getDrawable(R.drawable.gradient_blue_to_blue);
+                return R.drawable.gradient_blue_to_blue;
             case 3:
-                return context.getResources().getDrawable(R.drawable.gradient_blue_violet);
+                return R.drawable.gradient_blue_violet;
             case 4:
-                return context.getResources().getDrawable(R.drawable.gradient_red_red);
+                return R.drawable.gradient_red_red;
             case 5:
-                return context.getResources().getDrawable(R.drawable.gradient_red_yellow);
+                return R.drawable.gradient_red_yellow;
             case 6:
-                return context.getResources().getDrawable(R.drawable.gradient_yellow_green);
+                return R.drawable.gradient_yellow_green;
             case 7:
-                return context.getResources().getDrawable(R.drawable.gradient_yellow_to_red);
+                return R.drawable.gradient_yellow_to_red;
 
         }
 
-        return context.getResources().getDrawable(R.drawable.gradient_list_item_chat_room_red);
+        return R.drawable.gradient_list_item_chat_room_red;
 
     }
 
