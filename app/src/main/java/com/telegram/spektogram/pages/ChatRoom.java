@@ -57,19 +57,24 @@ public class ChatRoom extends Fragment implements Client.ResultHandler, DialogEx
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 TdApi.Chat chat = ((ChatRoomsAdapter.ViewHolder) view.getTag()).chat;
+                longClickChat = chat;
 
                 DeleteDialog deleteDialog = new DeleteDialog();
                 deleteDialog.setListener(ChatRoom.this);
-                deleteDialog.setMessage("Удалить чат");
+                deleteDialog.setMessage("Удалить историю сообщений");
                 deleteDialog.show(getActivity().getFragmentManager(), "tag");
                 return true;
             }
         });
 
-        ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.GetChats(0, 100), this);
-
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reloadAllChats();
     }
 
     // kostil'
@@ -102,6 +107,11 @@ public class ChatRoom extends Fragment implements Client.ResultHandler, DialogEx
             }
 
         }
+
+    }
+
+    public void reloadAllChats() {
+        ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.GetChats(0, 100), this);
 
     }
 
@@ -152,7 +162,12 @@ public class ChatRoom extends Fragment implements Client.ResultHandler, DialogEx
     @Override
     public void exitTest() {
         if (longClickChat != null) {
-//            ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.Dele, ChatRoom.this);
+            ApplicationSpektogram.getApplication(getActivity().getBaseContext()).sendFunction(new TdApi.DeleteChatHistory(longClickChat.id), new Client.ResultHandler() {
+                @Override
+                public void onResult(TdApi.TLObject object) {
+                    reloadAllChats();
+                }
+            });
 
         }
 

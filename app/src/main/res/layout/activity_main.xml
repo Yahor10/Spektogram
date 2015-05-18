@@ -16,6 +16,14 @@
         android:transcriptMode="alwaysScroll" />
 
     <include
+        android:id="@+id/empty_view_message"
+        layout="@layout/view_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
+
+    <include
         android:id="@+id/view_send_message"
         layout="@layout/view_send_message"
         android:layout_width="match_parent"

@@ -128,6 +128,8 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
 
 
         list.setAdapter(adapter);
+        list.setEmptyView(findViewById(R.id.empty_view_message));
+
 
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
@@ -302,7 +304,16 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         final View customView = actionBar.getCustomView();
         TextView chatName = (TextView) customView.findViewById(R.id.chatName);
         TextView chatStatus = (TextView) customView.findViewById(R.id.chatStatus);
-        chatName.setText("ONE TWO");
+
+        chatStatus.setVisibility(View.GONE);
+
+        if (chat.type instanceof TdApi.GroupChatInfo) {
+            chatName.setText(((TdApi.GroupChatInfo) chat.type).groupChat.title);
+        } else if (chat.type instanceof TdApi.PrivateChatInfo) {
+            chatName.setText(((TdApi.PrivateChatInfo) chat.type).user.firstName);
+        }
+
+
     }
 
 
