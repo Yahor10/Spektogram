@@ -68,12 +68,12 @@ public class MessagesAdapter extends BaseAdapter {
     public void addMessage(TdApi.Message message) {
         if (message != null) {
             this.messages.add(message);
-//            Collections.sort(this.messages, new Comparator<TdApi.Message>() {
-//                @TargetApi(Build.VERSION_CODES.KITKAT)
-//                public int compare(TdApi.Message s1, TdApi.Message s2) {
-//                    return Integer.compare(s1.date, s2.date);
-//                }
-//            });
+            Collections.sort(this.messages, new Comparator<TdApi.Message>() {
+                @TargetApi(Build.VERSION_CODES.KITKAT)
+                public int compare(TdApi.Message s1, TdApi.Message s2) {
+                    return Integer.compare(s1.date, s2.date);
+                }
+            });
         }
     }
 
@@ -115,6 +115,14 @@ public class MessagesAdapter extends BaseAdapter {
         for (int i = 0; i< messages.size();i++){
             if(messages.get(i).id == newMessage.id){
                 messages.set(i,newMessage);
+            }
+        }
+    }
+
+    public  void removeMessageById(int messgage_id){
+        for (int i = 0; i< messages.size();i++){
+            if(messages.get(i).id == messgage_id){
+                messages.remove(i);
             }
         }
     }

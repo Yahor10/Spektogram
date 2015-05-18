@@ -1,5 +1,6 @@
 package com.telegram.spektogram.contacts;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ import java.util.Map;
 /**
  * Created by ychabatarou on 13.05.2015.
  */
+@SuppressLint("ValidFragment")
 public class TelegramContactsFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private ListView list;

@@ -139,27 +139,29 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
 
         holder.background.setBackground(context.getResources().getDrawable(color_id));
 
-        if(i>0) {
-            boolean flag_color_verify = true;
-            int previous_color = colors.get(i-1);
-            int next_color = 0;
-            if(colors.size()>=(i+1)){
-                next_color = colors.get(i+1);
-            }
+        boolean flag_color_verify = true;
+        int previous_color = 0;
 
-            while (flag_color_verify) {
-                if(previous_color == color_id || next_color == color_id){
-                    color_id = getRandomBackground(context);
-                    holder.background.setBackground(context.getResources().getDrawable(color_id));
-                }else{
-                    flag_color_verify = false;
-                }
-            }
+        if ((i - 1) >= 0) {
+            previous_color = colors.get(i - 1);
+        }
 
+        int next_color = 0;
+        if (colors.size() >= (i + 1)) {
+            next_color = colors.get(i + 1);
+        }
+
+        while (flag_color_verify) {
+            if (previous_color == color_id || next_color == color_id) {
+                color_id = getRandomBackground(context);
+                holder.background.setBackground(context.getResources().getDrawable(color_id));
+            } else {
+                flag_color_verify = false;
+            }
         }
 
 
-        colors.add(i,color_id);
+        colors.add(i, color_id);
 
 //
 

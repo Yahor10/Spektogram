@@ -129,24 +129,47 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
 
         list.setAdapter(adapter);
 
-//        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//
-//
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                DeleteDialog deleteDialog = new DeleteDialog();
-//                deleteDialog.setMessage(" Удалить сообщение");
-//                MessagesAdapter.ViewHolder holder = (MessagesAdapter.ViewHolder) view.getTag(R.id.TAG_HOLDER_VIEW);
-//                longClickMessage = holder.message;
-//                deleteDialog.setListener(new DialogExitListener() {
-//                    @Override
-//                    public void exitTest() {
-//                        Toast.makeText(MessagesActivity.this, "Message delete id = " + longClickMessage.id, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//                return true;
-//            }
-//        });
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, final long id) {
+                DeleteDialog deleteDialog = new DeleteDialog();
+                deleteDialog.setMessage(" Удалить сообщение");
+
+
+                MessagesAdapter.ViewHolder holder = (MessagesAdapter.ViewHolder) view.getTag(R.id.TAG_HOLDER_VIEW);
+                longClickMessage = holder.message;
+
+                deleteDialog.setListener(new DialogExitListener() {
+                    @Override
+                    public void exitTest() {
+                        Toast.makeText(MessagesActivity.this, "Message delete id = " + longClickMessage.id, Toast.LENGTH_SHORT).show();
+                        int[] id_delete_messages = new int[1];
+                        id_delete_messages[0] = longClickMessage.id;
+                        ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.DeleteMessages(longClickMessage.chatId, id_delete_messages), new Client.ResultHandler() {
+
+                            @Override
+                            public void onResult(TdApi.TLObject object) {
+
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        adapter.removeMessageById(longClickMessage.id);
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                });
+
+                            }
+                        });
+                    }
+                });
+
+                deleteDialog.show(getFragmentManager(), "");
+                return true;
+            }
+        });
 
 
         chat = ApplicationSpektogram.chat;
@@ -169,7 +192,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         buildGoogleApiClient();
 
 
-        list.setOnItemLongClickListener(this);
+//        list.setOnItemLongClickListener(this);
 //        list.setMultiChoiceModeListener();
 
     }
@@ -632,6 +655,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
         startActionMode(multi);
+
         return false;
     }
 
