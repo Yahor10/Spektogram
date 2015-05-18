@@ -119,9 +119,13 @@ public class ApplicationSpektogram extends android.app.Application implements Cl
             sendBroadcast(intent);
 
         } else if (object instanceof TdApi.UpdateMessageDate) {
-            TdApi.UpdateMessageDate updateMessageDate = (TdApi.UpdateMessageDate) object;
+//            TdApi.UpdateMessageDate updateMessageDate = (TdApi.UpdateMessageDate) object;
+
+
+        } else if (object instanceof TdApi.UpdateMessageId) {
+            TdApi.UpdateMessageId updateMessageId = (TdApi.UpdateMessageId) object;
             Intent intent = new Intent(BROADCAST_UPDATE_NEW_MESSAGE);
-            intent.putExtra(MessagesActivity.KEY_EXTRA_CHAT_ID, updateMessageDate.chatId);
+            intent.putExtra(MessagesActivity.KEY_EXTRA_CHAT_ID, updateMessageId.chatId);
             sendBroadcast(intent);
 
         } else if (object instanceof TdApi.UpdateUserAction) {

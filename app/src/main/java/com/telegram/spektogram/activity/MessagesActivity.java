@@ -198,13 +198,17 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
                             if (flag_new_message) {
                                 adapter.addMessages(messages);
                             } else {
                                 adapter.setMessages(messages);
                             }
 
+
                             adapter.notifyDataSetChanged();
+
+
                         }
                     });
 
@@ -263,7 +267,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
     private final BroadcastReceiver updateFileDownloadReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, Intent intent) {
-            loadMessages(chat, false);
+//            loadMessages(chat, false);
             int file_id = intent.getIntExtra(ApplicationSpektogram.KEY_UPDATE_FILE_ID, 0);
             TdApi.Message message = adapter.findMessageWithFileId(file_id);
             if (message != null) {
@@ -277,27 +281,24 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                             final TdApi.Message m = mes.messages[0];
 
 
-
-
-
-
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
 
-//                                    View v = list.findViewWithTag(m.id);
-//                                    if (v != null) {
-//                                        MessagesAdapter.ViewHolder holder = (MessagesAdapter.ViewHolder) v.getTag(R.id.TAG_HOLDER_VIEW);
-//                                        if (holder != null) {
-//                                            holder.setData(m);
-//                                        }
-//                                    }
+                                    View v = list.findViewWithTag(m.id);
+                                    if (v != null) {
+                                        MessagesAdapter.ViewHolder holder = (MessagesAdapter.ViewHolder) v.getTag(R.id.TAG_HOLDER_VIEW);
+                                        if (holder != null) {
+                                            holder.setData(m);
+                                        }
+                                    }
+
                                     adapter.replaceMessage(m);
-                                    int index = list.getFirstVisiblePosition();
-                                    View up = list.getChildAt(0);
-                                    int top = (up == null) ? 0 : up.getTop();
+//                                    int index = list.getFirstVisiblePosition();
+//                                    View up = list.getChildAt(0);
+//                                    int top = (up == null) ? 0 : up.getTop();
                                     adapter.notifyDataSetChanged();
-                                    list.setSelectionFromTop(index, top);
+//                                    list.setSelectionFromTop(index, top);
                                 }
                             });
 
