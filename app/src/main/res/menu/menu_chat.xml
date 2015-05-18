@@ -6,8 +6,8 @@
         <item android:id="@+id/clear_history"
             android:title="@string/clear_chat_history"
             android:showAsAction="never"/>
-        <item android:id="@+id/open"
-            android:title="TEST"
+        <item android:id="@+id/delete_messages"
+            android:title="Delete messages"
             android:showAsAction="never"/>
 
 
