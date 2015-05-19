@@ -243,7 +243,7 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
                 not_saw_messages.setVisibility(View.VISIBLE);
                 not_saw_messages.setText("" + chat.unreadCount);
             }else{
-                not_saw_messages.setVisibility(View.VISIBLE);
+                not_saw_messages.setVisibility(View.GONE);
             }
         }
     }
