@@ -24,6 +24,7 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -415,6 +416,8 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
                 startActivity(Intent.createChooser(emailIntent, "Send Email"));
                 break;
         }
+
+        mDrawerLayout.closeDrawer(Gravity.LEFT);
     }
 
     /**

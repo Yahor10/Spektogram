@@ -526,13 +526,13 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                 menu.setHeaderTitle(resources.getString(R.string.message));
 
                 menu.add(SEND_PHOTO, R.string.take_picture).setIcon(
-                        resources.getDrawable(R.drawable.ic_attach_photo));
+                        resources.getDrawable(R.drawable.ic_camera));
                 menu.add(SEND_VIDEO, R.string.send_video).setIcon(
-                        resources.getDrawable(R.drawable.ic_attach_photo));
+                        resources.getDrawable(R.drawable.ic_camera));
                 menu.add(SEND_FILE, R.string.send_file).setIcon(
                         resources.getDrawable(R.drawable.ic_attach));
                 menu.add(SEND_GEO_LOCATION, R.string.send_location).setIcon(
-                        resources.getDrawable(R.drawable.ic_drawer));
+                        resources.getDrawable(R.drawable.ic_location_pin));
                 menu.show();
 
                 menu.setOnItemSelectedListener(this);

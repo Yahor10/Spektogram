@@ -128,7 +128,9 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
                                     new Client.ResultHandler() {
                                         @Override
                                         public void onResult(TdApi.TLObject object) {
-                                            Log.v(Constants.LOG_TAG, "CreateGroupChat" + object);
+                                            if(object instanceof TdApi.Chat){
+                                                finish();
+                                            }
                                         }
                                     });
                         }
