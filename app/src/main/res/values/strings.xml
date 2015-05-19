@@ -70,4 +70,6 @@
     <item type="id" name="TAG_MESSAGE_ID_VIEW"/>
     <item type="id" name="TAG_HOLDER_VIEW"/>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="chat_history_cleared">Chat history has been cleared</string>
+    <string name="clear_messages">Clear messages</string>
 </resources>

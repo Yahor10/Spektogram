@@ -8,6 +8,9 @@
         <item name="actionBarStyle">@style/ActionBar.Solid.MyAppTheme</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back</item>
         <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:actionModeBackground">@android:color/darker_gray</item>
+        <item name="android:actionModeCloseDrawable">@drawable/ic_arrow_back</item>
+        <item name="actionModeStyle">@style/AppBaseThemeMaterial.ActionMode</item>
         <!--<item name="colorControlActivated">@color/accent</item>-->
         <!--<item name="colorControlHighlight">@color/accent</item>-->
     </style>
@@ -26,6 +29,17 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+
+
+    <style name="AppBaseThemeMaterial.ActionMode" parent="@style/Widget.AppCompat.ActionMode">
+
+        <item name="titleTextStyle">@style/Theme.AppCompat.TextModeStyle</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextModeStyle" parent="TextAppearance.AppCompat.Widget.ActionMode.Title">
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
 </resources>

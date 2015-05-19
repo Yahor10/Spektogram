@@ -20,6 +20,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,7 +56,7 @@ import java.util.Arrays;
 
 
 public class MessagesActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, View.OnClickListener, AdapterView.OnItemLongClickListener, PopupMenu.OnItemSelectedListener {
+        GoogleApiClient.OnConnectionFailedListener, View.OnClickListener, AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener, PopupMenu.OnItemSelectedListener {
 
     private static final int SEND_PHOTO = 111;
     private static final int SEND_VIDEO = 113;
@@ -173,16 +174,18 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                     }
                 });
 
+
                 deleteDialog.show(getFragmentManager(), "");
                 return true;
             }
         });
 
+        list.setOnItemLongClickListener(this);
+        list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        list.setOnItemClickListener(this);
 
         chat = ApplicationSpektogram.chat;
-
         loadMessages(chat, false);
-
 
         messageText = (EditText) findViewById(R.id.message);
         messageText.addTextChangedListener(textWatcher);
@@ -199,7 +202,6 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
 
 
 //        list.setOnItemLongClickListener(this);
-//        list.setMultiChoiceModeListener();
 
     }
 
@@ -397,7 +399,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
     @Override
     protected void onResume() {
         super.onResume();
-        PreferenceUtils.setChatBackground(this,false);
+        PreferenceUtils.setChatBackground(this, false);
     }
 
     @Override
@@ -470,14 +472,22 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
             finish();
         }
 
-        if (id == R.id.clear_history) {
-            ApplicationSpektogram.getApplication(this).sendFunction(new TdApi.DeleteChatHistory(-1), new Client.ResultHandler() {
+        if (id == R.id.clear_history)
+            ApplicationSpektogram.getApplication(this).sendFunction(new TdApi.DeleteChatHistory(chat.id), new Client.ResultHandler() {
                 @Override
                 public void onResult(TdApi.TLObject object) {
-
+                    if (object instanceof TdApi.Ok) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.chat_history_cleared), Toast.LENGTH_SHORT).show();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.getMessages().clear();
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
                 }
             });
-        }
 
         if (id == R.id.delete_messages) {
             int[] arr = null;
@@ -639,7 +649,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                 picturePath = cursor.getString(columnIndex);
                 cursor.close();
 
-                if(!"".equals(picturePath)){
+                if (!"".equals(picturePath)) {
 
                     final TdApi.InputMessagePhoto inputMessagePhoto = new TdApi.InputMessagePhoto(picturePath);
                     messageText.setText("");
@@ -705,7 +715,20 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         return false;
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        if(mMode != null) {
+            final SparseBooleanArray checkedItemPositions = list.getCheckedItemPositions();
+            Log.v(Constants.LOG_TAG, "selected " + checkedItemPositions);
+            mMode.setTitle("" + checkedItemPositions.size());
+        }
+    }
+
+    public ActionMode mMode;
+
     private AbsListView.MultiChoiceModeListener multi = new AbsListView.MultiChoiceModeListener() {
+
 
         @Override
         public void onItemCheckedStateChanged(ActionMode mode, int position,
@@ -714,6 +737,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
             // such as update the title in the CAB
             Log.v(Constants.LOG_TAG, "checked");
         }
+
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
@@ -731,6 +755,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
             MenuInflater inflater = mode.getMenuInflater();
             inflater.inflate(R.menu.chat_long_click, menu);
 
+            mMode = mode;
             return true;
         }
 
@@ -738,7 +763,9 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         public void onDestroyActionMode(ActionMode mode) {
             // Here you can make any necessary updates to the activity when
             // the CAB is removed. By default, selected items are deselected/unchecked.
+            mMode = null;
         }
+
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -748,5 +775,6 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         }
 
     };
+
 
 }
