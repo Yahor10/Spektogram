@@ -235,7 +235,7 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
 
             android.text.format.DateFormat df = new android.text.format.DateFormat();
             Date date = new Date();
-            date.setTime(chat.topMessage.forwardDate);
+            date.setTime(chat.topMessage.forwardDate*1000);
             time_last_message.setText(df.format("hh:mm ", date));
 
             not_saw_messages.setVisibility(View.GONE);

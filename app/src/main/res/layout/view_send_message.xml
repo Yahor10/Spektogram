@@ -22,6 +22,7 @@
         android:layout_weight="1"
         android:focusable="true"
         android:gravity="start|left"
+        android:textColor="@android:color/white"
         android:hint="@string/message"
         android:singleLine="true">
 
