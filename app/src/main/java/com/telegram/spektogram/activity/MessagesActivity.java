@@ -1,10 +1,12 @@
 package com.telegram.spektogram.activity;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
@@ -76,6 +78,9 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
     ArrayList<TdApi.Message> messages;
     ArrayList<Integer> id_users = new ArrayList<Integer>();
     TdApi.Chat chat = null;
+
+    public Uri uriPhoto;
+    public static final int RESULT_CAMERA = 111;
 
 
     TdApi.Message longClickMessage = null;
@@ -495,6 +500,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
             case R.id.send:
                 final TdApi.InputMessageText inputMessageText = new TdApi.InputMessageText(messageText.getText().toString());
                 messageText.setText("");
+
                 ApplicationSpektogram.getApplication(this).sendChatMessageFunction(chat.id, inputMessageText, new Client.ResultHandler() {
                     @Override
                     public void onResult(TdApi.TLObject object) {
@@ -527,10 +533,12 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
 
         switch (item.getItemId()) {
             case SEND_PHOTO:
-                startCameraActivityPhoto();
+//                startCameraActivityPhoto();
+                getPhotoFromCamera();
                 break;
             case SEND_VIDEO:
-                startCameraActivityVideo();
+//                startCameraActivityVideo();
+
                 break;
             case SEND_FILE:
                 startFileActivity();
@@ -545,24 +553,24 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
     Uri attachImageUri;
     Uri attachVideoUri;
 
-    private void startCameraActivityPhoto() {
-        File root = new File(Environment.getExternalStorageDirectory()
-
-                + File.separator + "Spektogram" + File.separator);
-        root.mkdirs();
-
-
-        File sdImageMainDirectory = new File(root, "myPicName.jpg");
-
-
-        Log.d(TAG, "fileName = " + sdImageMainDirectory);
-
-        Uri outputFileUri = Uri.fromFile(sdImageMainDirectory);
-        attachImageUri = outputFileUri;
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-        startActivityForResult(cameraIntent, SEND_PHOTO);
-    }
+//    private void startCameraActivityPhoto() {
+//        File root = new File(Environment.getExternalStorageDirectory()
+//
+//                + File.separator + "Spektogram" + File.separator);
+//        root.mkdirs();
+//
+//
+//        File sdImageMainDirectory = new File(root, "myPicName.jpg");
+//
+//
+//        Log.d(TAG, "fileName = " + sdImageMainDirectory);
+//
+//        Uri outputFileUri = Uri.fromFile(sdImageMainDirectory);
+//        attachImageUri = outputFileUri;
+//        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+//        startActivityForResult(cameraIntent, SEND_PHOTO);
+//    }
 
     private void startCameraActivityVideo() {
         File root = new File(Environment.getExternalStorageDirectory()
@@ -578,6 +586,17 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         startActivityForResult(cameraIntent, SEND_VIDEO);
+    }
+
+    public void getPhotoFromCamera() {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "New Picture");
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
+        uriPhoto = getContentResolver().insert(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriPhoto);
+        startActivityForResult(intent, RESULT_CAMERA);
     }
 
 
@@ -598,23 +617,29 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == SEND_PHOTO) {
+        if (requestCode == RESULT_CAMERA) {
             if (resultCode == RESULT_OK) {
-                if (data == null) {
-                    Log.d(TAG, "Intent is null");
-                } else {
-                    Log.d(TAG, "Photo uri: " + data.getData());
-                    Bundle bndl = data.getExtras();
-                    if (bndl != null) {
-                        Object obj = data.getExtras().get("data");
-                        if (obj instanceof Bitmap) {
-                            Bitmap bitmap = (Bitmap) obj;
-                            Log.d(TAG, "bitmap " + bitmap.getWidth() + " x "
-                                    + bitmap.getHeight());
-                            ivPhoto.setImageBitmap(bitmap);
+                String picturePath = "";
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor cursor = getContentResolver().query(uriPhoto, filePathColumn, null, null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                picturePath = cursor.getString(columnIndex);
+                cursor.close();
+
+                if(!"".equals(picturePath)){
+
+                    final TdApi.InputMessagePhoto inputMessagePhoto = new TdApi.InputMessagePhoto(picturePath);
+                    messageText.setText("");
+
+                    ApplicationSpektogram.getApplication(this).sendChatMessageFunction(chat.id, inputMessagePhoto, new Client.ResultHandler() {
+                        @Override
+                        public void onResult(TdApi.TLObject object) {
+                            object.toString();
                         }
-                    }
+                    });
                 }
+
             } else if (resultCode == RESULT_CANCELED) {
                 Log.d(TAG, "Canceled");
             }
@@ -709,6 +734,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
             // an invalidate() request
             return false;
         }
+
     };
 
 }

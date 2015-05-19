@@ -286,7 +286,7 @@ public class MessagesAdapter extends BaseAdapter {
                 }
                 DateFormat df = new android.text.format.DateFormat();
                 Date date = new Date();
-                date.setTime(message.date);
+                date.setTime(message.date*1000);
 
                 time_message.setText(df.format("hh:mm", date));
 
