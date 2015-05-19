@@ -132,7 +132,8 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
             holder = (ViewHolder) view.getTag();
         }
 
-        holder.setData((TdApi.Chat) getItem(i));
+        final TdApi.Chat item = getItem(i);
+        holder.setData((TdApi.Chat) item);
 
         int color_id = getRandomBackground(context);
 
@@ -238,9 +239,12 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
             date.setTime(chat.topMessage.forwardDate);
             time_last_message.setText(df.format("hh:mm ", date));
 
-            not_saw_messages.setVisibility(View.GONE);
-
-
+            if(chat.unreadCount >0){
+                not_saw_messages.setVisibility(View.VISIBLE);
+                not_saw_messages.setText("" + chat.unreadCount);
+            }else{
+                not_saw_messages.setVisibility(View.VISIBLE);
+            }
         }
     }
 

@@ -23,6 +23,8 @@
         android:focusable="true"
         android:gravity="start|left"
         android:hint="@string/message"
+        android:textColorHint="@android:color/white"
+        android:textColor="@android:color/white"
         android:singleLine="true">
 
         <requestFocus />
@@ -39,6 +41,6 @@
         android:id="@+id/send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_margin="7dp"
         android:src="@drawable/ic_send" />
 </LinearLayout>

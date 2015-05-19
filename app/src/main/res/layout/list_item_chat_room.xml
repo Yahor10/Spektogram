@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
 
     android:minHeight="70dp"
     android:orientation="horizontal">
@@ -25,11 +25,12 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="left|center_vertical"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            >
 
             <TextView
                 android:id="@+id/txt_chat_name"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:enabled="true"
                 android:singleLine="true"
@@ -51,37 +52,33 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@android:color/white" />
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center_horizontal"
-            android:paddingRight="10dp">
-
             <TextView
                 android:id="@+id/txt_chat_last_message_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
                 android:text="05:23 PM"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+
+                android:layout_alignTop="@+id/txt_chat_name"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
 
             <TextView
                 android:id="@+id/txt_chat_not_saw_count_message"
-                android:layout_width="20sp"
-                android:layout_height="20sp"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/txt_chat_last_message_time"
-                android:background="@android:color/white"
+                android:layout_width="25sp"
+                android:layout_height="25sp"
+                android:background="@drawable/ic_chat_notify"
                 android:gravity="center"
                 android:text="2"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#4433ff" />
+                android:textColor="#4433ff"
+                android:layout_alignBottom="@+id/txt_last_message"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
 
         </RelativeLayout>
+
     </FrameLayout>
 
 </LinearLayout>

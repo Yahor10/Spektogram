@@ -44,7 +44,6 @@ public class Main2Activity extends ActionBarActivity {
                     Log.v(Constants.LOG_TAG,"stickers" + stickers1.length);
 //                    adapter.setmThumbIds();
                 }
-
             }
         });
     }

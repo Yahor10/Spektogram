@@ -179,7 +179,6 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         loadMessages(chat, false);
 
 
-        getSupportActionBar().setTitle("");
         messageText = (EditText) findViewById(R.id.message);
         messageText.addTextChangedListener(textWatcher);
 
@@ -499,7 +498,6 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                 ApplicationSpektogram.getApplication(this).sendChatMessageFunction(chat.id, inputMessageText, new Client.ResultHandler() {
                     @Override
                     public void onResult(TdApi.TLObject object) {
-//                        loadMessages(chat, true);
                     }
                 });
                 break;
