@@ -10,23 +10,17 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.telegram.spektogram.R;
-import com.telegram.spektogram.application.ApplicationSpektogram;
 import com.telegram.spektogram.fragment.NavigationDrawerFragment;
 import com.telegram.spektogram.preferences.PreferenceUtils;
-import com.telegram.spektogram.views.PopupMenu;
-
-import org.drinkless.td.libcore.telegram.Client;
-import org.drinkless.td.libcore.telegram.TdApi;
 
 
 public class ChatRoomActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, PopupMenu.OnItemSelectedListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     private static final int SEND_PHOTO = 1;
 
@@ -56,38 +50,6 @@ public class ChatRoomActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
         getSupportActionBar().setTitle("");
-
-
-//        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//
-//                PopupMenu menu = new PopupMenu(ChatRoomActivity.this);
-//                Resources resources = getResources();
-//
-//                menu.setHeaderTitle(resources.getString(R.string.message));
-//
-//                menu.add(SEND_PHOTO, R.string.title_activity_chat).setIcon(
-//                        resources.getDrawable(R.drawable.ic_drawer));
-//                menu.show();
-//
-//                menu.setOnItemSelectedListener(ChatRoomActivity.this);
-//
-//                Intent intent = new Intent(getBaseContext(), FileDialog.class);
-//                intent.putExtra(FileDialog.START_PATH, "/sdcard");
-//
-//                //can user select directories or not
-//                intent.putExtra(FileDialog.CAN_SELECT_DIR, true);
-//
-//                //alternatively you can set file filter
-//                //intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "png" });
-//
-////                startActivityForResult(intent, 1);
-//
-////                startActivity(ContactsActivity.buildStartIntent(getApplicationContext(),true,false,true));
-//            }
-//        });
 
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -211,25 +173,6 @@ public class ChatRoomActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
-
-    @Override
-    public void onItemSelected(com.telegram.spektogram.views.MenuItem item) {
-        final int itemId = item.getItemId();
-        switch (itemId) {
-            case SEND_PHOTO:
-                final TdApi.InputMessagePhoto photo = new TdApi.InputMessagePhoto("");
-                ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.SendMessage(1, photo), new Client.ResultHandler() {
-                    @Override
-                    public void onResult(TdApi.TLObject object) {
-                        Log.v(null, "result test:" + object.toString());
-                    }
-                });
-                break;
-            case SEND_GEO_LOCATION:
-
-                break;
-        }
-    }
 
 
 

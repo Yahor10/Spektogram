@@ -307,7 +307,8 @@ public class SettingsActivity extends PreferenceActivity {
             LinearLayout v = (LinearLayout) super.onCreateView(inflater, container, savedInstanceState);
 
             Button SendLogbtn = new Button(getActivity().getApplicationContext());
-            SendLogbtn.setText("send log file");
+
+            SendLogbtn.setText(R.string.logout);
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -317,6 +318,12 @@ public class SettingsActivity extends PreferenceActivity {
 
             v.addView(SendLogbtn);
 
+            SendLogbtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
             return v;
         }
 
