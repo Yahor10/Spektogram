@@ -401,6 +401,15 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
             case 4:
                 startActivity(SettingsActivity.buildStartIntent(getActivity()));
                 break;
+            case 3:
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setType("text/html");
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, "");
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Join telegram");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Go to telegram!\n telegram.org");
+
+                startActivity(Intent.createChooser(emailIntent, "Send Email"));
+                break;
         }
     }
 
