@@ -189,7 +189,7 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
 
 
             if (chat.type instanceof TdApi.GroupChatInfo) {
-                user_photo.setImageResource(R.drawable.user_photo);
+                user_photo.setImageResource(R.mipmap.ic_launcher);
                 chat_name.setText(((TdApi.GroupChatInfo) chat.type).groupChat.title);
             } else if (chat.type instanceof TdApi.PrivateChatInfo) {
 
@@ -213,7 +213,7 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
 
                 } else if (((TdApi.PrivateChatInfo) chat.type).user.photoSmall instanceof TdApi.FileEmpty) {
 
-                    user_photo.setImageResource(R.drawable.user_photo);
+                    user_photo.setImageResource(R.mipmap.ic_launcher);
                     int id_file = 0;
                     id_file = ((TdApi.FileEmpty) ((TdApi.PrivateChatInfo) chat.type).user.photoSmall).id;
 

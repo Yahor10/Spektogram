@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:background="@drawable/gradient_list_item_from_me_green_yellow"
     android:minHeight="60dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="5dp">
 
     <ImageView
         android:id="@+id/img_user_photo"
@@ -13,20 +14,21 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/user_photo" />
+        android:src="@drawable/user_photo"
+        android:visibility="gone"/>
 
     <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/img_user_photo"
+        android:layout_alignParentRight="true"
         android:src="@drawable/ic_right_chat" />
 
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginRight="20dp"
-        android:layout_toLeftOf="@+id/img_user_photo">
+        android:layout_alignParentRight="true">
 
         <TextView
             android:id="@+id/txt_message_time"
