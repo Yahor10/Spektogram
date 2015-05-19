@@ -20,8 +20,6 @@ public class TdApi {
     }
 
     public static class Audio extends TLObject {
-        public int userId;
-        public int date;
         public int duration;
         public String mimeType;
         public File audio;
@@ -29,57 +27,32 @@ public class TdApi {
         public Audio() {
         }
 
-        public Audio(int userId, int date, int duration, String mimeType, File audio) {
-            this.userId = userId;
-            this.date = date;
+        public Audio(int duration, String mimeType, File audio) {
             this.duration = duration;
             this.mimeType = mimeType;
             this.audio = audio;
         }
 
-        public static final int CONSTRUCTOR = -230218119;
+        public static final int CONSTRUCTOR = 1821318307;
 
         @Override
         public int getConstructor() {
-            return -230218119;
+            return 1821318307;
         }
 
         @Override
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("Audio").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("date").append(" = ").append(date).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("duration").append(" = ").append(duration).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("mimeType").append(" = ").append(mimeType).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("audio").append(" = ");
-            audio.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("duration").append(" = ").append(duration).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("mimeType").append(" = ").append(mimeType).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("audio").append(" = "); audio.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
     public static class Chat extends TLObject {
-
-
         public long id;
         public Message topMessage;
         public int unreadCount;
@@ -112,42 +85,15 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("Chat").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("id").append(" = ").append(id).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("topMessage").append(" = ");
-            topMessage.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("unreadCount").append(" = ").append(unreadCount).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("lastReadInboxMessageId").append(" = ").append(lastReadInboxMessageId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("lastReadOutboxMessageId").append(" = ").append(lastReadOutboxMessageId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("notificationSettings").append(" = ");
-            notificationSettings.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("type").append(" = ");
-            type.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("id").append(" = ").append(id).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("topMessage").append(" = "); topMessage.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("unreadCount").append(" = ").append(unreadCount).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("lastReadInboxMessageId").append(" = ").append(lastReadInboxMessageId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("lastReadOutboxMessageId").append(" = ").append(lastReadOutboxMessageId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("notificationSettings").append(" = "); notificationSettings.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("type").append(" = "); type.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -175,16 +121,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("PrivateChatInfo").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("user").append(" = ");
-            user.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("user").append(" = "); user.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -209,16 +148,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("GroupChatInfo").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("groupChat").append(" = ");
-            groupChat.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("groupChat").append(" = "); groupChat.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -243,15 +175,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UnknownPrivateChatInfo").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("userId").append(" = ").append(userId).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -276,15 +202,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UnknownGroupChatInfo").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("groupChatId").append(" = ").append(groupChatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("groupChatId").append(" = ").append(groupChatId).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -313,24 +233,11 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("ChatParticipant").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("user").append(" = ");
-            user.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("inviterId").append(" = ").append(inviterId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("joinDate").append(" = ").append(joinDate).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("user").append(" = "); user.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("inviterId").append(" = ").append(inviterId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("joinDate").append(" = ").append(joinDate).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -355,27 +262,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("Chats").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chats").append(" = ").append("Chat[]").append(" {\n");
-            {
-                for (Chat j : chats) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    j.toStringBuilder(shift + 2, s);
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chats").append(" = ").append("Chat[]").append(" {\n"); { for (Chat j : chats) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } j.toStringBuilder(shift + 2, s); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -400,33 +289,13 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("Contacts").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("users").append(" = ").append("User[]").append(" {\n");
-            {
-                for (User j : users) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    j.toStringBuilder(shift + 2, s);
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("users").append(" = ").append("User[]").append(" {\n"); { for (User j : users) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } j.toStringBuilder(shift + 2, s); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
     public static class Document extends TLObject {
-        public int userId;
-        public int date;
         public String fileName;
         public String mimeType;
         public PhotoSize thumb;
@@ -435,57 +304,30 @@ public class TdApi {
         public Document() {
         }
 
-        public Document(int userId, int date, String fileName, String mimeType, PhotoSize thumb, File document) {
-            this.userId = userId;
-            this.date = date;
+        public Document(String fileName, String mimeType, PhotoSize thumb, File document) {
             this.fileName = fileName;
             this.mimeType = mimeType;
             this.thumb = thumb;
             this.document = document;
         }
 
-        public static final int CONSTRUCTOR = 82677708;
+        public static final int CONSTRUCTOR = -1534690654;
 
         @Override
         public int getConstructor() {
-            return 82677708;
+            return -1534690654;
         }
 
         @Override
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("Document").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("date").append(" = ").append(date).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("fileName").append(" = ").append(fileName).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("mimeType").append(" = ").append(mimeType).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("thumb").append(" = ");
-            thumb.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("document").append(" = ");
-            document.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("fileName").append(" = ").append(fileName).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("mimeType").append(" = ").append(mimeType).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("thumb").append(" = "); thumb.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("document").append(" = "); document.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -512,19 +354,10 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("Error").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("code").append(" = ").append(code).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("text").append(" = ").append(text).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("code").append(" = ").append(code).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("text").append(" = ").append(text).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -554,19 +387,10 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("FileEmpty").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("id").append(" = ").append(id).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("size").append(" = ").append(size).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("id").append(" = ").append(id).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("size").append(" = ").append(size).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -595,23 +419,11 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("FileLocal").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("id").append(" = ").append(id).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("size").append(" = ").append(size).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("path").append(" = ").append(path).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("id").append(" = ").append(id).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("size").append(" = ").append(size).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("path").append(" = ").append(path).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -638,19 +450,10 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("GeoPoint").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("longitude").append(" = ").append(longitude).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("latitude").append(" = ").append(latitude).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("longitude").append(" = ").append(longitude).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("latitude").append(" = ").append(latitude).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -685,37 +488,14 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("GroupChat").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("id").append(" = ").append(id).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("title").append(" = ").append(title).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("participantsCount").append(" = ").append(participantsCount).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("photoSmall").append(" = ");
-            photoSmall.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("photoBig").append(" = ");
-            photoBig.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("left").append(" = ").append(left).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("id").append(" = ").append(id).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("title").append(" = ").append(title).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("participantsCount").append(" = ").append(participantsCount).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("photoSmall").append(" = "); photoSmall.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("photoBig").append(" = "); photoBig.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("left").append(" = ").append(left).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -744,36 +524,11 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("GroupChatFull").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("groupChat").append(" = ");
-            groupChat.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("adminId").append(" = ").append(adminId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("participants").append(" = ").append("ChatParticipant[]").append(" {\n");
-            {
-                for (ChatParticipant j : participants) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    j.toStringBuilder(shift + 2, s);
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("groupChat").append(" = "); groupChat.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("adminId").append(" = ").append(adminId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("participants").append(" = ").append("ChatParticipant[]").append(" {\n"); { for (ChatParticipant j : participants) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } j.toStringBuilder(shift + 2, s); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -801,15 +556,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("InputMessageText").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("text").append(" = ").append(text).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("text").append(" = ").append(text).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -834,15 +583,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("InputMessageAudio").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("filePath").append(" = ").append(filePath).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("filePath").append(" = ").append(filePath).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -867,15 +610,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("InputMessageDocument").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("filePath").append(" = ").append(filePath).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("filePath").append(" = ").append(filePath).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -900,15 +637,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("InputMessagePhoto").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("filePath").append(" = ").append(filePath).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("filePath").append(" = ").append(filePath).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -933,15 +664,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("InputMessageSticker").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("filePath").append(" = ").append(filePath).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("filePath").append(" = ").append(filePath).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -966,15 +691,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("InputMessageVideo").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("filePath").append(" = ").append(filePath).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("filePath").append(" = ").append(filePath).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1001,19 +720,10 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("InputMessageGeoPoint").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("longitude").append(" = ").append(longitude).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("latitude").append(" = ").append(latitude).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("longitude").append(" = ").append(longitude).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("latitude").append(" = ").append(latitude).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1042,23 +752,11 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("InputMessageContact").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("phoneNumber").append(" = ").append(phoneNumber).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("firstName").append(" = ").append(firstName).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("lastName").append(" = ").append(lastName).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("phoneNumber").append(" = ").append(phoneNumber).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("firstName").append(" = ").append(firstName).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("lastName").append(" = ").append(lastName).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1085,19 +783,10 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("InputMessageForwarded").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("fromChatId").append(" = ").append(fromChatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("messageId").append(" = ").append(messageId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("fromChatId").append(" = ").append(fromChatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("messageId").append(" = ").append(messageId).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1121,10 +810,7 @@ public class TdApi {
             s.append("LinkStateNone").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1145,10 +831,7 @@ public class TdApi {
             s.append("LinkStateKnowsPhoneNumber").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1169,10 +852,7 @@ public class TdApi {
             s.append("LinkStateContact").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1209,40 +889,15 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("Message").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("id").append(" = ").append(id).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("forwardFromId").append(" = ").append(forwardFromId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("forwardDate").append(" = ").append(forwardDate).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("fromId").append(" = ").append(fromId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("date").append(" = ").append(date).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("message").append(" = ");
-            message.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("id").append(" = ").append(id).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("forwardFromId").append(" = ").append(forwardFromId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("forwardDate").append(" = ").append(forwardDate).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("fromId").append(" = ").append(fromId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("date").append(" = ").append(date).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("message").append(" = "); message.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1270,15 +925,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("MessageText").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("text").append(" = ").append(text).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("text").append(" = ").append(text).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1303,16 +952,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("MessageAudio").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("audio").append(" = ");
-            audio.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("audio").append(" = "); audio.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1337,16 +979,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("MessageDocument").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("document").append(" = ");
-            document.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("document").append(" = "); document.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1371,16 +1006,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("MessageSticker").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("sticker").append(" = ");
-            sticker.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("sticker").append(" = "); sticker.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1405,16 +1033,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("MessagePhoto").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("photo").append(" = ");
-            photo.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("photo").append(" = "); photo.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1439,16 +1060,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("MessageVideo").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("video").append(" = ");
-            video.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("video").append(" = "); video.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1473,16 +1087,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("MessageGeoPoint").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("geoPoint").append(" = ");
-            geoPoint.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("geoPoint").append(" = "); geoPoint.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1513,27 +1120,12 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("MessageContact").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("phoneNumber").append(" = ").append(phoneNumber).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("firstName").append(" = ").append(firstName).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("lastName").append(" = ").append(lastName).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("phoneNumber").append(" = ").append(phoneNumber).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("firstName").append(" = ").append(firstName).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("lastName").append(" = ").append(lastName).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("userId").append(" = ").append(userId).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1560,31 +1152,10 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("MessageGroupChatCreate").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("title").append(" = ").append(title).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("participants").append(" = ").append("User[]").append(" {\n");
-            {
-                for (User j : participants) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    j.toStringBuilder(shift + 2, s);
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("title").append(" = ").append(title).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("participants").append(" = ").append("User[]").append(" {\n"); { for (User j : participants) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } j.toStringBuilder(shift + 2, s); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1609,15 +1180,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("MessageChatChangeTitle").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("title").append(" = ").append(title).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("title").append(" = ").append(title).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1642,16 +1207,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("MessageChatChangePhoto").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("photo").append(" = ");
-            photo.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("photo").append(" = "); photo.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1672,10 +1230,7 @@ public class TdApi {
             s.append("MessageChatDeletePhoto").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1700,16 +1255,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("MessageChatAddParticipant").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("user").append(" = ");
-            user.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("user").append(" = "); user.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1734,16 +1282,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("MessageChatDeleteParticipant").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("user").append(" = ");
-            user.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("user").append(" = "); user.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1764,10 +1305,7 @@ public class TdApi {
             s.append("MessageDeleted").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1788,10 +1326,7 @@ public class TdApi {
             s.append("MessageUnsupported").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1816,27 +1351,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("Messages").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("messages").append(" = ").append("Message[]").append(" {\n");
-            {
-                for (Message j : messages) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    j.toStringBuilder(shift + 2, s);
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("messages").append(" = ").append("Message[]").append(" {\n"); { for (Message j : messages) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } j.toStringBuilder(shift + 2, s); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1867,27 +1384,12 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("NotificationSettings").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("muteFor").append(" = ").append(muteFor).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("sound").append(" = ").append(sound).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("showPreviews").append(" = ").append(showPreviews).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("eventsMask").append(" = ").append(eventsMask).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("muteFor").append(" = ").append(muteFor).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("sound").append(" = ").append(sound).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("showPreviews").append(" = ").append(showPreviews).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("eventsMask").append(" = ").append(eventsMask).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1915,15 +1417,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("NotificationSettingsForChat").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1944,10 +1440,7 @@ public class TdApi {
             s.append("NotificationSettingsForPrivateChats").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1968,10 +1461,7 @@ public class TdApi {
             s.append("NotificationSettingsForGroupChats").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -1992,10 +1482,7 @@ public class TdApi {
             s.append("NotificationSettingsForAllChats").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2016,10 +1503,112 @@ public class TdApi {
             s.append("Ok").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
+        }
+    }
+
+    public abstract static class OptionValue extends TLObject {
+    }
+
+    public static class OptionBoolean extends OptionValue {
+        public boolean value;
+
+        public OptionBoolean() {
+        }
+
+        public OptionBoolean(boolean value) {
+            this.value = value;
+        }
+
+        public static final int CONSTRUCTOR = 280624660;
+
+        @Override
+        public int getConstructor() {
+            return 280624660;
+        }
+
+        @Override
+        protected void toStringBuilder(int shift, StringBuilder s) {
+            s.append("OptionBoolean").append(" {\n");
+            shift += 2;
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("value").append(" = ").append(value).append('\n');
+            shift -= 2;
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
+        }
+    }
+
+    public static class OptionEmpty extends OptionValue {
+
+        public OptionEmpty() {
+        }
+
+        public static final int CONSTRUCTOR = 1025799436;
+
+        @Override
+        public int getConstructor() {
+            return 1025799436;
+        }
+
+        @Override
+        protected void toStringBuilder(int shift, StringBuilder s) {
+            s.append("OptionEmpty").append(" {\n");
+            shift += 2;
+            shift -= 2;
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
+        }
+    }
+
+    public static class OptionInteger extends OptionValue {
+        public int value;
+
+        public OptionInteger() {
+        }
+
+        public OptionInteger(int value) {
+            this.value = value;
+        }
+
+        public static final int CONSTRUCTOR = 1383938450;
+
+        @Override
+        public int getConstructor() {
+            return 1383938450;
+        }
+
+        @Override
+        protected void toStringBuilder(int shift, StringBuilder s) {
+            s.append("OptionInteger").append(" {\n");
+            shift += 2;
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("value").append(" = ").append(value).append('\n');
+            shift -= 2;
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
+        }
+    }
+
+    public static class OptionString extends OptionValue {
+        public String value;
+
+        public OptionString() {
+        }
+
+        public OptionString(String value) {
+            this.value = value;
+        }
+
+        public static final int CONSTRUCTOR = -841614037;
+
+        @Override
+        public int getConstructor() {
+            return -841614037;
+        }
+
+        @Override
+        protected void toStringBuilder(int shift, StringBuilder s) {
+            s.append("OptionString").append(" {\n");
+            shift += 2;
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("value").append(" = ").append(value).append('\n');
+            shift -= 2;
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2048,35 +1637,11 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("Photo").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("date").append(" = ").append(date).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("photos").append(" = ").append("PhotoSize[]").append(" {\n");
-            {
-                for (PhotoSize j : photos) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    j.toStringBuilder(shift + 2, s);
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("userId").append(" = ").append(userId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("date").append(" = ").append(date).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("photos").append(" = ").append("PhotoSize[]").append(" {\n"); { for (PhotoSize j : photos) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } j.toStringBuilder(shift + 2, s); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2107,28 +1672,12 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("PhotoSize").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("type").append(" = ").append(type).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("photo").append(" = ");
-            photo.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("width").append(" = ").append(width).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("height").append(" = ").append(height).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("type").append(" = ").append(type).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("photo").append(" = "); photo.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("width").append(" = ").append(width).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("height").append(" = ").append(height).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2152,10 +1701,7 @@ public class TdApi {
             s.append("SendMessageTypingAction").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2176,10 +1722,7 @@ public class TdApi {
             s.append("SendMessageCancelAction").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2200,10 +1743,7 @@ public class TdApi {
             s.append("SendMessageRecordVideoAction").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2224,10 +1764,7 @@ public class TdApi {
             s.append("SendMessageUploadVideoAction").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2248,10 +1785,7 @@ public class TdApi {
             s.append("SendMessageRecordAudioAction").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2272,10 +1806,7 @@ public class TdApi {
             s.append("SendMessageUploadAudioAction").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2296,10 +1827,7 @@ public class TdApi {
             s.append("SendMessageUploadPhotoAction").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2320,10 +1848,7 @@ public class TdApi {
             s.append("SendMessageUploadDocumentAction").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2344,10 +1869,7 @@ public class TdApi {
             s.append("SendMessageGeoLocationAction").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2368,10 +1890,7 @@ public class TdApi {
             s.append("SendMessageChooseContactAction").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2402,29 +1921,12 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("Sticker").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("width").append(" = ").append(width).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("height").append(" = ").append(height).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("thumb").append(" = ");
-            thumb.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("sticker").append(" = ");
-            sticker.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("width").append(" = ").append(width).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("height").append(" = ").append(height).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("thumb").append(" = "); thumb.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("sticker").append(" = "); sticker.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2449,27 +1951,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("Stickers").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("stickers").append(" = ").append("Sticker[]").append(" {\n");
-            {
-                for (Sticker j : stickers) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    j.toStringBuilder(shift + 2, s);
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("stickers").append(" = ").append("Sticker[]").append(" {\n"); { for (Sticker j : stickers) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } j.toStringBuilder(shift + 2, s); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2497,16 +1981,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateNewMessage").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("message").append(" = ");
-            message.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("message").append(" = "); message.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2535,23 +2012,11 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateMessageId").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("oldId").append(" = ").append(oldId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("newId").append(" = ").append(newId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("oldId").append(" = ").append(oldId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("newId").append(" = ").append(newId).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2580,23 +2045,11 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateMessageDate").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("messageId").append(" = ").append(messageId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("newDate").append(" = ").append(newDate).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("messageId").append(" = ").append(messageId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("newDate").append(" = ").append(newDate).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2625,24 +2078,11 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateMessageContent").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("messageId").append(" = ").append(messageId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("newContent").append(" = ");
-            newContent.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("messageId").append(" = ").append(messageId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("newContent").append(" = "); newContent.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2671,23 +2111,11 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateChatReadInbox").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("lastRead").append(" = ").append(lastRead).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("unreadCount").append(" = ").append(unreadCount).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("lastRead").append(" = ").append(lastRead).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("unreadCount").append(" = ").append(unreadCount).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2714,19 +2142,10 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateChatReadOutbox").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("lastRead").append(" = ").append(lastRead).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("lastRead").append(" = ").append(lastRead).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2742,32 +2161,21 @@ public class TdApi {
             this.notificationSettings = notificationSettings;
         }
 
-        public static final int CONSTRUCTOR = 1078531382;
+        public static final int CONSTRUCTOR = -1767306883;
 
         @Override
         public int getConstructor() {
-            return 1078531382;
+            return -1767306883;
         }
 
         @Override
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateNotificationSettings").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("scope").append(" = ");
-            scope.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("notificationSettings").append(" = ");
-            notificationSettings.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("scope").append(" = "); scope.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("notificationSettings").append(" = "); notificationSettings.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2794,31 +2202,10 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateDeleteMessages").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("messages").append(" = ").append("int[]").append(" {\n");
-            {
-                for (int j : messages) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    s.append(j).append('\n');
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("messages").append(" = ").append("int[]").append(" {\n"); { for (int j : messages) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } s.append(j).append('\n'); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2847,24 +2234,11 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateUserAction").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("action").append(" = ");
-            action.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("userId").append(" = ").append(userId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("action").append(" = "); action.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2891,20 +2265,10 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateUserStatus").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("status").append(" = ");
-            status.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("userId").append(" = ").append(userId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("status").append(" = "); status.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2935,27 +2299,12 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateUserName").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("firstName").append(" = ").append(firstName).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("lastName").append(" = ").append(lastName).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("username").append(" = ").append(username).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("userId").append(" = ").append(userId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("firstName").append(" = ").append(firstName).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("lastName").append(" = ").append(lastName).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("username").append(" = ").append(username).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -2982,19 +2331,10 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateUserPhoneNumber").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("phoneNumber").append(" = ").append(phoneNumber).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("userId").append(" = ").append(userId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("phoneNumber").append(" = ").append(phoneNumber).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3023,25 +2363,11 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateUserPhoto").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("photoSmall").append(" = ");
-            photoSmall.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("photoBig").append(" = ");
-            photoBig.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("userId").append(" = ").append(userId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("photoSmall").append(" = "); photoSmall.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("photoBig").append(" = "); photoBig.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3070,25 +2396,11 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateUserLinks").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("myLink").append(" = ");
-            myLink.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("foreignLink").append(" = ");
-            foreignLink.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("userId").append(" = ").append(userId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("myLink").append(" = "); myLink.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("foreignLink").append(" = "); foreignLink.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3115,97 +2427,70 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateUserBlocked").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("isBlocked").append(" = ").append(isBlocked).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("userId").append(" = ").append(userId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("isBlocked").append(" = ").append(isBlocked).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
     public static class UpdateChatTitle extends Update {
-        public int chatId;
+        public long chatId;
         public String title;
 
         public UpdateChatTitle() {
         }
 
-        public UpdateChatTitle(int chatId, String title) {
+        public UpdateChatTitle(long chatId, String title) {
             this.chatId = chatId;
             this.title = title;
         }
 
-        public static final int CONSTRUCTOR = -926390061;
+        public static final int CONSTRUCTOR = 1931125386;
 
         @Override
         public int getConstructor() {
-            return -926390061;
+            return 1931125386;
         }
 
         @Override
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateChatTitle").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("title").append(" = ").append(title).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("title").append(" = ").append(title).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
     public static class UpdateChatParticipantsCount extends Update {
-        public int chatId;
+        public long chatId;
         public int participantsCount;
 
         public UpdateChatParticipantsCount() {
         }
 
-        public UpdateChatParticipantsCount(int chatId, int participantsCount) {
+        public UpdateChatParticipantsCount(long chatId, int participantsCount) {
             this.chatId = chatId;
             this.participantsCount = participantsCount;
         }
 
-        public static final int CONSTRUCTOR = 559248869;
+        public static final int CONSTRUCTOR = 1188647993;
 
         @Override
         public int getConstructor() {
-            return 559248869;
+            return 1188647993;
         }
 
         @Override
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateChatParticipantsCount").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("participantsCount").append(" = ").append(participantsCount).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("participantsCount").append(" = ").append(participantsCount).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3234,23 +2519,11 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateNewAuthorization").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("date").append(" = ").append(date).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("device").append(" = ").append(device).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("location").append(" = ").append(location).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("date").append(" = ").append(date).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("device").append(" = ").append(device).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("location").append(" = ").append(location).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3279,23 +2552,11 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateFileProgress").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("fileId").append(" = ").append(fileId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("size").append(" = ").append(size).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("ready").append(" = ").append(ready).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("fileId").append(" = ").append(fileId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("size").append(" = ").append(size).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("ready").append(" = ").append(ready).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3324,62 +2585,41 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateFile").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("fileId").append(" = ").append(fileId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("size").append(" = ").append(size).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("path").append(" = ").append(path).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("fileId").append(" = ").append(fileId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("size").append(" = ").append(size).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("path").append(" = ").append(path).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
     public static class UpdateOption extends Update {
         public String name;
-        public String value;
+        public OptionValue value;
 
         public UpdateOption() {
         }
 
-        public UpdateOption(String name, String value) {
+        public UpdateOption(String name, OptionValue value) {
             this.name = name;
             this.value = value;
         }
 
-        public static final int CONSTRUCTOR = 1873396678;
+        public static final int CONSTRUCTOR = 900822020;
 
         @Override
         public int getConstructor() {
-            return 1873396678;
+            return 900822020;
         }
 
         @Override
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UpdateOption").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("name").append(" = ").append(name).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("value").append(" = ").append(value).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("name").append(" = ").append(name).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("value").append(" = "); value.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3400,10 +2640,7 @@ public class TdApi {
             s.append("UpdateStickers").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3446,56 +2683,18 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("User").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("id").append(" = ").append(id).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("firstName").append(" = ").append(firstName).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("lastName").append(" = ").append(lastName).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("username").append(" = ").append(username).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("phoneNumber").append(" = ").append(phoneNumber).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("status").append(" = ");
-            status.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("photoSmall").append(" = ");
-            photoSmall.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("photoBig").append(" = ");
-            photoBig.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("myLink").append(" = ");
-            myLink.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("foreignLink").append(" = ");
-            foreignLink.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("id").append(" = ").append(id).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("firstName").append(" = ").append(firstName).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("lastName").append(" = ").append(lastName).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("username").append(" = ").append(username).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("phoneNumber").append(" = ").append(phoneNumber).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("status").append(" = "); status.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("photoSmall").append(" = "); photoSmall.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("photoBig").append(" = "); photoBig.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("myLink").append(" = "); myLink.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("foreignLink").append(" = "); foreignLink.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3526,28 +2725,12 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UserFull").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("user").append(" = ");
-            user.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("isBlocked").append(" = ").append(isBlocked).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("realFirstName").append(" = ").append(realFirstName).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("realLastName").append(" = ").append(realLastName).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("user").append(" = "); user.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("isBlocked").append(" = ").append(isBlocked).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("realFirstName").append(" = ").append(realFirstName).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("realLastName").append(" = ").append(realLastName).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3571,10 +2754,7 @@ public class TdApi {
             s.append("UserStatusEmpty").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3599,15 +2779,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UserStatusOnline").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("expires").append(" = ").append(expires).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("expires").append(" = ").append(expires).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3632,15 +2806,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UserStatusOffline").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("wasOnline").append(" = ").append(wasOnline).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("wasOnline").append(" = ").append(wasOnline).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3661,10 +2829,7 @@ public class TdApi {
             s.append("UserStatusRecently").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3685,10 +2850,7 @@ public class TdApi {
             s.append("UserStatusLastWeek").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3709,16 +2871,11 @@ public class TdApi {
             s.append("UserStatusLastMonth").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
     public static class Video extends TLObject {
-        public int userId;
-        public int date;
         public int duration;
         public String mimeType;
         public String caption;
@@ -3730,9 +2887,7 @@ public class TdApi {
         public Video() {
         }
 
-        public Video(int userId, int date, int duration, String mimeType, String caption, PhotoSize thumb, int width, int height, File video) {
-            this.userId = userId;
-            this.date = date;
+        public Video(int duration, String mimeType, String caption, PhotoSize thumb, int width, int height, File video) {
             this.duration = duration;
             this.mimeType = mimeType;
             this.caption = caption;
@@ -3742,60 +2897,26 @@ public class TdApi {
             this.video = video;
         }
 
-        public static final int CONSTRUCTOR = -192592193;
+        public static final int CONSTRUCTOR = -1103202708;
 
         @Override
         public int getConstructor() {
-            return -192592193;
+            return -1103202708;
         }
 
         @Override
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("Video").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("date").append(" = ").append(date).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("duration").append(" = ").append(duration).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("mimeType").append(" = ").append(mimeType).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("caption").append(" = ").append(caption).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("thumb").append(" = ");
-            thumb.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("width").append(" = ").append(width).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("height").append(" = ").append(height).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("video").append(" = ");
-            video.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("duration").append(" = ").append(duration).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("mimeType").append(" = ").append(mimeType).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("caption").append(" = ").append(caption).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("thumb").append(" = "); thumb.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("width").append(" = ").append(width).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("height").append(" = ").append(height).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("video").append(" = "); video.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3819,34 +2940,7 @@ public class TdApi {
             s.append("AuthStateWaitSetPhoneNumber").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
-        }
-    }
-
-    public static class AuthStateWaitSendSms extends AuthState {
-
-        public AuthStateWaitSendSms() {
-        }
-
-        public static final int CONSTRUCTOR = 445980381;
-
-        @Override
-        public int getConstructor() {
-            return 445980381;
-        }
-
-        @Override
-        protected void toStringBuilder(int shift, StringBuilder s) {
-            s.append("AuthStateWaitSendSms").append(" {\n");
-            shift += 2;
-            shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3867,10 +2961,7 @@ public class TdApi {
             s.append("AuthStateWaitSetCode").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3891,10 +2982,7 @@ public class TdApi {
             s.append("AuthStateWaitSetName").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3915,10 +3003,28 @@ public class TdApi {
             s.append("AuthStateOk").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
+        }
+    }
+
+    public static class AuthStateLoggingOut extends AuthState {
+
+        public AuthStateLoggingOut() {
+        }
+
+        public static final int CONSTRUCTOR = -1773524779;
+
+        @Override
+        public int getConstructor() {
+            return -1773524779;
+        }
+
+        @Override
+        protected void toStringBuilder(int shift, StringBuilder s) {
+            s.append("AuthStateLoggingOut").append(" {\n");
+            shift += 2;
+            shift -= 2;
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3943,22 +3049,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("TestBytes").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("value").append(" = ").append("bytes { ");
-            {
-                for (byte k : value) {
-                    int b = (int) k & 255;
-                    s.append(HEX_CHARACTERS[b >> 4]).append(HEX_CHARACTERS[b & 15]).append(' ');
-                }
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("value").append(" = ").append("bytes { "); { for (byte k : value) { int b = (int)k & 255; s.append(HEX_CHARACTERS[b >> 4]).append(HEX_CHARACTERS[b & 15]).append(' '); } } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -3979,10 +3072,7 @@ public class TdApi {
             s.append("TestEmpty").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4007,15 +3097,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("TestInt").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("value").append(" = ").append(value).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("value").append(" = ").append(value).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4040,15 +3124,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("TestString").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("value").append(" = ").append(value).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("value").append(" = ").append(value).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4073,27 +3151,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("TestVectorInt").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("value").append(" = ").append("int[]").append(" {\n");
-            {
-                for (int j : value) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    s.append(j).append('\n');
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("value").append(" = ").append("int[]").append(" {\n"); { for (int j : value) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } s.append(j).append('\n'); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4118,27 +3178,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("TestVectorIntObject").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("value").append(" = ").append("TestInt[]").append(" {\n");
-            {
-                for (TestInt j : value) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    j.toStringBuilder(shift + 2, s);
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("value").append(" = ").append("TestInt[]").append(" {\n"); { for (TestInt j : value) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } j.toStringBuilder(shift + 2, s); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4163,27 +3205,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("TestVectorString").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("value").append(" = ").append("String[]").append(" {\n");
-            {
-                for (String j : value) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    s.append(j).append('\n');
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("value").append(" = ").append("String[]").append(" {\n"); { for (String j : value) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } s.append(j).append('\n'); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4208,27 +3232,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("TestVectorStringObject").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("value").append(" = ").append("TestString[]").append(" {\n");
-            {
-                for (TestString j : value) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    j.toStringBuilder(shift + 2, s);
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("value").append(" = ").append("TestString[]").append(" {\n"); { for (TestString j : value) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } j.toStringBuilder(shift + 2, s); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4257,23 +3263,11 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("AddChatParticipant").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("forwardLimit").append(" = ").append(forwardLimit).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("userId").append(" = ").append(userId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("forwardLimit").append(" = ").append(forwardLimit).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4294,58 +3288,34 @@ public class TdApi {
             s.append("AuthGetState").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
     public static class AuthReset extends TLFunction {
+        public boolean force;
 
         public AuthReset() {
         }
 
-        public static final int CONSTRUCTOR = 2038596138;
+        public AuthReset(boolean force) {
+            this.force = force;
+        }
+
+        public static final int CONSTRUCTOR = 377134467;
 
         @Override
         public int getConstructor() {
-            return 2038596138;
+            return 377134467;
         }
 
         @Override
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("AuthReset").append(" {\n");
             shift += 2;
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("force").append(" = ").append(force).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
-        }
-    }
-
-    public static class AuthSendSms extends TLFunction {
-
-        public AuthSendSms() {
-        }
-
-        public static final int CONSTRUCTOR = -2118592274;
-
-        @Override
-        public int getConstructor() {
-            return -2118592274;
-        }
-
-        @Override
-        protected void toStringBuilder(int shift, StringBuilder s) {
-            s.append("AuthSendSms").append(" {\n");
-            shift += 2;
-            shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4370,15 +3340,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("AuthSetCode").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("code").append(" = ").append(code).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("code").append(" = ").append(code).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4405,19 +3369,10 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("AuthSetName").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("firstName").append(" = ").append(firstName).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("lastName").append(" = ").append(lastName).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("firstName").append(" = ").append(firstName).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("lastName").append(" = ").append(lastName).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4442,15 +3397,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("AuthSetPhoneNumber").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("phoneNumber").append(" = ").append(phoneNumber).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("phoneNumber").append(" = ").append(phoneNumber).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4475,15 +3424,36 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("BlockUser").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("userId").append(" = ").append(userId).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
+        }
+    }
+
+    public static class CancelDownloadFile extends TLFunction {
+        public int fileId;
+
+        public CancelDownloadFile() {
+        }
+
+        public CancelDownloadFile(int fileId) {
+            this.fileId = fileId;
+        }
+
+        public static final int CONSTRUCTOR = 18489866;
+
+        @Override
+        public int getConstructor() {
+            return 18489866;
+        }
+
+        @Override
+        protected void toStringBuilder(int shift, StringBuilder s) {
+            s.append("CancelDownloadFile").append(" {\n");
+            shift += 2;
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("fileId").append(" = ").append(fileId).append('\n');
+            shift -= 2;
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4510,19 +3480,10 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("ChangeChatTitle").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("title").append(" = ").append(title).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("title").append(" = ").append(title).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4549,31 +3510,37 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("CreateGroupChat").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("participantIds").append(" = ").append("int[]").append(" {\n");
-            {
-                for (int j : participantIds) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    s.append(j).append('\n');
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("title").append(" = ").append(title).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("participantIds").append(" = ").append("int[]").append(" {\n"); { for (int j : participantIds) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } s.append(j).append('\n'); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("title").append(" = ").append(title).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
+        }
+    }
+
+    public static class CreatePrivateChat extends TLFunction {
+        public int userId;
+
+        public CreatePrivateChat() {
+        }
+
+        public CreatePrivateChat(int userId) {
+            this.userId = userId;
+        }
+
+        public static final int CONSTRUCTOR = 1204324690;
+
+        @Override
+        public int getConstructor() {
+            return 1204324690;
+        }
+
+        @Override
+        protected void toStringBuilder(int shift, StringBuilder s) {
+            s.append("CreatePrivateChat").append(" {\n");
+            shift += 2;
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("userId").append(" = ").append(userId).append('\n');
+            shift -= 2;
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4598,15 +3565,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("DeleteChatHistory").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4633,19 +3594,10 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("DeleteChatParticipant").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("userId").append(" = ").append(userId).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4672,31 +3624,10 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("DeleteMessages").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("messageIds").append(" = ").append("int[]").append(" {\n");
-            {
-                for (int j : messageIds) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    s.append(j).append('\n');
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("messageIds").append(" = ").append("int[]").append(" {\n"); { for (int j : messageIds) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } s.append(j).append('\n'); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4721,15 +3652,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("DownloadFile").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("fileId").append(" = ").append(fileId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("fileId").append(" = ").append(fileId).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4758,35 +3683,11 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("ForwardMessages").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("fromChatId").append(" = ").append(fromChatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("messageIds").append(" = ").append("int[]").append(" {\n");
-            {
-                for (int j : messageIds) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    s.append(j).append('\n');
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("fromChatId").append(" = ").append(fromChatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("messageIds").append(" = ").append("int[]").append(" {\n"); { for (int j : messageIds) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } s.append(j).append('\n'); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4811,15 +3712,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("GetChat").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4850,27 +3745,12 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("GetChatHistory").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("fromId").append(" = ").append(fromId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("offset").append(" = ").append(offset).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("limit").append(" = ").append(limit).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("fromId").append(" = ").append(fromId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("offset").append(" = ").append(offset).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("limit").append(" = ").append(limit).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4897,19 +3777,10 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("GetChats").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("offset").append(" = ").append(offset).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("limit").append(" = ").append(limit).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("offset").append(" = ").append(offset).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("limit").append(" = ").append(limit).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4930,10 +3801,7 @@ public class TdApi {
             s.append("GetContacts").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4958,15 +3826,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("GetGroupChat").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("groupChatId").append(" = ").append(groupChatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("groupChatId").append(" = ").append(groupChatId).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -4991,15 +3853,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("GetGroupChatFull").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("groupChatId").append(" = ").append(groupChatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("groupChatId").append(" = ").append(groupChatId).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -5020,10 +3876,7 @@ public class TdApi {
             s.append("GetMe").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -5048,16 +3901,36 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("GetNotificationSettings").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("scope").append(" = ");
-            scope.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("scope").append(" = "); scope.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
+        }
+    }
+
+    public static class GetOption extends TLFunction {
+        public String name;
+
+        public GetOption() {
+        }
+
+        public GetOption(String name) {
+            this.name = name;
+        }
+
+        public static final int CONSTRUCTOR = -1572495746;
+
+        @Override
+        public int getConstructor() {
+            return -1572495746;
+        }
+
+        @Override
+        protected void toStringBuilder(int shift, StringBuilder s) {
+            s.append("GetOption").append(" {\n");
+            shift += 2;
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("name").append(" = ").append(name).append('\n');
+            shift -= 2;
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -5082,15 +3955,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("GetStickers").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("emoji").append(" = ").append(emoji).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("emoji").append(" = ").append(emoji).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -5115,15 +3982,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("GetUser").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("userId").append(" = ").append(userId).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -5148,15 +4009,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("GetUserFull").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("userId").append(" = ").append(userId).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -5183,20 +4038,10 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("SendMessage").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("chatId").append(" = ").append(chatId).append('\n');
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("message").append(" = ");
-            message.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("chatId").append(" = ").append(chatId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("message").append(" = "); message.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -5223,21 +4068,40 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("SetNotificationSettings").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("scope").append(" = ");
-            scope.toStringBuilder(shift, s);
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("notificationSettings").append(" = ");
-            notificationSettings.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("scope").append(" = "); scope.toStringBuilder(shift, s);
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("notificationSettings").append(" = "); notificationSettings.toStringBuilder(shift, s);
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
+        }
+    }
+
+    public static class SetOption extends TLFunction {
+        public String name;
+        public OptionValue value;
+
+        public SetOption() {
+        }
+
+        public SetOption(String name, OptionValue value) {
+            this.name = name;
+            this.value = value;
+        }
+
+        public static final int CONSTRUCTOR = 2114670322;
+
+        @Override
+        public int getConstructor() {
+            return 2114670322;
+        }
+
+        @Override
+        protected void toStringBuilder(int shift, StringBuilder s) {
+            s.append("SetOption").append(" {\n");
+            shift += 2;
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("name").append(" = ").append(name).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("value").append(" = "); value.toStringBuilder(shift, s);
+            shift -= 2;
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -5262,22 +4126,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("TestCallBytes").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("x").append(" = ").append("bytes { ");
-            {
-                for (byte k : x) {
-                    int b = (int) k & 255;
-                    s.append(HEX_CHARACTERS[b >> 4]).append(HEX_CHARACTERS[b & 15]).append(' ');
-                }
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("x").append(" = ").append("bytes { "); { for (byte k : x) { int b = (int)k & 255; s.append(HEX_CHARACTERS[b >> 4]).append(HEX_CHARACTERS[b & 15]).append(' '); } } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -5298,10 +4149,7 @@ public class TdApi {
             s.append("TestCallEmpty").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -5326,15 +4174,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("TestCallString").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("x").append(" = ").append(x).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("x").append(" = ").append(x).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -5359,27 +4201,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("TestCallVectorInt").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("x").append(" = ").append("int[]").append(" {\n");
-            {
-                for (int j : x) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    s.append(j).append('\n');
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("x").append(" = ").append("int[]").append(" {\n"); { for (int j : x) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } s.append(j).append('\n'); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -5404,27 +4228,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("TestCallVectorIntObject").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("x").append(" = ").append("TestInt[]").append(" {\n");
-            {
-                for (TestInt j : x) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    j.toStringBuilder(shift + 2, s);
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("x").append(" = ").append("TestInt[]").append(" {\n"); { for (TestInt j : x) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } j.toStringBuilder(shift + 2, s); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -5449,27 +4255,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("TestCallVectorString").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("x").append(" = ").append("String[]").append(" {\n");
-            {
-                for (String j : x) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    s.append(j).append('\n');
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("x").append(" = ").append("String[]").append(" {\n"); { for (String j : x) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } s.append(j).append('\n'); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -5494,27 +4282,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("TestCallVectorStringObject").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("x").append(" = ").append("TestString[]").append(" {\n");
-            {
-                for (TestString j : x) {
-                    for (int i = 0; i < shift + 2; i++) {
-                        s.append(' ');
-                    }
-                    j.toStringBuilder(shift + 2, s);
-                }
-            }
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("x").append(" = ").append("TestString[]").append(" {\n"); { for (TestString j : x) { for (int i = 0; i < shift + 2; i++) { s.append(' '); } j.toStringBuilder(shift + 2, s); } } for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -5539,15 +4309,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("TestSquareInt").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("x").append(" = ").append(x).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("x").append(" = ").append(x).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -5568,10 +4332,7 @@ public class TdApi {
             s.append("TestTestNet").append(" {\n");
             shift += 2;
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
@@ -5596,15 +4357,9 @@ public class TdApi {
         protected void toStringBuilder(int shift, StringBuilder s) {
             s.append("UnblockUser").append(" {\n");
             shift += 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("userId").append(" = ").append(userId).append('\n');
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("userId").append(" = ").append(userId).append('\n');
             shift -= 2;
-            for (int i = 0; i < shift; i++) {
-                s.append(' ');
-            }
-            s.append("}\n");
+            for (int i = 0; i < shift; i++) { s.append(' '); } s.append("}\n");
         }
     }
 
