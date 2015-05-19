@@ -25,7 +25,6 @@
         android:textColor="@android:color/white"
         android:hint="@string/message"
         android:textColorHint="@android:color/white"
-        android:textColor="@android:color/white"
         android:singleLine="true">
 
         <requestFocus />
