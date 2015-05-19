@@ -53,6 +53,7 @@ import org.drinkless.td.libcore.telegram.TdApi;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class MessagesActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks,
@@ -489,17 +490,6 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                 }
             });
 
-        if (id == R.id.delete_messages) {
-            int[] arr = null;
-            final TdApi.DeleteMessages func = new TdApi.DeleteMessages(-1, arr);
-            ApplicationSpektogram.getApplication(this).sendFunction(func, new Client.ResultHandler() {
-                @Override
-                public void onResult(TdApi.TLObject object) {
-
-                }
-            });
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -720,8 +710,16 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
 
         if(mMode != null) {
             final SparseBooleanArray checkedItemPositions = list.getCheckedItemPositions();
-            Log.v(Constants.LOG_TAG, "selected " + checkedItemPositions);
-            mMode.setTitle("" + checkedItemPositions.size());
+            int selected = 0;
+            for(int i = 0; i <checkedItemPositions.size();i++){
+                final int keyAt = checkedItemPositions.keyAt(i);
+                final boolean checked = checkedItemPositions.get(keyAt);
+                if(checked){
+                    selected ++;
+                }
+            }
+
+            mMode.setTitle("" + selected);
         }
     }
 
@@ -735,7 +733,6 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                                               long id, boolean checked) {
             // Here you can do something when items are selected/de-selected,
             // such as update the title in the CAB
-            Log.v(Constants.LOG_TAG, "checked");
         }
 
 
@@ -743,10 +740,51 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             // Respond to clicks on the actions in the CAB
             switch (item.getItemId()) {
+                case R.id.clear_messages:
+                    final SparseBooleanArray checkedItemPositions = list.getCheckedItemPositions();
 
+
+                    int [] arr = new int[checkedItemPositions.size()];
+                    int j = 0;
+                    final List<TdApi.Message>removeMessages = new ArrayList<>(checkedItemPositions.size());
+                    for(int i =0 ; i <= checkedItemPositions.size() ; i ++ ){
+                        final int keyAt = checkedItemPositions.keyAt(i);
+                        if(checkedItemPositions.get(keyAt)){
+                            final TdApi.Message item1 = (TdApi.Message) adapter.getItem(keyAt);
+                            arr[j] = item1.id;
+                            j++;
+                            removeMessages.add(item1);
+                        }
+                    }
+                    if(j == 0){
+                        return false;
+                    }
+
+                    final TdApi.DeleteMessages func = new TdApi.DeleteMessages(chat.id, arr);
+                    ApplicationSpektogram.getApplication(getApplicationContext()).sendFunction(func, new Client.ResultHandler() {
+                        @Override
+                        public void onResult(TdApi.TLObject object) {
+                            if(object instanceof TdApi.Ok){
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), "Messages has been cleared", Toast.LENGTH_SHORT).show();
+                                        adapter.getMessages().removeAll(removeMessages);
+                                        adapter.notifyDataSetChanged();
+                                        mMode.setTitle("" + 0);
+                                        for(int i =0 ; i <= checkedItemPositions.size() ; i ++ ) {
+                                            list.setItemChecked(checkedItemPositions.keyAt(i),false);
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+                    break;
                 default:
                     return false;
             }
+            return  false;
         }
 
         @Override
@@ -758,6 +796,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
             mMode = mode;
             return true;
         }
+
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
