@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -36,6 +37,37 @@ public class NotificationUtils {
                         .setFullScreenIntent(pi, true)
                         .setShowWhen(true)
                         .setLargeIcon(bitmapDrawable.getBitmap())
+                        .setContentTitle(title)
+                        .setContentText(text).setContentIntent(pi);
+
+        if (PreferenceUtils.isVibrate(context)) {
+            mBuilder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
+        }
+
+        final Notification build = mBuilder.build();
+
+        NotificationManager mNotifyMgr =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+// Builds the notification and issues it.
+        int mNotificationId = 1232132;
+        mNotifyMgr.notify(mNotificationId, build);
+        Log.v(Constants.LOG_TAG, "buildSimpleNotification ");
+    }
+
+    public static void buildSimpleNotification(Context context, String title, String text,Bitmap largeicon ) {
+        Intent intent = new Intent(context, ChatRoomActivity.class);
+        //noinspection ResourceType
+        PendingIntent pi = PendingIntent.getActivity(context, 0, intent, Intent.FLAG_ACTIVITY_NEW_TASK );
+
+//        final Drawable drawable = context.getDrawable(R.mipmap.ic_launcher);
+//        BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setAutoCancel(true)
+                        .setFullScreenIntent(pi, true)
+                        .setShowWhen(true)
+                        .setLargeIcon(largeicon)
                         .setContentTitle(title)
                         .setContentText(text).setContentIntent(pi);
 

@@ -395,6 +395,18 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        PreferenceUtils.setChatBackground(this,false);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        PreferenceUtils.setChatBackground(this, true);
+    }
+
+    @Override
     protected void onStop() {
         // Disconnecting the client invalidates it.
         if (mGoogleApiClient != null)

@@ -2,7 +2,6 @@ package com.telegram.spektogram.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -14,13 +13,12 @@ import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
-import com.lamerman.FileDialog;
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.application.ApplicationSpektogram;
 import com.telegram.spektogram.fragment.NavigationDrawerFragment;
+import com.telegram.spektogram.preferences.PreferenceUtils;
 import com.telegram.spektogram.views.PopupMenu;
 
 import org.drinkless.td.libcore.telegram.Client;
@@ -60,38 +58,36 @@ public class ChatRoomActivity extends ActionBarActivity
         getSupportActionBar().setTitle("");
 
 
-        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                PopupMenu menu = new PopupMenu(ChatRoomActivity.this);
-                Resources resources = getResources();
-
-                menu.setHeaderTitle(resources.getString(R.string.message));
-
-                menu.add(SEND_PHOTO, R.string.title_activity_chat).setIcon(
-                        resources.getDrawable(R.drawable.ic_drawer));
-                menu.show();
-
-                menu.setOnItemSelectedListener(ChatRoomActivity.this);
-
-                Intent intent = new Intent(getBaseContext(), FileDialog.class);
-                intent.putExtra(FileDialog.START_PATH, "/sdcard");
-
-                //can user select directories or not
-                intent.putExtra(FileDialog.CAN_SELECT_DIR, true);
-
-                //alternatively you can set file filter
-                //intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "png" });
-
-//                startActivityForResult(intent, 1);
-
-//                startActivity(ContactsActivity.buildStartIntent(getApplicationContext(),true,false,true));
-                final Intent intent1 = Main2Activity.buildStartIntent(getApplication());
-                startActivity(intent1);
-            }
-        });
+//        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//
+//                PopupMenu menu = new PopupMenu(ChatRoomActivity.this);
+//                Resources resources = getResources();
+//
+//                menu.setHeaderTitle(resources.getString(R.string.message));
+//
+//                menu.add(SEND_PHOTO, R.string.title_activity_chat).setIcon(
+//                        resources.getDrawable(R.drawable.ic_drawer));
+//                menu.show();
+//
+//                menu.setOnItemSelectedListener(ChatRoomActivity.this);
+//
+//                Intent intent = new Intent(getBaseContext(), FileDialog.class);
+//                intent.putExtra(FileDialog.START_PATH, "/sdcard");
+//
+//                //can user select directories or not
+//                intent.putExtra(FileDialog.CAN_SELECT_DIR, true);
+//
+//                //alternatively you can set file filter
+//                //intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "png" });
+//
+////                startActivityForResult(intent, 1);
+//
+////                startActivity(ContactsActivity.buildStartIntent(getApplicationContext(),true,false,true));
+//            }
+//        });
 
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -102,6 +98,19 @@ public class ChatRoomActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        PreferenceUtils.setChatBackground(this,false);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        PreferenceUtils.setChatBackground(this,true);
     }
 
     @Override

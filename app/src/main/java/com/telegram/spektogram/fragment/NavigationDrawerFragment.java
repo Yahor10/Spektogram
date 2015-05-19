@@ -34,6 +34,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.activity.ContactsActivity;
@@ -393,6 +394,9 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
         switch (position) {
             case 0:
                 startActivity(ContactsActivity.buildStartIntent(activity, true, true, false));
+                break;
+            case 1:
+                Toast.makeText(activity,"not implemented yet",Toast.LENGTH_SHORT).show();
                 break;
             case 2:
                 final Intent intent = ContactsActivity.buildStartIntent(activity, false);

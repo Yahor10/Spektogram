@@ -1,10 +1,14 @@
 package com.telegram.spektogram.application;
 
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 
@@ -113,7 +117,10 @@ public class
 
         if (object instanceof TdApi.UpdateNewMessage) {
             TdApi.UpdateNewMessage newMessage = (TdApi.UpdateNewMessage) object;
-//            updateNewMessage(newMessage);
+            final boolean chatBackground = PreferenceUtils.isChatBackground(this);
+            if(chatBackground) {
+                updateNewMessage(newMessage);
+            }
 
             Intent intent = new Intent(BROADCAST_UPDATE_NEW_MESSAGE);
             intent.putExtra(MessagesActivity.KEY_EXTRA_CHAT_ID, newMessage.message.chatId);
@@ -239,11 +246,20 @@ public class
     private void updateNewMessageText(int fromId, TdApi.MessageText content) {
         final TdApi.MessageText text = content;
         client.send(new TdApi.GetUser(fromId), new Client.ResultHandler() {
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onResult(TdApi.TLObject object) {
                 TdApi.User user = (TdApi.User) object;
                 String name = user.firstName;
-                NotificationUtils.buildSimpleNotification(ApplicationSpektogram.this, name, text.text);
+                final TdApi.File photoSmall = user.photoSmall;
+                Bitmap bitmap = null;
+                if(photoSmall instanceof TdApi.FileLocal){
+                    bitmap = BitmapFactory.decodeFile(((TdApi.FileLocal) photoSmall).path);
+                }else{
+                    final BitmapDrawable drawable = (BitmapDrawable) getDrawable(R.mipmap.ic_launcher);
+                    bitmap = drawable.getBitmap();
+                }
+                NotificationUtils.buildSimpleNotification(ApplicationSpektogram.this, name, text.text, bitmap);
             }
         });
     }
