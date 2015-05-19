@@ -57,6 +57,52 @@ public class MessagesAdapter extends BaseAdapter {
     public void setMessages(ArrayList<TdApi.Message> messages) {
         this.messages = messages;
 
+        sortMessages();
+    }
+
+    public void addMessageAndReplaceOldUserPhotoMessage(TdApi.Message message) {
+        if (message != null) {
+
+            if (id_owner_user == message.fromId && message.message instanceof TdApi.MessagePhoto) {
+                TdApi.Photo photo = ((TdApi.MessagePhoto) message.message).photo;
+                TdApi.FileLocal file_for_replase = null;
+
+                for (int i = photo.photos.length - 1; i >= 0; i--) {
+                    if (photo.photos[i].photo instanceof TdApi.FileLocal) {
+                        file_for_replase = (TdApi.FileLocal) photo.photos[i].photo;
+                        break;
+                    }
+                }
+                if (file_for_replase != null) {
+                    for (int i = 0; i < messages.size(); i++) {
+                        if (messages.get(i).fromId == id_owner_user && messages.get(i).message instanceof TdApi.MessagePhoto) {
+                            TdApi.Photo photo1 = ((TdApi.MessagePhoto) message.message).photo;
+                            for (TdApi.PhotoSize p_s : photo1.photos) {
+                                if (p_s.photo instanceof TdApi.FileLocal) {
+                                    if (((TdApi.FileLocal) p_s.photo).id == file_for_replase.id) {
+                                        messages.set(i, message);
+                                        return;
+                                    }
+                                } else if (p_s.photo instanceof TdApi.FileEmpty) {
+                                    if (((TdApi.FileEmpty) p_s.photo).id == file_for_replase.id) {
+                                        messages.set(i, message);
+                                        return;
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            }
+
+            this.messages.add(message);
+            sortMessages();
+        }
+    }
+
+    public void sortMessages() {
         Collections.sort(this.messages, new Comparator<TdApi.Message>() {
             @TargetApi(Build.VERSION_CODES.KITKAT)
             public int compare(TdApi.Message s1, TdApi.Message s2) {
@@ -67,13 +113,10 @@ public class MessagesAdapter extends BaseAdapter {
 
     public void addMessage(TdApi.Message message) {
         if (message != null) {
+
             this.messages.add(message);
-            Collections.sort(this.messages, new Comparator<TdApi.Message>() {
-                @TargetApi(Build.VERSION_CODES.KITKAT)
-                public int compare(TdApi.Message s1, TdApi.Message s2) {
-                    return Integer.compare(s1.date, s2.date);
-                }
-            });
+            sortMessages();
+
         }
     }
 
@@ -111,17 +154,17 @@ public class MessagesAdapter extends BaseAdapter {
         return null;
     }
 
-    public void replaceMessage(TdApi.Message newMessage){
-        for (int i = 0; i< messages.size();i++){
-            if(messages.get(i).id == newMessage.id){
-                messages.set(i,newMessage);
+    public void replaceMessage(TdApi.Message newMessage) {
+        for (int i = 0; i < messages.size(); i++) {
+            if (messages.get(i).id == newMessage.id) {
+                messages.set(i, newMessage);
             }
         }
     }
 
-    public  void removeMessageById(int messgage_id){
-        for (int i = 0; i< messages.size();i++){
-            if(messages.get(i).id == messgage_id){
+    public void removeMessageById(int messgage_id) {
+        for (int i = 0; i < messages.size(); i++) {
+            if (messages.get(i).id == messgage_id) {
                 messages.remove(i);
             }
         }
@@ -250,33 +293,52 @@ public class MessagesAdapter extends BaseAdapter {
                     txt_message.setVisibility(View.GONE);
                     int id_file = 0;
 
-                    if (((TdApi.MessagePhoto) message.message).photo.photos[0].photo instanceof TdApi.FileLocal) {
-                        String url = ((TdApi.FileLocal) ((TdApi.MessagePhoto) message.message).photo.photos[0].photo).path;
+                    if (((TdApi.MessagePhoto) message.message).photo.photos.length != 0) {
+                        int lenght = ((TdApi.MessagePhoto) message.message).photo.photos.length;
+
+                        boolean flag_file_is_local = false;
+
+                        for (int i = lenght - 1; i >= 0; i--) {
+                            if (((TdApi.MessagePhoto) message.message).photo.photos[i].photo instanceof TdApi.FileLocal) {
+                                String url = ((TdApi.FileLocal) ((TdApi.MessagePhoto) message.message).photo.photos[i].photo).path;
 
 
-                        final Bitmap bitmapFromMemCache = ApplicationSpektogram.getApplication(context).getBitmapFromMemCache(url);
-                        if (bitmapFromMemCache != null) {
-                            img_photo_message.setImageBitmap(bitmapFromMemCache);
-                        } else {
-                            final Bitmap bitmap = BitmapFactory.decodeFile(url);
-                            final ApplicationSpektogram application = ApplicationSpektogram.getApplication(context);
-                            application.addBitmapToMemoryCache(url, bitmap);
-                            img_photo_message.setImageBitmap(bitmap);
+                                final Bitmap bitmapFromMemCache = ApplicationSpektogram.getApplication(context).getBitmapFromMemCache(url);
+                                if (bitmapFromMemCache != null) {
+                                    img_photo_message.setImageBitmap(bitmapFromMemCache);
+                                } else {
+                                    final Bitmap bitmap = BitmapFactory.decodeFile(url);
+                                    final ApplicationSpektogram application = ApplicationSpektogram.getApplication(context);
+                                    application.addBitmapToMemoryCache(url, bitmap);
+                                    img_photo_message.setImageBitmap(bitmap);
+                                }
+
+                                flag_file_is_local = true;
+                                break;
+                            }
                         }
 
+                        if (!flag_file_is_local) {
+                            if (lenght == 1) {
+                                lenght = 0;
+                            } else if (lenght > 1) {
+                                lenght = lenght / 2;
+                            }
 
-                    } else if (((TdApi.MessagePhoto) message.message).photo.photos[0].photo instanceof TdApi.FileEmpty) {
-                        img_photo_message.setImageResource(R.drawable.user_photo);
-                        id_file = ((TdApi.FileEmpty) ((TdApi.MessagePhoto) message.message).photo.photos[0].photo).id;
-                        ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.DownloadFile(id_file), new Client.ResultHandler() {
-                            @Override
-                            public void onResult(TdApi.TLObject object) {
+                            if (((TdApi.MessagePhoto) message.message).photo.photos[lenght].photo instanceof TdApi.FileEmpty) {
+                                img_photo_message.setImageResource(R.drawable.user_photo);
+                                id_file = ((TdApi.FileEmpty) ((TdApi.MessagePhoto) message.message).photo.photos[lenght].photo).id;
+                                ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.DownloadFile(id_file), new Client.ResultHandler() {
+                                    @Override
+                                    public void onResult(TdApi.TLObject object) {
+
+                                    }
+                                });
 
                             }
-                        });
+                        }
 
                     }
-
 
                 } else {
                     img_photo_message.setVisibility(View.GONE);
@@ -286,7 +348,7 @@ public class MessagesAdapter extends BaseAdapter {
                 }
                 DateFormat df = new android.text.format.DateFormat();
                 Date date = new Date();
-                date.setTime(message.date*1000);
+                date.setTime(message.date * 1000);
 
                 time_message.setText(df.format("hh:mm", date));
 

@@ -45,8 +45,28 @@ public class CodeFragment extends Fragment {
             }
         });
 
-        getActivity().registerReceiver(new IncomingSMSReceiver(), new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
+
         return v;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Connect the client.
+        getActivity().registerReceiver(updateNewMessageReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
+    }
+
+    @Override
+    public void onStop() {
+        // Disconnecting the client invalidates it.
+        try {
+            getActivity().unregisterReceiver(updateNewMessageReceiver);
+
+        } catch (Exception e) {
+        }
+
+
+        super.onStop();
     }
 
     private void checkCode(String code) {
@@ -117,6 +137,8 @@ public class CodeFragment extends Fragment {
             }
         });
     }
+
+    private final IncomingSMSReceiver updateNewMessageReceiver = new IncomingSMSReceiver();
 
     class IncomingSMSReceiver extends BroadcastReceiver {
 

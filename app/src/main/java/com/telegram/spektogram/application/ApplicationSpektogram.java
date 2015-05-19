@@ -134,6 +134,8 @@ public class
             TdApi.UpdateMessageId updateMessageId = (TdApi.UpdateMessageId) object;
             Intent intent = new Intent(BROADCAST_UPDATE_NEW_MESSAGE);
             intent.putExtra(MessagesActivity.KEY_EXTRA_CHAT_ID, updateMessageId.chatId);
+            intent.putExtra(MessagesActivity.KEY_EXTRA_ID_OLD, updateMessageId.oldId);
+            intent.putExtra(MessagesActivity.KEY_EXTRA_ID_NEW, updateMessageId.newId);
             sendBroadcast(intent);
 
         } else if (object instanceof TdApi.UpdateUserAction) {
