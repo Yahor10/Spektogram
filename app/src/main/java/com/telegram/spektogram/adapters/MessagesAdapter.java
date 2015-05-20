@@ -299,6 +299,7 @@ public class MessagesAdapter extends BaseAdapter {
                     img_photo_message.setVisibility(View.VISIBLE);
                     txt_message.setVisibility(View.VISIBLE);
                     txt_message.setText("Document");
+                    img_photo_message.setImageResource(R.drawable.ic_file);
 
                     TdApi.MessageDocument doc = (TdApi.MessageDocument) message.message;
                     final TdApi.File photo = doc.document.document;
@@ -325,6 +326,7 @@ public class MessagesAdapter extends BaseAdapter {
 
                     img_photo_message.setVisibility(View.VISIBLE);
                     txt_message.setVisibility(View.GONE);
+                    img_photo_message.setImageResource(R.drawable.gradient_blue_blue);
 
                     int lenght = ((TdApi.MessagePhoto) message.message).photo.photos.length;
                     boolean flag_file_is_local = false;
