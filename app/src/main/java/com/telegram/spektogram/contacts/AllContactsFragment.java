@@ -1,5 +1,6 @@
 package com.telegram.spektogram.contacts;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,12 @@ public class AllContactsFragment extends Fragment {
     private ContactsAdapter adapterContacts;
     private Map<String, TdApi.User> userMap;
 
+
+    public AllContactsFragment(){
+
+    }
+
+    @SuppressLint("ValidFragment")
     public AllContactsFragment(Map<String, TdApi.User> userMap) {
         this.userMap = userMap;
     }

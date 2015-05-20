@@ -18,11 +18,12 @@ import com.telegram.spektogram.application.ApplicationSpektogram;
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -235,18 +236,21 @@ public class ChatRoomsAdapter extends ArrayAdapter<TdApi.Chat> {
             }
 
             android.text.format.DateFormat df = new android.text.format.DateFormat();
-            Date date = new Date();
-            date.setTime(chat.topMessage.forwardDate*1000);
-            time_last_message.setText(df.format("hh:mm ", date));
 
-            if(chat.unreadCount >0){
+            String date = DATE_FORMAT.format(TimeUnit.SECONDS.toMillis(chat.topMessage.date));
+//
+            time_last_message.setText(date);
+
+            if (chat.unreadCount > 0) {
                 not_saw_messages.setVisibility(View.VISIBLE);
                 not_saw_messages.setText("" + chat.unreadCount);
-            }else{
+            } else {
                 not_saw_messages.setVisibility(View.GONE);
             }
         }
     }
+
+    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm");
 
     public int getRandomBackground(Context context) {
 

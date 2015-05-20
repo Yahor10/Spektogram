@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +18,11 @@ import com.telegram.spektogram.application.ApplicationSpektogram;
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by alex-pers on 5/7/15.
@@ -346,15 +346,15 @@ public class MessagesAdapter extends BaseAdapter {
 
                     txt_message.setText("Не текстовое сообщение");
                 }
-                DateFormat df = new android.text.format.DateFormat();
-                Date date = new Date();
-                date.setTime(message.date * 1000);
+                String date = DATE_FORMAT.format(TimeUnit.SECONDS.toMillis(message.date));
 
-                time_message.setText(df.format("hh:mm", date));
+                time_message.setText(date);
 
             }
         }
     }
+
+    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm");
 
 
 }
