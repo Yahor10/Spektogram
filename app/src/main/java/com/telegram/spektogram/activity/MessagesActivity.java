@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.net.Uri;
@@ -49,10 +50,12 @@ import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 
 public class MessagesActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks,
@@ -139,49 +142,6 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         list.setEmptyView(findViewById(R.id.empty_view_message));
 
 
-//        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//
-//
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, final long id) {
-//                DeleteDialog deleteDialog = new DeleteDialog();
-//                deleteDialog.setMessage(" Удалить сообщение");
-//
-//
-//                MessagesAdapter.ViewHolder holder = (MessagesAdapter.ViewHolder) view.getTag(R.id.TAG_HOLDER_VIEW);
-//                longClickMessage = holder.message;
-//
-//                deleteDialog.setListener(new DialogExitListener() {
-//                    @Override
-//                    public void exitTest() {
-//                        Toast.makeText(MessagesActivity.this, "Message delete id = " + longClickMessage.id, Toast.LENGTH_SHORT).show();
-//                        int[] id_delete_messages = new int[1];
-//                        id_delete_messages[0] = longClickMessage.id;
-//                        ApplicationSpektogram.getApplication(getBaseContext()).sendFunction(new TdApi.DeleteMessages(longClickMessage.chatId, id_delete_messages), new Client.ResultHandler() {
-//
-//                            @Override
-//                            public void onResult(TdApi.TLObject object) {
-//
-//
-//                                runOnUiThread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        adapter.removeMessageById(longClickMessage.id);
-//                                        adapter.notifyDataSetChanged();
-//                                    }
-//                                });
-//
-//                            }
-//                        });
-//                    }
-//                });
-//
-//
-//                deleteDialog.show(getFragmentManager(), "");
-//                return true;
-//            }
-//        });
-
         list.setOnItemLongClickListener(this);
         list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         list.setOnItemClickListener(this);
@@ -201,9 +161,6 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
 
         restoreActionBar();
         buildGoogleApiClient();
-
-
-//        list.setOnItemLongClickListener(this);
 
     }
 
@@ -300,7 +257,6 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         ActionBar actionBar = getSupportActionBar();
 
         actionBar.setDisplayShowTitleEnabled(false);
-//        actionBar.setTitle("Maria One Two");
         actionBar.setDisplayShowCustomEnabled(true);
 
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -312,18 +268,42 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         final View customView = actionBar.getCustomView();
         TextView chatName = (TextView) customView.findViewById(R.id.chatName);
         TextView chatStatus = (TextView) customView.findViewById(R.id.chatStatus);
-
-        chatStatus.setVisibility(View.GONE);
+        ImageView chatIcon = (ImageView) customView.findViewById(R.id.chatIcon);
 
         if (chat.type instanceof TdApi.GroupChatInfo) {
-            chatName.setText(((TdApi.GroupChatInfo) chat.type).groupChat.title);
+
+            final TdApi.GroupChat groupChat = ((TdApi.GroupChatInfo) chat.type).groupChat;
+            chatName.setText(groupChat.title);
+            chatStatus.setText(groupChat.participantsCount + " members");
+            chatIcon.setImageResource(R.mipmap.ic_launcher);
+
+            if(groupChat.photoSmall instanceof TdApi.FileLocal){
+                TdApi.FileLocal local = (TdApi.FileLocal) groupChat.photoSmall;
+                final Bitmap bitmap = BitmapFactory.decodeFile(local.path);
+                chatIcon.setImageBitmap(bitmap);
+            }
+
         } else if (chat.type instanceof TdApi.PrivateChatInfo) {
-            chatName.setText(((TdApi.PrivateChatInfo) chat.type).user.firstName);
+            final TdApi.User user = ((TdApi.PrivateChatInfo) chat.type).user;
+            final TdApi.UserStatus status = user.status;
+            if(status instanceof TdApi.UserStatusOnline){
+                chatStatus.setText("Online");
+            }else if(status instanceof TdApi.UserStatusOffline){
+                TdApi.UserStatusOffline offline = (TdApi.UserStatusOffline) status;
+                String date = DATE_FORMAT.format(TimeUnit.SECONDS.toMillis(offline.wasOnline));
+                chatStatus.setText("was online " + date.toString());
+            }
+            chatIcon.setImageResource(R.mipmap.ic_launcher);
+            if(user.photoSmall instanceof TdApi.FileLocal){
+                TdApi.FileLocal local = (TdApi.FileLocal) user.photoSmall;
+                final Bitmap bitmap = BitmapFactory.decodeFile(local.path);
+                chatIcon.setImageBitmap(bitmap);
+            }
+            chatName.setText(user.firstName);
         }
-
-
     }
 
+    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 
     private final BroadcastReceiver updateNewMessageReceiver = new BroadcastReceiver() {
         @Override
