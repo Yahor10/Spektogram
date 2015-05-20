@@ -684,7 +684,17 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         if (requestCode == SEND_FILE) {
             String filePath = data.getStringExtra(FileDialog.RESULT_PATH);
             Log.v(Constants.LOG_TAG, "file " + filePath);
+            final TdApi.InputMessageDocument inputMessagePhoto = new TdApi.InputMessageDocument(filePath);
+            messageText.setText("");
+
+            ApplicationSpektogram.getApplication(this).sendChatMessageFunction(chat.id, inputMessagePhoto, new Client.ResultHandler() {
+                @Override
+                public void onResult(TdApi.TLObject object) {
+                    Log.v(Constants.LOG_TAG,"file sended" + object);
+                }
+            });
         }
+
     }
 
     //user location

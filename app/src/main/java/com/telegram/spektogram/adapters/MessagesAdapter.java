@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.application.ApplicationSpektogram;
+import com.telegram.spektogram.application.Constants;
 
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
@@ -286,75 +288,96 @@ public class MessagesAdapter extends BaseAdapter {
 
                     img_photo_message.setVisibility(View.GONE);
                     txt_message.setVisibility(View.VISIBLE);
-
-                } else if (message.message instanceof TdApi.MessagePhoto) {
-
-                    img_photo_message.setVisibility(View.VISIBLE);
-                    txt_message.setVisibility(View.GONE);
-                    int id_file = 0;
-
-                    if (((TdApi.MessagePhoto) message.message).photo.photos.length != 0) {
-                        int lenght = ((TdApi.MessagePhoto) message.message).photo.photos.length;
-
-                        boolean flag_file_is_local = false;
-
-                        for (int i = lenght - 1; i >= 0; i--) {
-                            if (((TdApi.MessagePhoto) message.message).photo.photos[i].photo instanceof TdApi.FileLocal) {
-                                String url = ((TdApi.FileLocal) ((TdApi.MessagePhoto) message.message).photo.photos[i].photo).path;
-
-
-                                final Bitmap bitmapFromMemCache = ApplicationSpektogram.getApplication(context).getBitmapFromMemCache(url);
-                                if (bitmapFromMemCache != null) {
-                                    img_photo_message.setImageBitmap(bitmapFromMemCache);
-                                } else {
-                                    final Bitmap bitmap = BitmapFactory.decodeFile(url);
-                                    final ApplicationSpektogram application = ApplicationSpektogram.getApplication(context);
-                                    application.addBitmapToMemoryCache(url, bitmap);
-                                    img_photo_message.setImageBitmap(bitmap);
-                                }
-
-                                flag_file_is_local = true;
-                                break;
+                } else if (message.message instanceof TdApi.MessageDocument) {
+                    TdApi.MessageDocument doc = (TdApi.MessageDocument) message.message;
+                    final TdApi.File photo = doc.document.document;
+                    if(photo instanceof TdApi.FileLocal){
+                        final String path = ((TdApi.FileLocal) photo).path;
+                        final ApplicationSpektogram application = ApplicationSpektogram.getApplication(context);
+                        Bitmap bitmap = null;
+                        if(application.getBitmapFromMemCache(path) == null){
+                             bitmap = BitmapFactory.decodeFile(path);
+                            Log.v(Constants.LOG_TAG, "path" + path);
+                            if(bitmap != null){
+                                application.addBitmapToMemoryCache(path,bitmap);
                             }
+                        }else{
+                            bitmap = application.getBitmapFromMemCache(path);
                         }
-
-                        if (!flag_file_is_local) {
-                            if (lenght == 1) {
-                                lenght = 0;
-                            } else if (lenght > 1) {
-                                lenght = lenght / 2;
-                            }
-
-                            if (((TdApi.MessagePhoto) message.message).photo.photos[lenght].photo instanceof TdApi.FileEmpty) {
-                                img_photo_message.setImageResource(R.drawable.user_photo);
-                                id_file = ((TdApi.FileEmpty) ((TdApi.MessagePhoto) message.message).photo.photos[lenght].photo).id;
-                                ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.DownloadFile(id_file), new Client.ResultHandler() {
-                                    @Override
-                                    public void onResult(TdApi.TLObject object) {
-
-                                    }
-                                });
-
-                            }
+                        if(bitmap != null) {
+                            img_photo_message.setImageBitmap(bitmap);
+                        }else{
+                            img_photo_message.setImageResource(R.drawable.ic_file);
                         }
-
                     }
 
-                } else {
-                    img_photo_message.setVisibility(View.GONE);
-                    txt_message.setVisibility(View.VISIBLE);
-
-                    txt_message.setText("Не текстовое сообщение");
                 }
-                DateFormat df = new android.text.format.DateFormat();
-                Date date = new Date();
-                date.setTime(message.date * 1000);
+            } else if (message.message instanceof TdApi.MessagePhoto) {
 
-                time_message.setText(df.format("hh:mm", date));
+                img_photo_message.setVisibility(View.VISIBLE);
+                txt_message.setVisibility(View.GONE);
+                int id_file = 0;
 
+                if (((TdApi.MessagePhoto) message.message).photo.photos.length != 0) {
+                    int lenght = ((TdApi.MessagePhoto) message.message).photo.photos.length;
+
+                    boolean flag_file_is_local = false;
+
+                    for (int i = lenght - 1; i >= 0; i--) {
+                        if (((TdApi.MessagePhoto) message.message).photo.photos[i].photo instanceof TdApi.FileLocal) {
+                            String url = ((TdApi.FileLocal) ((TdApi.MessagePhoto) message.message).photo.photos[i].photo).path;
+
+
+                            final Bitmap bitmapFromMemCache = ApplicationSpektogram.getApplication(context).getBitmapFromMemCache(url);
+                            if (bitmapFromMemCache != null) {
+                                img_photo_message.setImageBitmap(bitmapFromMemCache);
+                            } else {
+                                final Bitmap bitmap = BitmapFactory.decodeFile(url);
+                                final ApplicationSpektogram application = ApplicationSpektogram.getApplication(context);
+                                application.addBitmapToMemoryCache(url, bitmap);
+                                img_photo_message.setImageBitmap(bitmap);
+                            }
+
+                            flag_file_is_local = true;
+                            break;
+                        }
+                    }
+
+                    if (!flag_file_is_local) {
+                        if (lenght == 1) {
+                            lenght = 0;
+                        } else if (lenght > 1) {
+                            lenght = lenght / 2;
+                        }
+
+                        if (((TdApi.MessagePhoto) message.message).photo.photos[lenght].photo instanceof TdApi.FileEmpty) {
+                            img_photo_message.setImageResource(R.drawable.user_photo);
+                            id_file = ((TdApi.FileEmpty) ((TdApi.MessagePhoto) message.message).photo.photos[lenght].photo).id;
+                            ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.DownloadFile(id_file), new Client.ResultHandler() {
+                                @Override
+                                public void onResult(TdApi.TLObject object) {
+
+                                }
+                            });
+
+                        }
+                    }
+
+                }
+
+            } else {
+                img_photo_message.setVisibility(View.GONE);
+                txt_message.setVisibility(View.VISIBLE);
+
+                txt_message.setText("Не текстовое сообщение");
             }
+            DateFormat df = new android.text.format.DateFormat();
+            Date date = new Date();
+            date.setTime(message.date * 1000);
+
+            time_message.setText(df.format("hh:mm", date));
+
         }
     }
-
-
 }
+
