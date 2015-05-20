@@ -287,6 +287,10 @@ public class MessagesAdapter extends BaseAdapter {
                     img_photo_message.setVisibility(View.GONE);
                     txt_message.setVisibility(View.VISIBLE);
                 } else if (message.message instanceof TdApi.MessageGeoPoint) {
+
+                    img_photo_message.setVisibility(View.VISIBLE);
+                    txt_message.setVisibility(View.VISIBLE);
+                    txt_message.setText("GEO POINT");
                     TdApi.MessageGeoPoint geoPoint = (TdApi.MessageGeoPoint) message.message;
                     img_photo_message.setImageResource(R.drawable.ic_staticmap);
 
