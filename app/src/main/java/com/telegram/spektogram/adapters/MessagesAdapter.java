@@ -360,7 +360,7 @@ public class MessagesAdapter extends BaseAdapter {
                             }
 
                             if (((TdApi.MessagePhoto) message.message).photo.photos[lenght].photo instanceof TdApi.FileEmpty) {
-                                img_photo_message.setImageResource(R.drawable.user_photo);
+                                img_photo_message.setImageResource(R.drawable.gradient_yellow_to_red);
                                 int id_file = ((TdApi.FileEmpty) ((TdApi.MessagePhoto) message.message).photo.photos[lenght].photo).id;
                                 ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.DownloadFile(id_file), new Client.ResultHandler() {
                                     @Override
