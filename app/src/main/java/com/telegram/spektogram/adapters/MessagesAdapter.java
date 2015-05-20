@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import android.widget.TextView;
 
 import com.telegram.spektogram.R;
 import com.telegram.spektogram.application.ApplicationSpektogram;
-import com.telegram.spektogram.application.Constants;
 
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
@@ -288,6 +286,10 @@ public class MessagesAdapter extends BaseAdapter {
 
                     img_photo_message.setVisibility(View.GONE);
                     txt_message.setVisibility(View.VISIBLE);
+                }else if(message.message instanceof TdApi.MessageGeoPoint){
+                    TdApi.MessageGeoPoint geoPoint = (TdApi.MessageGeoPoint) message.message;
+                    img_photo_message.setImageResource(R.drawable.ic_staticmap);
+
                 } else if (message.message instanceof TdApi.MessageDocument) {
                     TdApi.MessageDocument doc = (TdApi.MessageDocument) message.message;
                     final TdApi.File photo = doc.document.document;
@@ -297,7 +299,6 @@ public class MessagesAdapter extends BaseAdapter {
                         Bitmap bitmap = null;
                         if(application.getBitmapFromMemCache(path) == null){
                              bitmap = BitmapFactory.decodeFile(path);
-                            Log.v(Constants.LOG_TAG, "path" + path);
                             if(bitmap != null){
                                 application.addBitmapToMemoryCache(path,bitmap);
                             }
