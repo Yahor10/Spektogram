@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -226,6 +228,8 @@ public class MessagesAdapter extends BaseAdapter {
         return i;
     }
 
+
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
@@ -286,28 +290,26 @@ public class MessagesAdapter extends BaseAdapter {
 
                     img_photo_message.setVisibility(View.GONE);
                     txt_message.setVisibility(View.VISIBLE);
-                }else if(message.message instanceof TdApi.MessageGeoPoint){
-                    TdApi.MessageGeoPoint geoPoint = (TdApi.MessageGeoPoint) message.message;
+                } else if (message.message instanceof TdApi.MessageGeoPoint) {
                     img_photo_message.setImageResource(R.drawable.ic_staticmap);
-
                 } else if (message.message instanceof TdApi.MessageDocument) {
                     TdApi.MessageDocument doc = (TdApi.MessageDocument) message.message;
                     final TdApi.File photo = doc.document.document;
-                    if(photo instanceof TdApi.FileLocal){
+                    if (photo instanceof TdApi.FileLocal) {
                         final String path = ((TdApi.FileLocal) photo).path;
                         final ApplicationSpektogram application = ApplicationSpektogram.getApplication(context);
                         Bitmap bitmap = null;
-                        if(application.getBitmapFromMemCache(path) == null){
-                             bitmap = BitmapFactory.decodeFile(path);
-                            if(bitmap != null){
-                                application.addBitmapToMemoryCache(path,bitmap);
+                        if (application.getBitmapFromMemCache(path) == null) {
+                            bitmap = BitmapFactory.decodeFile(path);
+                            if (bitmap != null) {
+                                application.addBitmapToMemoryCache(path, bitmap);
                             }
-                        }else{
+                        } else {
                             bitmap = application.getBitmapFromMemCache(path);
                         }
-                        if(bitmap != null) {
+                        if (bitmap != null) {
                             img_photo_message.setImageBitmap(bitmap);
-                        }else{
+                        } else {
                             img_photo_message.setImageResource(R.drawable.ic_file);
                         }
                     }
@@ -351,46 +353,51 @@ public class MessagesAdapter extends BaseAdapter {
                             lenght = lenght / 2;
                         }
 
-                        if (((TdApi.MessagePhoto) message.message).photo.photos[lenght].photo instanceof TdApi.FileEmpty) {
+                        if (((TdApi.MessagePhoto) message.message).photo.photos[0].photo instanceof TdApi.FileLocal) {
+                            String url = ((TdApi.FileLocal) ((TdApi.MessagePhoto) message.message).photo.photos[0].photo).path;
+
+
+                            final Bitmap bitmapFromMemCache = ApplicationSpektogram.getApplication(context).getBitmapFromMemCache(url);
+                            if (bitmapFromMemCache != null) {
+                                img_photo_message.setImageBitmap(bitmapFromMemCache);
+                            } else {
+                                final Bitmap bitmap = BitmapFactory.decodeFile(url);
+                                final ApplicationSpektogram application = ApplicationSpektogram.getApplication(context);
+                                application.addBitmapToMemoryCache(url, bitmap);
+                                img_photo_message.setImageBitmap(bitmap);
+                            }
+
+
+                        } else if (((TdApi.MessagePhoto) message.message).photo.photos[0].photo instanceof TdApi.FileEmpty) {
                             img_photo_message.setImageResource(R.drawable.user_photo);
-                            id_file = ((TdApi.FileEmpty) ((TdApi.MessagePhoto) message.message).photo.photos[lenght].photo).id;
+                            id_file = ((TdApi.FileEmpty) ((TdApi.MessagePhoto) message.message).photo.photos[0].photo).id;
                             ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.DownloadFile(id_file), new Client.ResultHandler() {
                                 @Override
                                 public void onResult(TdApi.TLObject object) {
-                            if (((TdApi.MessagePhoto) message.message).photo.photos[lenght].photo instanceof TdApi.FileEmpty) {
-                                img_photo_message.setImageResource(R.drawable.gradient_blue_blue);
-                                id_file = ((TdApi.FileEmpty) ((TdApi.MessagePhoto) message.message).photo.photos[lenght].photo).id;
-                                ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.DownloadFile(id_file), new Client.ResultHandler() {
-                                    @Override
-                                    public void onResult(TdApi.TLObject object) {
 
                                 }
                             });
 
                         }
+                        } else {
+                            img_photo_message.setVisibility(View.GONE);
+                            txt_message.setVisibility(View.VISIBLE);
+                            String date = DATE_FORMAT.format(TimeUnit.SECONDS.toMillis(message.date));
+
+                            time_message.setText(date);
+
+                            txt_message.setText("РќРµ С‚РµРєСЃС‚РѕРІРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ");
+                        }
+                        DateFormat df = new android.text.format.DateFormat();
+                        Date date = new Date();
+                        date.setTime(message.date * 1000);
+
+                        time_message.setText(df.format("hh:mm", date));
+
                     }
-
                 }
-                String date = DATE_FORMAT.format(TimeUnit.SECONDS.toMillis(message.date));
-
-            } else {
-                img_photo_message.setVisibility(View.GONE);
-                txt_message.setVisibility(View.VISIBLE);
-                time_message.setText(date);
-
-                txt_message.setText("Не текстовое сообщение");
             }
-            DateFormat df = new android.text.format.DateFormat();
-            Date date = new Date();
-            date.setTime(message.date * 1000);
-
-            time_message.setText(df.format("hh:mm", date));
-
         }
-    }
+        private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm");
 }
 
-    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm");
-
-
-}
