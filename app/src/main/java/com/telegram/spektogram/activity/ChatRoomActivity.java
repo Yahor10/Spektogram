@@ -67,6 +67,10 @@ public class ChatRoomActivity extends ActionBarActivity
     protected void onResume() {
         super.onResume();
         PreferenceUtils.setChatBackground(this,false);
+
+        if(!PreferenceUtils.isUserAuth(this)){
+            finish();
+        }
     }
 
     @Override
@@ -102,7 +106,7 @@ public class ChatRoomActivity extends ActionBarActivity
         actionBar.setTitle("");
         actionBar.setDisplayShowCustomEnabled(true);
 
-        getSupportActionBar().setBackgroundDrawable(getDrawable(R.drawable.top_shape));
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.top_shape));
         actionBar.setCustomView(R.layout.ab_main);
 
         String s = getString(R.string.app_name);

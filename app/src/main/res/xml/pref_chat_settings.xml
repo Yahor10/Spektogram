@@ -23,13 +23,4 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/chat_background">
-        <Preference
-            android:selectable="true"
-            android:enabled="true"
-            android:key="change_chat_background"
-            android:title="@string/change_chat_background"
-             />
-    </PreferenceCategory>
-
 </PreferenceScreen>

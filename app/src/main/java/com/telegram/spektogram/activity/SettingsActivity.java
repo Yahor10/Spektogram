@@ -26,8 +26,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.telegram.spektogram.R;
+import com.telegram.spektogram.application.ApplicationSpektogram;
 import com.telegram.spektogram.preferences.PreferenceKeys;
 import com.telegram.spektogram.preferences.PreferenceUtils;
+
+import org.drinkless.td.libcore.telegram.Client;
+import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.List;
 
@@ -100,7 +104,7 @@ public class SettingsActivity extends PreferenceActivity {
         // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
         // their values. When their values change, their summaries are updated
         // to reflect the new value, per the Android Design guidelines.
-        bindPreferenceSummaryToValue(findPreference("display_name"));
+//        bindPreferenceSummaryToValue(findPreference("display_name"));
     }
 
     /**
@@ -321,7 +325,13 @@ public class SettingsActivity extends PreferenceActivity {
             SendLogbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    ApplicationSpektogram.getApplication(getActivity()).sendFunction(new TdApi.AuthReset(), new Client.ResultHandler() {
+                        @Override
+                        public void onResult(TdApi.TLObject object) {
+                            PreferenceUtils.setUserAuth(getActivity(),false);
+                            getActivity().finish();
+                        }
+                    });
                 }
             });
             return v;

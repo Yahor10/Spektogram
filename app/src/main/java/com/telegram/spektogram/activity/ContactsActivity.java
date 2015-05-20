@@ -243,7 +243,7 @@ public class ContactsActivity extends ActionBarActivity implements Client.Result
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
-        getSupportActionBar().setBackgroundDrawable(getDrawable(R.drawable.top_shape));
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.top_shape));
         actionBar.setCustomView(R.layout.ab_main);
 
 
