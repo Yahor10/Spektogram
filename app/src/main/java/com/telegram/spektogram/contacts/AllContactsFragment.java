@@ -26,6 +26,10 @@ public class AllContactsFragment extends Fragment {
     private ContactsAdapter adapterContacts;
     private Map<String, TdApi.User> userMap;
 
+    public AllContactsFragment(){
+
+    }
+
     public AllContactsFragment(Map<String, TdApi.User> userMap) {
         this.userMap = userMap;
     }
