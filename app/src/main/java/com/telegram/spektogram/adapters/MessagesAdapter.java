@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +18,11 @@ import com.telegram.spektogram.application.ApplicationSpektogram;
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by alex-pers on 5/7/15.
@@ -357,6 +357,12 @@ public class MessagesAdapter extends BaseAdapter {
                             ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.DownloadFile(id_file), new Client.ResultHandler() {
                                 @Override
                                 public void onResult(TdApi.TLObject object) {
+                            if (((TdApi.MessagePhoto) message.message).photo.photos[lenght].photo instanceof TdApi.FileEmpty) {
+                                img_photo_message.setImageResource(R.drawable.gradient_blue_blue);
+                                id_file = ((TdApi.FileEmpty) ((TdApi.MessagePhoto) message.message).photo.photos[lenght].photo).id;
+                                ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.DownloadFile(id_file), new Client.ResultHandler() {
+                                    @Override
+                                    public void onResult(TdApi.TLObject object) {
 
                                 }
                             });
@@ -365,10 +371,12 @@ public class MessagesAdapter extends BaseAdapter {
                     }
 
                 }
+                String date = DATE_FORMAT.format(TimeUnit.SECONDS.toMillis(message.date));
 
             } else {
                 img_photo_message.setVisibility(View.GONE);
                 txt_message.setVisibility(View.VISIBLE);
+                time_message.setText(date);
 
                 txt_message.setText("Не текстовое сообщение");
             }
@@ -382,3 +390,7 @@ public class MessagesAdapter extends BaseAdapter {
     }
 }
 
+    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm");
+
+
+}

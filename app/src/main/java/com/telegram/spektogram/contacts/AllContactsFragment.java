@@ -27,9 +27,14 @@ public class AllContactsFragment extends Fragment {
     private ContactsAdapter adapterContacts;
     private Map<String, TdApi.User> userMap;
 
+
     public AllContactsFragment(){
 
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 93d950aa6da1c2625bebbc1b5885dcc5d1a25aec
     @SuppressLint("ValidFragment")
     public AllContactsFragment(Map<String, TdApi.User> userMap) {
         this.userMap = userMap;
