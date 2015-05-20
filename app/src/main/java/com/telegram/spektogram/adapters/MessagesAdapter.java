@@ -340,7 +340,12 @@ public class MessagesAdapter extends BaseAdapter {
 
                     }
 
-                } else {
+                }else if(message.message instanceof TdApi.MessageVideo){
+                    img_photo_message.setVisibility(View.VISIBLE);
+                    txt_message.setVisibility(View.VISIBLE);
+                    txt_message.setText("Video");
+                    img_photo_message.setImageResource(R.drawable.gradient_blue_violet);
+                }else {
                     img_photo_message.setVisibility(View.GONE);
                     txt_message.setVisibility(View.VISIBLE);
 
