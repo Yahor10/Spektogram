@@ -67,6 +67,10 @@ public class ChatRoomActivity extends ActionBarActivity
     protected void onResume() {
         super.onResume();
         PreferenceUtils.setChatBackground(this,false);
+
+        if(!PreferenceUtils.isUserAuth(this)){
+            finish();
+        }
     }
 
     @Override
