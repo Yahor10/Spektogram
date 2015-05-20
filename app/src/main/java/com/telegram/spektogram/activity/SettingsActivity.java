@@ -242,13 +242,6 @@ public class SettingsActivity extends PreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
 
-
-            findPreference("change_chat_background").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    return false;
-                }
-            });
         }
     }
 
@@ -263,24 +256,12 @@ public class SettingsActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_user_settings);
 
-            final Preference pref = getPreferenceManager().findPreference(
-                    PreferenceKeys.USER_FIRST_NAME);
 
             final Preference change = getPreferenceManager().findPreference(
                     PreferenceKeys.CHANGE_NUMBER);
 
             final Activity activity = getActivity();
             change.setTitle(getString(R.string.phone_number) + " " + PreferenceUtils.getPhoneNumber(activity));
-
-            pref.setSummary(PreferenceUtils.getUserFistName(activity));
-            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    pref.setSummary(newValue.toString());
-                    return true;
-                }
-            });
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
