@@ -276,7 +276,7 @@ public class MessagesAdapter extends BaseAdapter {
         ImageView img_photo_message;
 
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-        public void setData(TdApi.Message message) {
+        public void setData(final TdApi.Message message) {
 
             this.message = message;
 
@@ -286,17 +286,41 @@ public class MessagesAdapter extends BaseAdapter {
 
                     img_photo_message.setVisibility(View.GONE);
                     txt_message.setVisibility(View.VISIBLE);
+                } else if (message.message instanceof TdApi.MessageGeoPoint) {
+                    TdApi.MessageGeoPoint geoPoint = (TdApi.MessageGeoPoint) message.message;
+                    img_photo_message.setImageResource(R.drawable.ic_staticmap);
+
+                } else if (message.message instanceof TdApi.MessageDocument) {
+                    TdApi.MessageDocument doc = (TdApi.MessageDocument) message.message;
+                    final TdApi.File photo = doc.document.document;
+                    if (photo instanceof TdApi.FileLocal) {
+                        final String path = ((TdApi.FileLocal) photo).path;
+                        final ApplicationSpektogram application = ApplicationSpektogram.getApplication(context);
+                        Bitmap bitmap = null;
+                        if (application.getBitmapFromMemCache(path) == null) {
+                            bitmap = BitmapFactory.decodeFile(path);
+                            if (bitmap != null) {
+                                application.addBitmapToMemoryCache(path, bitmap);
+                            }
+                        } else {
+                            bitmap = application.getBitmapFromMemCache(path);
+                        }
+                        if (bitmap != null) {
+                            img_photo_message.setImageBitmap(bitmap);
+                        } else {
+                            img_photo_message.setImageResource(R.drawable.ic_file);
+                        }
+                    }
 
                 } else if (message.message instanceof TdApi.MessagePhoto) {
 
                     img_photo_message.setVisibility(View.VISIBLE);
                     txt_message.setVisibility(View.GONE);
-                    int id_file = 0;
 
+                    int lenght = ((TdApi.MessagePhoto) message.message).photo.photos.length;
+                    boolean flag_file_is_local = false;
                     if (((TdApi.MessagePhoto) message.message).photo.photos.length != 0) {
-                        int lenght = ((TdApi.MessagePhoto) message.message).photo.photos.length;
 
-                        boolean flag_file_is_local = false;
 
                         for (int i = lenght - 1; i >= 0; i--) {
                             if (((TdApi.MessagePhoto) message.message).photo.photos[i].photo instanceof TdApi.FileLocal) {
@@ -317,6 +341,7 @@ public class MessagesAdapter extends BaseAdapter {
                                 break;
                             }
                         }
+                    }
 
                         if (!flag_file_is_local) {
                             if (lenght == 1) {
@@ -326,40 +351,47 @@ public class MessagesAdapter extends BaseAdapter {
                             }
 
                             if (((TdApi.MessagePhoto) message.message).photo.photos[lenght].photo instanceof TdApi.FileEmpty) {
-                                img_photo_message.setImageResource(R.drawable.gradient_blue_blue);
-                                id_file = ((TdApi.FileEmpty) ((TdApi.MessagePhoto) message.message).photo.photos[lenght].photo).id;
+                                img_photo_message.setImageResource(R.drawable.user_photo);
+                                int id_file = ((TdApi.FileEmpty) ((TdApi.MessagePhoto) message.message).photo.photos[lenght].photo).id;
                                 ApplicationSpektogram.getApplication(context).sendFunction(new TdApi.DownloadFile(id_file), new Client.ResultHandler() {
                                     @Override
                                     public void onResult(TdApi.TLObject object) {
 
                                     }
-                                });
 
+                                });
                             }
                         }
 
-                    }
-
-                }else if(message.message instanceof TdApi.MessageVideo){
+                } else if (message.message instanceof TdApi.MessageVideo) {
                     img_photo_message.setVisibility(View.VISIBLE);
                     txt_message.setVisibility(View.VISIBLE);
                     txt_message.setText("Video");
                     img_photo_message.setImageResource(R.drawable.gradient_blue_violet);
-                }else {
+                } else {
                     img_photo_message.setVisibility(View.GONE);
                     txt_message.setVisibility(View.VISIBLE);
 
                     txt_message.setText("Не текстовое сообщение");
+
                 }
-                String date = DATE_FORMAT.format(TimeUnit.SECONDS.toMillis(message.date));
 
-                time_message.setText(date);
 
+            } else {
+                img_photo_message.setVisibility(View.GONE);
+                txt_message.setVisibility(View.VISIBLE);
+                txt_message.setText("Не текстовое сообщение");
             }
+            String date = DATE_FORMAT.format(TimeUnit.SECONDS.toMillis(message.date));
+
+            time_message.setText(date);
+
         }
     }
 
-    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm");
+
+
+private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm");
 
 
 }

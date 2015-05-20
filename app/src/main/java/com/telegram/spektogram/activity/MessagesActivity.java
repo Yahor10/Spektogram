@@ -52,6 +52,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 
 public class MessagesActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks,
@@ -648,16 +649,17 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                     ApplicationSpektogram.getApplication(this).sendChatMessageFunction(chat.id, inputMessagePhoto, new Client.ResultHandler() {
                         @Override
                         public void onResult(TdApi.TLObject object) {
-                            final TdApi.Message message = (TdApi.Message) object;
+                            if (object instanceof TdApi.Message) {
+                                final TdApi.Message message = (TdApi.Message) object;
 
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    adapter.addMessage(message);
-                                    adapter.notifyDataSetChanged();
-                                }
-                            });
-
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        adapter.addMessage(message);
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                });
+                            }
                         }
                     });
                 }
@@ -709,6 +711,29 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         }
 
 
+        if (requestCode == SEND_FILE) {
+            String filePath = data.getStringExtra(FileDialog.RESULT_PATH);
+            Log.v(Constants.LOG_TAG, "file " + filePath);
+            final TdApi.InputMessageDocument inputMessagePhoto = new TdApi.InputMessageDocument(filePath);
+            messageText.setText("");
+
+            ApplicationSpektogram.getApplication(this).sendChatMessageFunction(chat.id, inputMessagePhoto, new Client.ResultHandler() {
+                @Override
+                public void onResult(TdApi.TLObject object) {
+                    if (object instanceof TdApi.Message) {
+                        final TdApi.Message message = (TdApi.Message) object;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.addMessage(message);
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
     }
 
     //user location
@@ -725,13 +750,42 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         if (mLastLocation != null) {
             latitude = mLastLocation.getLatitude();
             longitude = mLastLocation.getLongitude();
+
+
+        final TdApi.InputMessageGeoPoint geoPoint  = new TdApi.InputMessageGeoPoint(latitude,longitude);
+        messageText.setText("");
+
+        ApplicationSpektogram.getApplication(this).sendChatMessageFunction(chat.id, geoPoint, new Client.ResultHandler() {
+            @Override
+            public void onResult(TdApi.TLObject object) {
+                if (object instanceof TdApi.Message) {
+                    final TdApi.Message message = (TdApi.Message) object;
+                    Log.v(Constants.LOG_TAG,"geo message" + message);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.addMessage(message);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            }
+        });
+
+        Log.d(Constants.LOG_TAG, "lat"  + Double.toString(latitude));
+        Log.d(Constants.LOG_TAG, "lon" + Double.toString(longitude));
         }
-
-        Log.d(TAG, Double.toString(latitude));
-        Log.d(TAG, Double.toString(longitude));
-
     }
 
+    private static String getMapUrl(Double lat, Double lon, int width, int height) {
+        final String coordPair = lat + "," + lon;
+        return "http://maps.googleapis.com/maps/api/staticmap?"
+                + "&zoom=16"
+                + "&size=" + width + "x" + height
+                + "&maptype=roadmap&sensor=true"
+                + "&center=" + coordPair
+                + "&markers=color:black|" + coordPair;
+    }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -754,8 +808,16 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                     selected++;
                 }
             }
-
             mMode.setTitle("" + selected);
+            return;
+        }
+
+        final TdApi.Message item = (TdApi.Message) adapter.getItem(position);
+        if(item.message instanceof TdApi.MessageGeoPoint){
+            TdApi.GeoPoint geoPoint = ((TdApi.MessageGeoPoint) item.message).geoPoint;
+            String uri = String.format(Locale.ENGLISH, "geo:%f,%f", geoPoint.latitude, geoPoint.longitude);
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            startActivity(intent);
         }
     }
 
