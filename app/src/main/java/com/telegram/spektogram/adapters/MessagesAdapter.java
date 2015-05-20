@@ -291,6 +291,11 @@ public class MessagesAdapter extends BaseAdapter {
                     img_photo_message.setImageResource(R.drawable.ic_staticmap);
 
                 } else if (message.message instanceof TdApi.MessageDocument) {
+
+                    img_photo_message.setVisibility(View.VISIBLE);
+                    txt_message.setVisibility(View.VISIBLE);
+                    txt_message.setText("Document");
+
                     TdApi.MessageDocument doc = (TdApi.MessageDocument) message.message;
                     final TdApi.File photo = doc.document.document;
                     if (photo instanceof TdApi.FileLocal) {
