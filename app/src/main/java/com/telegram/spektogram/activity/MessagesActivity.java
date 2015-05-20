@@ -86,7 +86,9 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
     TdApi.Chat chat = null;
 
     public Uri uriPhoto;
-    public static final int RESULT_CAMERA = 111;
+    public Uri uriVideo;
+    public static final int RESULT_PHOTO_CAMERA = 111;
+    public static final int RESULT_VIDEO_CAMERA = 112;
 
 
     TdApi.Message longClickMessage = null;
@@ -533,8 +535,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                 getPhotoFromCamera();
                 break;
             case SEND_VIDEO:
-//                startCameraActivityVideo();
-
+                getVideoFromCamera();
                 break;
             case SEND_FILE:
                 startFileActivity();
@@ -568,21 +569,6 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
 //        startActivityForResult(cameraIntent, SEND_PHOTO);
 //    }
 
-    private void startCameraActivityVideo() {
-        File root = new File(Environment.getExternalStorageDirectory()
-                + File.separator + "Spektogram" + File.separator);
-        root.mkdirs();
-
-        File sdImageMainDirectory = new File(root, "myVideoName.mp4");
-
-        Log.d(TAG, "fileName = " + sdImageMainDirectory);
-
-        Uri outputFileUri = Uri.fromFile(sdImageMainDirectory);
-        attachVideoUri = outputFileUri;
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-        startActivityForResult(cameraIntent, SEND_VIDEO);
-    }
 
     public void getPhotoFromCamera() {
         ContentValues values = new ContentValues();
@@ -592,7 +578,19 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uriPhoto);
-        startActivityForResult(intent, RESULT_CAMERA);
+        startActivityForResult(intent, RESULT_PHOTO_CAMERA);
+    }
+
+
+    public void getVideoFromCamera() {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "New Video");
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera video");
+        uriVideo = getContentResolver().insert(
+                MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
+        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriVideo);
+        startActivityForResult(intent, RESULT_VIDEO_CAMERA);
     }
 
 
@@ -613,7 +611,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RESULT_CAMERA) {
+        if (requestCode == RESULT_PHOTO_CAMERA) {
             if (resultCode == RESULT_OK) {
                 String picturePath = "";
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -649,19 +647,49 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
             } else if (resultCode == RESULT_CANCELED) {
                 Log.d(TAG, "Canceled");
             }
-        }
-
-        if (requestCode == SEND_VIDEO) {
+        } else if (requestCode == RESULT_VIDEO_CAMERA) {
             if (resultCode == RESULT_OK) {
-                if (data == null) {
-                    Log.d(TAG, "Intent is null");
-                } else {
-                    Log.d(TAG, "Video uri: " + data.getData());
+                String videoPath = "";
+                String[] filePathColumn = {MediaStore.Files.FileColumns.DATA};
+                Cursor cursor = getContentResolver().query(uriVideo, filePathColumn, null, null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                videoPath = cursor.getString(columnIndex);
+                cursor.close();
+
+                if (!"".equals(videoPath)) {
+
+                    final TdApi.InputMessageVideo inputMessageVideo = new TdApi.InputMessageVideo(videoPath);
+                    messageText.setText("");
+
+                    ApplicationSpektogram.getApplication(this).sendChatMessageFunction(chat.id, inputMessageVideo, new Client.ResultHandler() {
+                        @Override
+                        public void onResult(TdApi.TLObject object) {
+                            try{
+                                final TdApi.Message message = (TdApi.Message) object;
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        adapter.addMessage(message);
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                });
+                            } catch (Exception e){
+                                Toast.makeText(getApplicationContext(),"Файл не найден",Toast.LENGTH_SHORT).show();
+                            }
+
+
+
+
+                        }
+                    });
                 }
+
             } else if (resultCode == RESULT_CANCELED) {
                 Log.d(TAG, "Canceled");
             }
         }
+
 
         if (requestCode == SEND_FILE) {
             String filePath = data.getStringExtra(FileDialog.RESULT_PATH);
