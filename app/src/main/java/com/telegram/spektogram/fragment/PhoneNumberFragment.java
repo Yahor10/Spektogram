@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
-import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,14 +34,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PhoneNumberFragment extends Fragment implements  AdapterView.OnItemSelectedListener {
+public class PhoneNumberFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
-    private Spinner countryCodeField;
+    private Spinner countrySpinner;
 
     private EditText phoneNumberField;
+    private EditText countryNumberField;
+
+    TextWatcher countryNumberWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (s.length() == 1 && !s.toString().contains("+")) {
+                countryNumberField.setSelection(1);
+                s.insert(0, "+");
+            }
+            if (s.length() == 0) {
+                s.insert(0, "+");
+                countryNumberField.setSelection(1);
+            }
+
+        }
+    };
 
     private ApplicationSpektogram application;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,8 +81,11 @@ public class PhoneNumberFragment extends Fragment implements  AdapterView.OnItem
             }
         });
 
-        countryCodeField = (Spinner) v.findViewById(R.id.country_code_field);
+        countrySpinner = (Spinner) v.findViewById(R.id.country_code_spinner);
         phoneNumberField = (EditText) v.findViewById(R.id.phone_number_field);
+        countryNumberField = (EditText) v.findViewById(R.id.phone_number_code);
+        countryNumberField.addTextChangedListener(countryNumberWatcher);
+
         initAutocomplete();
 
         v.findViewById(R.id.send_code_button).setOnClickListener(new View.OnClickListener() {
@@ -69,20 +97,20 @@ public class PhoneNumberFragment extends Fragment implements  AdapterView.OnItem
         return v;
     }
 
-    private void setPhoneNumber () {
+    private void setPhoneNumber() {
         final SignInActivity activity = (SignInActivity) getActivity();
         final boolean networkConnected = activity.isNetworkConnected();
-        if(!networkConnected){
-            Toast.makeText(activity,R.string.no_internet_connection,Toast.LENGTH_SHORT).show();
+        if (!networkConnected) {
+            Toast.makeText(activity, R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        final String phoneNumber =  phoneNumberField.getText().toString();
+        final String phoneNumber = countryNumberField.getText().toString() + phoneNumberField.getText().toString();
 
         final PhoneFormat instance = PhoneFormat.getInstance();
         final boolean phoneNumberValid = instance.isPhoneNumberValid(phoneNumber);
 
-        if(!phoneNumberValid ){
+        if (!phoneNumberValid) {
             activity.showToast(getString(R.string.not_valid_phone));
             return;
         }
@@ -110,15 +138,6 @@ public class PhoneNumberFragment extends Fragment implements  AdapterView.OnItem
         });
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        final Editable text = phoneNumberField.getText();
-        final FragmentActivity activity = getActivity();
-        if(activity != null) {
-//            PreferenceUtils.setPhoneNumber(activity, text.toString());
-        }
-    }
 
     private void initAutocomplete() {
         ArrayList<String> countriesArray = new ArrayList<>();
@@ -147,11 +166,11 @@ public class PhoneNumberFragment extends Fragment implements  AdapterView.OnItem
         CustomArrayAdapter adapter = new CustomArrayAdapter(getActivity(), R.layout.country_spinner_item, countriesArray);
         adapter.setDropDownViewResource(R.layout.country_spinner_item_dropdown);
 
-        countryCodeField.setOnItemSelectedListener(this);
+        countrySpinner.setOnItemSelectedListener(this);
 
         final FragmentActivity activity = getActivity();
 
-        countryCodeField.setAdapter(
+        countrySpinner.setAdapter(
                 new NothingSelectedSpinnerAdapter(
                         adapter,
                         R.layout.contact_spinner_row_nothing_selected,
@@ -162,19 +181,14 @@ public class PhoneNumberFragment extends Fragment implements  AdapterView.OnItem
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        final String phoneNumber = phoneNumberField.getText().toString();
-        final String selectedItem = (String) countryCodeField.getSelectedItem();
+        String selectedItem = (String) countrySpinner.getSelectedItem();
 
-        if(selectedItem == null){
+        if (selectedItem == null) {
             return;
         }
-        final String substring = selectedItem.substring(selectedItem.indexOf("(")+ 1,selectedItem.indexOf(")"));
+        final String substring = selectedItem.substring(selectedItem.indexOf("(") + 1, selectedItem.indexOf(")"));
 
-        if(!TextUtils.isEmpty(phoneNumber)) {
-            phoneNumberField.setText( "+" + phoneNumber + substring);
-        }else{
-            phoneNumberField.setText("+" + substring);
-        }
+        countryNumberField.setText("+" + substring);
     }
 
     @Override
@@ -201,7 +215,7 @@ public class PhoneNumberFragment extends Fragment implements  AdapterView.OnItem
             TextView row = (TextView) inflater.inflate(R.layout.country_spinner_item, parent, false);
             final String text = objects.get(position);
             final int start = text.indexOf(")");
-            final String substring = text.substring(start + 1 , text.length());
+            final String substring = text.substring(start + 1, text.length());
             row.setSingleLine(true);
             row.setText(substring);
             return row;
