@@ -22,43 +22,44 @@
 
             android:layout_gravity="center_horizontal" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:orientation="horizontal">
+            >
 
-            <AutoCompleteTextView
+            <Spinner
+
                 android:id="@+id/country_code_field"
-                android:layout_width="60dp"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
                 android:textColor="@android:color/white"
-                android:textColorHint="@android:color/white"
-                android:singleLine="true"
-                android:inputType="phone"
-                android:hint="@string/area" />
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/phone_number_field"
+            />
 
             <EditText
                 android:id="@+id/phone_number_field"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
                 android:textColor="@android:color/white"
                 android:textColorHint="@android:color/white"
                 android:singleLine="true"
-
                 android:inputType="phone"
-                android:hint="+123 22 1111111" >
+                android:hint="+123 22 1111111"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true">
                 <requestFocus/>
                 </EditText>
 
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <Button
             android:id="@+id/send_code_button"

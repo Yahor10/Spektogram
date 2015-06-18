@@ -132,6 +132,7 @@ public class ChatRoomActivity extends ActionBarActivity
             getMenuInflater().inflate(R.menu.chat, menu);
             restoreActionBar();
 
+            menu.add("t").setVisible(false);
 //            SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 //
 //            final MenuItem item = menu.findItem(R.id.search);

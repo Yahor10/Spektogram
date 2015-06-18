@@ -88,7 +88,7 @@ public class PreferenceUtils {
         SharedPreferences defaultSharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
         return defaultSharedPreferences.getString(
-                PreferenceKeys.PHONE_NUMBER, "1");
+                PreferenceKeys.PHONE_NUMBER, "");
     }
 
     public static boolean isOfflineMode(Context context) {
