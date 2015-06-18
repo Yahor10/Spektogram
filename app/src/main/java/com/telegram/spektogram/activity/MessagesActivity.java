@@ -279,7 +279,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
             chatStatus.setText(groupChat.participantsCount + " members");
             chatIcon.setImageResource(R.mipmap.ic_launcher);
 
-            if(groupChat.photoSmall instanceof TdApi.FileLocal){
+            if (groupChat.photoSmall instanceof TdApi.FileLocal) {
                 TdApi.FileLocal local = (TdApi.FileLocal) groupChat.photoSmall;
                 final Bitmap bitmap = BitmapFactory.decodeFile(local.path);
                 chatIcon.setImageBitmap(bitmap);
@@ -288,15 +288,15 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         } else if (chat.type instanceof TdApi.PrivateChatInfo) {
             final TdApi.User user = ((TdApi.PrivateChatInfo) chat.type).user;
             final TdApi.UserStatus status = user.status;
-            if(status instanceof TdApi.UserStatusOnline){
+            if (status instanceof TdApi.UserStatusOnline) {
                 chatStatus.setText("Online");
-            }else if(status instanceof TdApi.UserStatusOffline){
+            } else if (status instanceof TdApi.UserStatusOffline) {
                 TdApi.UserStatusOffline offline = (TdApi.UserStatusOffline) status;
                 String date = DATE_FORMAT.format(TimeUnit.SECONDS.toMillis(offline.wasOnline));
                 chatStatus.setText("was online " + date.toString());
             }
             chatIcon.setImageResource(R.mipmap.ic_launcher);
-            if(user.photoSmall instanceof TdApi.FileLocal){
+            if (user.photoSmall instanceof TdApi.FileLocal) {
                 TdApi.FileLocal local = (TdApi.FileLocal) user.photoSmall;
                 final Bitmap bitmap = BitmapFactory.decodeFile(local.path);
                 chatIcon.setImageBitmap(bitmap);
@@ -583,14 +583,79 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
 
 
     public void getVideoFromCamera() {
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE, "New Video");
-        values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera video");
-        uriVideo = getContentResolver().insert(
-                MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
+//        ContentValues values = new ContentValues();
+//        values.put(MediaStore.Video.Media.TITLE, "new");
+//        values.put(MediaStore.Video.Media.DESCRIPTION, "video for spectogram");
+//        uriVideo = getContentResolver().insert(
+//                MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
+//        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriVideo);
+//        startActivityForResult(intent, RESULT_VIDEO_CAMERA);
+
+
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+
+        // create a file to save the video
+        uriVideo = getOutputMediaFileUri();
+
+        // set the image file name
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uriVideo);
+
+        // set the video image quality to high
+        intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+
+        // start the Video Capture Intent
         startActivityForResult(intent, RESULT_VIDEO_CAMERA);
+
+//        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+//        if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+//            startActivityForResult(takeVideoIntent, RESULT_VIDEO_CAMERA);
+//        }
+    }
+
+    /** Create a file Uri for saving an image or video */
+    private static Uri getOutputMediaFileUri(){
+
+        return Uri.fromFile(getOutputMediaFile());
+    }
+
+    /** Create a File for saving an image or video */
+    private static File getOutputMediaFile(){
+
+        // Check that the SDCard is mounted
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "MyCameraVideo");
+
+
+        // Create the storage directory(MyCameraVideo) if it does not exist
+        if (! mediaStorageDir.exists()){
+
+            if (! mediaStorageDir.mkdirs()){
+
+
+                Log.d("MyCameraVideo", "Failed to create directory MyCameraVideo.");
+                return null;
+            }
+        }
+
+
+        // Create a media file name
+
+        // For unique file name appending current timeStamp with file name
+        java.util.Date date= new java.util.Date();
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+                .format(date.getTime());
+
+        File mediaFile;
+
+
+            // For unique video file name appending current timeStamp with file name
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+                    "VID_"+ timeStamp + ".mp4");
+
+
+
+        return mediaFile;
     }
 
 
@@ -649,13 +714,11 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
             }
         } else if (requestCode == RESULT_VIDEO_CAMERA) {
             if (resultCode == RESULT_OK) {
+
+//                Uri videoUri = data.getData();
+
                 String videoPath = "";
-                String[] filePathColumn = {MediaStore.Files.FileColumns.DATA};
-                Cursor cursor = getContentResolver().query(uriVideo, filePathColumn, null, null, null);
-                cursor.moveToFirst();
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                videoPath = cursor.getString(columnIndex);
-                cursor.close();
+                videoPath = data.getData().getPath();
 
                 if (!"".equals(videoPath)) {
 
@@ -665,7 +728,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                     ApplicationSpektogram.getApplication(this).sendChatMessageFunction(chat.id, inputMessageVideo, new Client.ResultHandler() {
                         @Override
                         public void onResult(TdApi.TLObject object) {
-                            try{
+                            try {
                                 final TdApi.Message message = (TdApi.Message) object;
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -674,15 +737,15 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
                                         adapter.notifyDataSetChanged();
                                     }
                                 });
-                            } catch (Exception e){
-                                Toast.makeText(getApplicationContext(),"Файл не найден",Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+
                             }
-
-
 
 
                         }
                     });
+                } else{
+                    Toast.makeText(getApplicationContext(), "Файл не найден", Toast.LENGTH_SHORT).show();
                 }
 
             } else if (resultCode == RESULT_CANCELED) {
@@ -732,28 +795,28 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
             longitude = mLastLocation.getLongitude();
 
 
-        final TdApi.InputMessageGeoPoint geoPoint  = new TdApi.InputMessageGeoPoint(latitude,longitude);
-        messageText.setText("");
+            final TdApi.InputMessageGeoPoint geoPoint = new TdApi.InputMessageGeoPoint(latitude, longitude);
+            messageText.setText("");
 
-        ApplicationSpektogram.getApplication(this).sendChatMessageFunction(chat.id, geoPoint, new Client.ResultHandler() {
-            @Override
-            public void onResult(TdApi.TLObject object) {
-                if (object instanceof TdApi.Message) {
-                    final TdApi.Message message = (TdApi.Message) object;
-                    Log.v(Constants.LOG_TAG,"geo message" + message);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.addMessage(message);
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
+            ApplicationSpektogram.getApplication(this).sendChatMessageFunction(chat.id, geoPoint, new Client.ResultHandler() {
+                @Override
+                public void onResult(TdApi.TLObject object) {
+                    if (object instanceof TdApi.Message) {
+                        final TdApi.Message message = (TdApi.Message) object;
+                        Log.v(Constants.LOG_TAG, "geo message" + message);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.addMessage(message);
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
                 }
-            }
-        });
+            });
 
-        Log.d(Constants.LOG_TAG, "lat"  + Double.toString(latitude));
-        Log.d(Constants.LOG_TAG, "lon" + Double.toString(longitude));
+            Log.d(Constants.LOG_TAG, "lat" + Double.toString(latitude));
+            Log.d(Constants.LOG_TAG, "lon" + Double.toString(longitude));
         }
     }
 
@@ -793,7 +856,7 @@ public class MessagesActivity extends ActionBarActivity implements GoogleApiClie
         }
 
         final TdApi.Message item = (TdApi.Message) adapter.getItem(position);
-        if(item.message instanceof TdApi.MessageGeoPoint){
+        if (item.message instanceof TdApi.MessageGeoPoint) {
             TdApi.GeoPoint geoPoint = ((TdApi.MessageGeoPoint) item.message).geoPoint;
             String uri = String.format(Locale.ENGLISH, "geo:%f,%f", geoPoint.latitude, geoPoint.longitude);
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
